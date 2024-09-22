@@ -1,7 +1,7 @@
 # KareRun: Funrun Events Management System
 
-_A centralized hub where funrun event organizers can easily publish and manage funrun events, and participants can seamlessly register, and access all event details.
-_
+A centralized hub where fun run event organizers can easily publish and manage fun run events, and participants can seamlessly register, and access all event details.
+
 ## Functional Requirements 
 
 1. User Management
