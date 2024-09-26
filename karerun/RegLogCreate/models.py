@@ -1,17 +1,37 @@
 from django.db import models
 from django.core.validators import MinValueValidator,MaxValueValidator
+from django.contrib.auth.hashers import make_password
 # Create your models here.
 #add db_comment && 
 class User(models.Model):
     userid = models.BigAutoField(primary_key=True)
-    username = models.CharField(max_length=30)
+    username = models.CharField(max_length=30) #Display Name?
     firstname = models.CharField(max_length=30)
     lastname = models.CharField(max_length=30)
     #Should be hashed
     password = models.CharField(max_length=255)
     email = models.EmailField()
-    age = models.PositiveSmallIntegerField()
+    birthdate = models.DateTimeField()
     isEventOrganizer = models.BooleanField(default=False)
+
+    def __str__(self) -> str:
+        return self.username
+
+#should be hashed by django
+    def login(email,password):
+        # hashedPassword = make_password(password)
+        hashedPassword = password
+        User.objects.filter(email = email).filter(password = hashedPassword).get()
+
+    def register(details: dict) -> bool:
+        new_user = User(firstname = details['firstname'],
+                        lastname=details['lastname'],
+                        birthdate=details['birthdate'],
+                        username=details['username'],
+                        email = details['email'],
+                        password = details['password'])
+        new_user.save()
+        return True
 
 
 
@@ -33,4 +53,6 @@ class Event(models.Model):
     inclusionimage = models.ImageField()
     sizechartimage = models.ImageField()
     racerouteimage = models.ImageField()
-    
+
+    def __str__(self) -> str:
+        return self.eventname
