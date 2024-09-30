@@ -1,7 +1,10 @@
 from django.db import models
 from django.core.validators import MinValueValidator,MaxValueValidator
 from django.contrib.auth.hashers import make_password
+<<<<<<< HEAD
 import datetime
+=======
+>>>>>>> 2ab8c514eddc9bd5460e8aec00c4ad87f4a0a07b
 # Create your models here.
 #add db_comment && 
 class User(models.Model):
@@ -12,7 +15,11 @@ class User(models.Model):
     #Should be hashed
     password = models.CharField(max_length=255)
     email = models.EmailField()
+<<<<<<< HEAD
     birthdate = models.DateField(null = True, blank = True)
+=======
+    birthdate = models.DateTimeField()
+>>>>>>> 2ab8c514eddc9bd5460e8aec00c4ad87f4a0a07b
     isEventOrganizer = models.BooleanField(default=False)
 
     def __str__(self) -> str:

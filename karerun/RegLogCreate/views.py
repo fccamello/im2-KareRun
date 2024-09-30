@@ -2,7 +2,10 @@ from django.shortcuts import render,redirect
 from django.urls import path
 from .models import User
 from .forms import RegisterUserForm
+<<<<<<< HEAD
 from datetime import date
+=======
+>>>>>>> 2ab8c514eddc9bd5460e8aec00c4ad87f4a0a07b
 # Create your views here.
 def register(request):
     user = User.objects.all()
@@ -12,6 +15,7 @@ def register(request):
             user = User()
             user.firstname = form.cleaned_data['firstname']
             user.lastname = form.cleaned_data['lastname']
+<<<<<<< HEAD
             user.username = form.cleaned_data['username']
             user.email = form.cleaned_data['email']
             user.password = form.cleaned_data['password']
@@ -28,3 +32,14 @@ def register(request):
 
 def success(request):
     return render(request,'RegLogCreate/sucess.html')
+=======
+            user.birthdate = form.cleaned_data['birthdate']
+            user.username = form.cleaned_data['username']
+            user.email = form.cleaned_data['email']
+            user.password = form.cleaned_data['password']
+            user.save()
+            return redirect('register')
+    else:
+        form = RegisterUserForm()
+    return render(request,'RegLogCreate/register.html',{'forms':form})
+>>>>>>> 2ab8c514eddc9bd5460e8aec00c4ad87f4a0a07b
