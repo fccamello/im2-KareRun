@@ -24,17 +24,6 @@ class User(models.Model):
         hashedPassword = password
         User.objects.filter(email = email).filter(password = hashedPassword).get()
 
-    def register(details: dict) -> bool:
-        new_user = User(firstname = details['firstname'],
-                        lastname=details['lastname'],
-                        birthdate=details['birthdate'],
-                        username=details['username'],
-                        email = details['email'],
-                        password = details['password'])
-        new_user.save()
-        return True
-
-
 
 
 
