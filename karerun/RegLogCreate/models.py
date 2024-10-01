@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator,MaxValueValidator
 from django.contrib.auth.hashers import make_password
+from django.core.files.storage import FileSystemStorage
 import datetime
 # Create your models here.
 #add db_comment && 
@@ -25,8 +26,10 @@ class User(models.Model):
         User.objects.filter(email = email).filter(password = hashedPassword).get()
 
 
-
-
+bannerloc = FileSystemStorage(location="./photos/eventbanner/")
+inclusionloc = FileSystemStorage(location="./photos/eventinclusion/")
+sizechartloc = FileSystemStorage(location="./photos/eventsizechart/")
+racerouteloc = FileSystemStorage(location="./photos/eventraceroute/")
 class Event(models.Model):
     eventid = models.BigAutoField(primary_key=True)
     eventname = models.CharField(max_length=100)
@@ -39,10 +42,10 @@ class Event(models.Model):
     dateposted = models.DateTimeField(auto_now_add=True)
     #should be a list of inclusions
     inclusions = models.JSONField()
-    bannerimage = models.ImageField()
-    inclusionimage = models.ImageField()
-    sizechartimage = models.ImageField()
-    racerouteimage = models.ImageField()
+    bannerimage = models.ImageField(storage=bannerloc)
+    inclusionimage = models.ImageField(storage=inclusionloc)
+    sizechartimage = models.ImageField(storage=sizechartloc)
+    racerouteimage = models.ImageField(storage=racerouteloc)
 
     def __str__(self) -> str:
         return self.eventname
