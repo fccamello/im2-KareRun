@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.urls import path
 from .models import User
-from .forms import RegisterUserForm,LoginForm
+from .forms import RegisterUserForm,LoginForm,CreateEvent
 from datetime import date
 from django.contrib.auth import authenticate
 # Create your views here.
@@ -29,9 +29,27 @@ def login(request):
             user = authenticate(request, email=email, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('success')
+                return redirect('sucess')
             else:
                 form.add_error(None, "Invalid email or password")
+                print(form.errors)
+                return redirect('sucess')
+        else:
+            print(form.errors)
     else:
         form = LoginForm()
     return render(request,'RegLogCreate/login.html',{'forms':form})
+
+def createEvent(request):
+    if request.method == 'POST':
+        print("received event POST")
+        form = CreateEvent(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            print("saved event")
+            return redirect('sucess')
+        else:
+            print(form.errors)
+    else:
+        form = CreateEvent()
+    return render(request, 'RegLogCreate/createEvent.html', {'forms': form})
