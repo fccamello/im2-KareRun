@@ -26,13 +26,13 @@ def login(request):
         if form.is_valid():
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
-            user = authenticate(request, email=email, password=password)
+            user = User.login(email,password)
+            print(user)
             if user is not None:
-                login(request, user)
+                print("success")
                 return redirect('sucess')
             else:
-                form.add_error(None, "Invalid email or password")
-                print(form.errors)
+                print("error/wrong password")
                 return redirect('sucess')
         else:
             print(form.errors)

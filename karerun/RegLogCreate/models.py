@@ -23,7 +23,7 @@ class User(models.Model):
     def login(email,password):
         # hashedPassword = make_password(password)
         hashedPassword = password
-        User.objects.filter(email = email).filter(password = hashedPassword).get()
+        return User.objects.filter(email = email).filter(password = hashedPassword).get()
 
 
 bannerloc = FileSystemStorage(location="./photos/eventbanner/")
