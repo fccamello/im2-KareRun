@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Create Event</title>
+  </head>
+  <body>
+    <h1>Create Event</h1>
+    {% if forms.errors %} {{forms.errors}} {%endif%}
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <p>event name</p>
+      {{forms.eventname}}
+      <p>event details</p>
+      {{forms.eventdetails}}
+      <p>event categories</p>
+      {{forms.eventcategory}}
+      <p>event location</p>
+      {{forms.eventlocation}}
+      <p>event date</p>
+      {{forms.eventdate}}
+      <p>event time</p>
+      {{forms.eventtime}}
+      <p>inclusions</p>
+      {{forms.inclusions}}
+      <p>inclusion images</p>
+      {{forms.inclusionimage}}
+      <p>banner image</p>
+      {{forms.bannerimage}}
+      <p>size chart</p>
+      {{forms.sizechartimage}}
+      <p>race route</p>
+      {{forms.racerouteimage}}
+      <button type="submit">submit</button>
+    </form>
+  </body>
+</html>

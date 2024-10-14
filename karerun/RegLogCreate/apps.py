@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class UsermanagementConfig(AppConfig):
+class ReglogcreateConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'UserManagement'
+    name = 'RegLogCreate'
