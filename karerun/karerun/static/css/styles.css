@@ -37,10 +37,11 @@ header a{
 
 .nav-buttons{
     /* border-radius: 5px; */
-    border: 1px solid #007CFC;
+    border: none;
     background-color: transparent;
     color: white;
     width: 80px;
+    border-radius: 2px;
     height: 30px;
     font-size: 12px;
 }
@@ -274,7 +275,7 @@ header a{
 
 .carousel.next .time,
 .carousel.prev .time{
-    animation: runningTime 3s linear 1 forwards;
+    animation: runningTime 2s linear 1 forwards;
 }
 @keyframes runningTime{
     from{ width: 100%}
