@@ -26,10 +26,11 @@ class User(models.Model):
         return User.objects.filter(email = email).filter(password = hashedPassword).get()
 
 
-bannerloc = FileSystemStorage(location="./photos/eventbanner/")
-inclusionloc = FileSystemStorage(location="./photos/eventinclusion/")
-sizechartloc = FileSystemStorage(location="./photos/eventsizechart/")
-racerouteloc = FileSystemStorage(location="./photos/eventraceroute/")
+# bannerloc = FileSystemStorage(location="./photos/eventbanner/")
+# inclusionloc = FileSystemStorage(location="./photos/eventinclusion/")
+# sizechartloc = FileSystemStorage(location="./photos/eventsizechart/")
+# racerouteloc = FileSystemStorage(location="./photos/eventraceroute/")
+
 class Event(models.Model):
     eventid = models.BigAutoField(primary_key=True)
     eventname = models.CharField(max_length=100)
@@ -42,10 +43,16 @@ class Event(models.Model):
     dateposted = models.DateTimeField(auto_now_add=True)
     #should be a list of inclusions
     inclusions = models.JSONField()
-    bannerimage = models.ImageField(storage=bannerloc)
-    inclusionimage = models.ImageField(storage=inclusionloc)
-    sizechartimage = models.ImageField(storage=sizechartloc)
-    racerouteimage = models.ImageField(storage=racerouteloc)
+    # bannerimage = models.ImageField(storage=bannerloc)
+    # inclusionimage = models.ImageField(storage=inclusionloc)
+    # sizechartimage = models.ImageField(storage=sizechartloc)
+    # racerouteimage = models.ImageField(storage=racerouteloc)
+
+
+    bannerimage = models.ImageField(upload_to='eventbanner/')
+    inclusionimage = models.ImageField(upload_to='eventinclusion/')
+    sizechartimage = models.ImageField(upload_to='eventsizechart/')
+    racerouteimage = models.ImageField(upload_to='eventraceroute/')
 
     def __str__(self) -> str:
         return self.eventname

@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Race List</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/event_list.css' %}">
+
+</head>
+<body style="background-color: aliceblue;">
+     
+        <header style="background-color: #002B5A;">
+            
+            <img src="{% static 'photos/logo.png' %}" style="max-width: 150px; width: 100%; padding-left: 100px;">
+            <div class="header-navs">
+                <nav style="text-decoration: none;">
+                    <a href="">Home</a>
+                    <a href="">Events</a>
+                    <button class="nav-buttons" onclick="window.location.href='{% url 'login' %}';" style="background-color: white; color: black;">Log In</button>
+                    <button class="nav-buttons" onclick="window.location.href='{% url 'register' %}';" style="background-color: #FF5726;">Sign Up</button>
+                </nav>
+            </div>
+        </header>
+
+
+    <div class = "event_list_banner"> </div>
+    <div class ="races_title"> Races </div>
+    <div style="margin-left: 2%;">
+
+        <form method="GET" id="search-sort-form">
+            <input type="text" name="search" value="{{ search_query }}" placeholder="Search by event name">
+            <select name="sort" id="sort-select">
+                <option value="date" {% if sort_by == 'date' %}selected{% endif %}>Sort by Date</option>
+                <option value="name" {% if sort_by == 'name' %}selected{% endif %}>Sort by Name</option>
+            </select>
+        </form>
+    </div>
+
+
+    <div class="race_list">
+        {% for event in events %}
+            <div class="card">
+                <a href="{% url 'event_detail' event_id=event.eventid %}" style="text-decoration: none; color: inherit;">
+                        <img src="{{ event.bannerimage.url }}" class="card-img" alt="{{ event.eventname }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ event.eventname }}</h5>
+                    <p class="card-text">Location: {{ event.eventlocation }}</p>
+                    <p class="card-text">Date: {{ event.eventdate }}</p>
+                    <p class="card-text">Time: {{ event.eventtime }}</p>
+                    <p class="card-text">Details: {{ event.eventdetails }}</p>
+                </div>
+            </div>
+        {% empty %}
+            <div class="no-results">
+                <p>No races found.</p>
+            </div>
+        {% endfor %}
+    </div>
+    
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sortSelect = document.getElementById('sort-select');
+            const form = document.getElementById('search-sort-form');
+
+            sortSelect.addEventListener('change', function() {
+                form.submit();
+            });
+        });
+
+    </script>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>   
+
+
+</body>
+</html>

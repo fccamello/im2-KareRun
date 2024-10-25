@@ -16,8 +16,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from django.conf import settings
+from django.conf.urls.static import static
+from EventDetails import views
+from Events.views import race_list_view
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('LandingPage.urls')),
     path('',include('RegLogCreate.urls')),
-]
+    path('', include('EventDetails.urls')),
+    path('events/', race_list_view, name='race_list'),
+
+]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

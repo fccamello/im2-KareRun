@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ event.eventname }}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/event_details.css' %}">
+</head>
+<body style="background-color: aliceblue;">
+     
+    <header style="background-color: #002B5A;">
+        
+        <img src="{% static 'photos/logo.png' %}" style="max-width: 150px; width: 100%; padding-left: 100px;">
+        <div class="header-navs">
+            <nav>
+                <a href="">Home</a>
+                <a href="">Events</a>
+                <button class="nav-buttons" onclick="window.location.href='{% url 'login' %}';" style="background-color: white; color: black;">Log In</button>
+                <button class="nav-buttons" onclick="window.location.href='{% url 'register' %}';" style="background-color: #FF5726;">Sign Up</button>
+            </nav>
+        </div>
+    </header>
+
+
+        <div class="page_banner_bg" style="background-image: url('{{ event.bannerimage.url }}');">
+            <div class="page_banner_bg::after"></div> 
+        </div>
+
+
+    <div class="event_banner" style="background-image: url('{{ event.bannerimage.url }}');">
+    </div>
+    
+    <div class="event_name"> {{ event.eventname }}</div>
+    <div class="event_description"> {{ event.eventdetails }}</div>
+    <div class="event_description">Location: {{ event.eventlocation }}</p> </div>
+    <div class="event_description">Date: {{ event.eventdate }}</div>
+    <div class="event_description">Time: {{ event.eventtime }}</div>
+    <div style="overflow-x: hidden; margin: 0;">
+        <div class="event_description">Images</h2> </div>
+        <!-- <h3>Banner Image</h3>
+        <p>Banner Image URL: {{ event.inclusionimage.url }}</p> -->
+        {% if event.inclusionimage %}
+            <div class="event_inclusions">
+                <img src="{{ event.inclusionimage.url }}">
+            </div>
+        {% else %}
+            <p>No image available</p>
+        {% endif %}
+    </div>
+    
+
+    <script>
+        window.onload = function() {
+            const eventBanner = document.getElementById('eventBanner');
+            const img = new Image();
+            img.src = "{{ event.bannerimage.url }}"; 
+
+            eventBanner.style.backgroundImage = `url(${img.src})`;
+        };
+    </script>
+</body>
+</html>
