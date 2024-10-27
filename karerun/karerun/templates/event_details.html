@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ event.eventname }}</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.1/aos.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.1/aos.js"></script>
     <link rel="stylesheet" href="{% static 'css/event_details.css' %}">
 </head>
 <body style="background-color: aliceblue;">
@@ -25,22 +27,55 @@
 
 
         <div class="page_banner_bg" style="background-image: url('{{ event.bannerimage.url }}');">
-            <div class="page_banner_bg::after"></div> 
+
+            <div class="event_box"> 
+                <div class="event_details">
+                  <h5>  {{  event.eventdate|date:"F" }}  </h5>
+                  <h4>  {{  event.eventdate|date:"d" }}  </h4>
+                  <h5>  {{  event.eventdate|date:"Y" }}  </h5>
+                    <h1 class="first_word">{{ first_word }}</h1>
+                    <div style="width: auto;"><h1 class="rest_of_text"> {{ rest_of_text }}</h1> </div>
+                    <h5 class="categories">{{ categories|join:" | " }}  </h5>
+                </div>
+                <button class="btnreg" onclick="location.href='{% url 'event_reg' event_id=event.eventid %}'">REGISTER</button>
+            </div>
+         
         </div>
+
 
 
     <div class="event_banner" style="background-image: url('{{ event.bannerimage.url }}');">
     </div>
     
-    <div class="event_name"> {{ event.eventname }}</div>
+    <!-- <div class="event_name"> {{ event.eventname }}</div>
     <div class="event_description"> {{ event.eventdetails }}</div>
     <div class="event_description">Location: {{ event.eventlocation }}</p> </div>
     <div class="event_description">Date: {{ event.eventdate }}</div>
     <div class="event_description">Time: {{ event.eventtime }}</div>
-    <div style="overflow-x: hidden; margin: 0;">
-        <div class="event_description">Images</h2> </div>
+    <div style="overflow-x: hidden; margin: 0;"> -->
+        <!-- <div class="event_description"> </h2> </div> -->
         <!-- <h3>Banner Image</h3>
         <p>Banner Image URL: {{ event.inclusionimage.url }}</p> -->
+
+        <div class="categories-container">
+            <div class="categories-row">
+                {% for category in categories %}
+                    <div class="category-box" 
+                        data-aos="flip-left" 
+                        data-aos-easing="ease" 
+                        data-aos-duration="1000" 
+                        style="background-color: 
+                        {% if forloop.counter0 == 0 %} #F4A730 
+                        {% elif forloop.counter0 == 1 %} #F4782F 
+                        {% elif forloop.counter0 == 2 %} #ED5D74 
+                        {% elif forloop.counter0 == 3 %} #1AA5DD 
+                        {% endif %};">
+                        <h5>{{ category }}</h5>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        
         {% if event.inclusionimage %}
             <div class="event_inclusions">
                 <img src="{{ event.inclusionimage.url }}">
@@ -48,17 +83,27 @@
         {% else %}
             <p>No image available</p>
         {% endif %}
+
+        {% if event.inclusionimage %}
+        <div class="event_inclusions">
+            <img src="{{ event.bannerimage.url }}">
+        </div>
+    {% else %}
+        <p>No image available</p>
+    {% endif %}
     </div>
+
+    
+<script>
+    AOS.init({
+        duration: 10, 
+    });
+</script>
     
 
-    <script>
-        window.onload = function() {
-            const eventBanner = document.getElementById('eventBanner');
-            const img = new Image();
-            img.src = "{{ event.bannerimage.url }}"; 
+    
+  
+    
 
-            eventBanner.style.backgroundImage = `url(${img.src})`;
-        };
-    </script>
 </body>
 </html>
