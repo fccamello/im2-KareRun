@@ -83,11 +83,16 @@
     margin: 10px; 
     color: white; 
     display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 200px; 
+    cursor: pointer;
+    border: none;
+    /* align-items: center; */
+    height: 300px; 
     border-radius: 10px; 
     transition: transform 0.4s ease; 
+}
+
+.category-box.selected, .category-box.selected:hover {
+    box-shadow: 0 0 0 3px #012b5b;
 }
 
 [data-aos^="flip"] {
@@ -321,4 +326,89 @@
     transform: translateY(-1px);
 }
 
+.inclusions-header{
+    margin-top: 0% !important;
+    text-align: left;
+    margin-left: 2%;
+    font-size: 20px;
+    font-weight: 400;
+    padding-top: 0% !important;
+    margin-bottom: 0;
+}
 
+.inclusion-item {
+    /* margin: 20px 0; */
+}
+
+.inclusion-item h4 {
+    /* margin-bottom: 10px; */
+    color: #333;
+}
+
+.size-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.size-btn {
+    padding: 8px 16px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.inclusions-list{
+    font-size: 15px;
+    font-weight: 500;
+    text-transform: uppercase;
+    text-align: left;
+    margin-top: 1%;
+
+}
+
+.category-price{
+    bottom: 20px;
+    position: absolute;
+    width: 100%;
+    font-weight: bold;
+    text-align: center;
+    font-size: 40px;
+    margin-top: 1%;
+    margin-right: auto;
+}
+
+.category-inclusions h1{
+    margin-top: 0%;
+    color: #012b5b;
+}
+    
+.inclusion-item h2{
+    color: #4CC7C5;
+
+}
+
+.size-btn:hover {
+    border-color: #666;
+}
+
+.size-btn.active {
+    background: #002B5A;
+    color: white;
+    border-color: #002B5A;
+}
+
+
+.category-box-container{
+    display: block;
+}
+
+.category-km{
+    height: 0%;
+    font-size: 50px;
+    font-weight: bold;
+    margin-top: 0% !important;
+    padding: 0% !important;
+}

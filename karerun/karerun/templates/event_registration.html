@@ -1,4 +1,5 @@
 {% load static %}
+{% load custom_filters %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,18 +45,46 @@
     <div class="categories-container">
         <div class="categories-row">
             {% for category in categories %}
-                <div class="category-box" 
+                <button class="category-box" 
+                    onclick="selectCategory(this)"
                     style="background-color: 
                     {% if forloop.counter0 == 0 %} #F4A730 
                     {% elif forloop.counter0 == 1 %} #F4782F 
                     {% elif forloop.counter0 == 2 %} #ED5D74 
                     {% elif forloop.counter0 == 3 %} #1AA5DD 
-                    {% endif %};">
-                    <h5>{{ category }}</h5>
-                </div>
-            {% endfor %}
+                    {% endif %}">
+                    <div style="display: block; padding: 0%; margin: 0%; width: 100%; height: 100%; position: relative;"> 
+                        <div class="category-distance">
+                            <div class="category-km">  {{ category }}  </div>
+                        </div>
+                        <hr style="color: black;">
+                        <div class="inclusions-header">INCLUSIONS:</div>
+                        <ul class="inclusions-list">
+                            {% with category_items=category_inclusions|get_item:category %}
+                                {% for item in category_items %}
+                                    <li style="padding-top: 5px;">
+                                        {{ item.inclusion }}
+                                    </li>
+                                {% endfor %}
+                            {% endwith %}
+                        </ul>
+                        <div class="category-price">
+                            {% with price=category_prices|get_item:category %}
+                                {% if price %}
+                                    Php {{ price|floatformat:"0" }}
+                                {% else %}
+                                    Price TBD
+                                {% endif %}
+                            {% endwith %}
+                        </div>
+                            </div>
+                        <div class="checkmark-icon hidden"></div>
+                        </button>
+                
+                {% endfor %}
+            </div>
         </div>
-    </div>
+     
 
     <div class="reg_category">Personal Details</div>
     
@@ -113,35 +142,57 @@
                     <input type="tel" name="emergency_number" class="form-input" placeholder="Emergency Number">
                 </div>
             </div>
-        </form>
+       
     </div>
 
     <div class="reg_category">Inclusions</div>
 
     <div class="size-selector-container">
-        <div class="categories-row">
-            {% for inclusion in inclusions %}
-                <div class="inclusion_box">
-                    <div class="size-label">{{inclusion}}</div>
-                    <div class="size-selection">
-                        <div class="size-label">Singlet Size</div>
-                        <div class="size-options">
-                            <button class="size-btn">XS</button>
-                            <button class="size-btn">S</button>
-                            <button class="size-btn active">M</button>
-                            <button class="size-btn">L</button>
-                            <button class="size-btn">XL</button>
+        <div class="categories-row" id="inclusion-container">
+            {% for category in categories %}
+                <div class="category-inclusions" data-category="{{ category }}" style="display: none;">
+                    <h1>{{ category }}</h1>
+                    
+                    {% with singlet_sizes=category_inclusions|get_item:category|filter_sizes:"Singlet" %}
+                    {% if singlet_sizes %}
+                        <div class="inclusion-item">
+                            <h2>Singlet</h2>
+                            <div class="size-buttons">
+                                {% for size in singlet_sizes %}
+                                    <button class="size-btn" data-inclusion="Singlet" data-size="{{ size }}">
+                                        {{ size }}
+                                    </button>
+                                {% endfor %}
+                            </div>
                         </div>
-                    </div>
-                
+                    {% endif %}
+                    {% endwith %}
+    
+                    {% with shirt_sizes=category_inclusions|get_item:category|filter_sizes:"Finisher Shirt" %}
+                    {% if shirt_sizes %}
+                        <div class="inclusion-item">
+                            <h2>Finisher Shirt</h2>
+                            <div class="size-buttons">
+                                {% for size in shirt_sizes %}
+                                    <button class="size-btn" data-inclusion="Finisher Shirt" data-size="{{ size }}">
+                                        {{ size }}
+                                    </button>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% endwith %}
                 </div>
             {% endfor %}
         </div>
     </div>
 
+
     <div class="button-container">
-        <button class="submit-button">SUBMIT</button>
+        <button class="submit-button" type="submit">SUBMIT</button>
     </div>
+
+</form>
 
     <script>
         document.querySelectorAll('.age-button').forEach(button => {
@@ -167,6 +218,96 @@
             button.classList.add('active');
         });
     });
+
+    // function selectCategory(button) {
+    // // Remove selection from all category boxes
+    // document.querySelectorAll('.category-box').forEach(btn => {
+    //     btn.classList.remove('selected');
+    //     btn.querySelector('.checkmark-icon').classList.add('hidden');
+    // });
+    
+    // // Add selection to clicked button
+    // button.classList.add('selected');
+    // button.querySelector('.checkmark-icon').classList.remove('hidden');
+
+    // // Get the selected category text
+    // const selectedCategory = button.querySelector('h5').textContent.trim();
+
+    // // Hide all inclusion divs first
+    // document.querySelectorAll('.category-inclusions').forEach(div => {
+    //     div.style.display = 'none';
+    // });
+
+    // // Show only the selected category's inclusions
+    // const selectedInclusions = document.querySelector(`.category-inclusions[data-category="${selectedCategory}"]`);
+    // if (selectedInclusions) {
+    //     selectedInclusions.style.display = 'block';
+    // }
+
+    function selectCategory(button) {
+    // Remove selection from all category boxes
+    document.querySelectorAll('.category-box').forEach(btn => {
+        btn.classList.remove('selected');
+        btn.querySelector('.checkmark-icon').classList.add('hidden');
+    });
+    
+    // Add selection to clicked button
+    button.classList.add('selected');
+    button.querySelector('.checkmark-icon').classList.remove('hidden');
+
+    // Get the selected category text
+    const selectedCategory = button.querySelector('.category-km').textContent.trim();
+
+    // Hide all inclusion divs first
+    document.querySelectorAll('.category-inclusions').forEach(div => {
+        div.style.display = 'none';
+    });
+
+    // Show only the selected category's inclusions
+    const selectedInclusions = document.querySelector(`.category-inclusions[data-category="${selectedCategory}"]`);
+    if (selectedInclusions) {
+        selectedInclusions.style.display = 'block';
+    }
+
+    // Reset all size selections
+    document.querySelectorAll('.size-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+}
+
+// Handle size button clicks
+document.querySelectorAll('.size-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        // Get all size buttons within the same inclusion type
+        const inclusionType = this.getAttribute('data-inclusion');
+        const inclusionContainer = this.closest('.inclusion-item');
+        const sizeButtons = inclusionContainer.querySelectorAll('.size-btn');
+        
+        // Remove active class from all buttons in this inclusion type
+        sizeButtons.forEach(btn => btn.classList.remove('active'));
+        
+        // Add active class to clicked button
+        this.classList.add('active');
+        
+        // You can store the selected size and inclusion type
+        const selectedSize = this.getAttribute('data-size');
+        console.log(`Selected ${inclusionType} size: ${selectedSize}`);
+    });
+});
+
+// Show first category by default when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    const firstCategoryBox = document.querySelector('.category-box');
+    if (firstCategoryBox) {
+        selectCategory(firstCategoryBox);
+    }
+});
+    
+    
+
+
+
+   
     </script>
 </body>
 </html>

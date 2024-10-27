@@ -21,11 +21,14 @@ class LoginForm(forms.Form):
 class CreateEvent(forms.ModelForm):
     eventname = forms.CharField(max_length=100)
     eventdetails = forms.CharField(widget = forms.Textarea)
-    eventcategory = forms.CharField(widget=forms.Textarea)
+    # eventcategory = forms.CharField(widget=forms.Textarea)
+    eventcategory = forms.CharField(max_length=100)
     eventlocation = forms.CharField(max_length=100)
     eventdate = forms.DateField(widget = forms.DateInput(attrs={'type':'date'}))
     eventtime = forms.TimeField(widget = forms.TimeInput(attrs={'type':'time'}))
-    inclusions = forms.CharField(widget=forms.Textarea)
+    # inclusions = forms.CharField(widget=forms.Textarea)
+    # inclusions = forms.CharField(widget=forms.HiddenInput())
+    inclusions = forms.JSONField()  # Use a JSONField for inclusions
     bannerimage = forms.ImageField(widget=forms.ClearableFileInput(attrs={'accept': 'image/*'}))
     inclusionimage = forms.ImageField(widget=forms.ClearableFileInput(attrs={'accept': 'image/*'}))
     sizechartimage = forms.ImageField(widget=forms.ClearableFileInput(attrs={'accept': 'image/*'}))
