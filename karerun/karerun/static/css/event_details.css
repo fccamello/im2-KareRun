@@ -180,8 +180,10 @@ color: #002B5A;
     transform: translateY(-2px);
 }
 
-categories-container {
-    padding: 20px; 
+.categories-container {
+    padding-right: 20px; 
+    padding-left: 20px;
+    padding-top: 10px;
 }
 
 .categories-row {
