@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect
 from django.urls import path
+from django.contrib.auth import login as user_login
 from .models import User
 from .forms import RegisterUserForm,LoginForm,CreateEvent
 from datetime import date
@@ -29,6 +30,7 @@ def login(request):
             user = User.login(email,password)
             print(user)
             if user is not None:
+                user_login(request, user)
                 print("success")
                 return redirect('sucess')
             else:
