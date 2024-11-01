@@ -4,3 +4,5 @@ karerun/ReglogCreate/migrations/__pycache__/*.pyc
 karerun/*/*.pyc
 karerun/*/*/*.pyc
 karerun/*/*/*/*.pyc
+*.pyc
+*.pyc
