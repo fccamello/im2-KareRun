@@ -1,3 +1,6 @@
 karerun/*/__pycache__/*.pyc
 karerun/db.sqlite3
 karerun/ReglogCreate/migrations/__pycache__/*.pyc
+karerun/*/*.pyc
+karerun/*/*/*.pyc
+karerun/*/*/*/*.pyc
