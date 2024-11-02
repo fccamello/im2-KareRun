@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from RegLogCreate.models import Event
+from RegLogCreate.models import Event,User
 
 def race_list_view(request):
     events = Event.objects.all()
@@ -14,9 +14,20 @@ def race_list_view(request):
     else:
         events = events.order_by('eventdate')
 
+    userId = request.session.get('userID',None)
+    userName = None
+    if userId is not None:
+        userName = User.objects.get(userid = userId).username
+        print(userId)
+    else:
+        print("no session")
+    
+
+
     context = {
         'events': events,
         'search_query': query,
         'sort_by': sort_by,
+        'userName':userName
     }
     return render(request, 'event_list.html', context)

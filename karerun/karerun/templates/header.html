@@ -1,0 +1,26 @@
+<div class="header-navs">
+  <nav>
+    <a href="{%url 'index'%}">Home</a>
+    <a href="{% url 'race_list' %}">Events</a>
+    <!-- <a href=""></a> -->
+    {% if userName is None %}
+    <button
+      class="nav-buttons"
+      onclick="window.location.href='{% url 'login' %}';"
+      style="background-color: white; color: black"
+    >
+      Log In
+    </button>
+    <button
+      class="nav-buttons"
+      onclick="window.location.href='{% url 'register' %}';"
+      style="background-color: #ff5726"
+    >
+      Sign Up
+    </button>
+    {% else %}
+    <!--  -->
+    <a>Hello {{userName}}</a>
+    {% endif %}
+  </nav>
+</div>

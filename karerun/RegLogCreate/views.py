@@ -15,10 +15,10 @@ def register(request):
             return redirect('sucess')
     else:
         form = RegisterUserForm()
-    return render(request,'RegLogCreate/register.html',{'forms':form})
+    return render(request,'register.html',{'forms':form})
 
 def success(request):
-    return render(request,'RegLogCreate/sucess.html')
+    return render(request,'sucess.html')
 
 def login(request):
     if request.method == 'POST':
@@ -39,7 +39,7 @@ def login(request):
             print(form.errors)
     else:
         form = LoginForm()
-    return render(request,'RegLogCreate/login.html',{'forms':form})
+    return render(request,'login.html',{'forms':form})
 
 def createEvent(request):
     if request.method == 'POST':
@@ -53,4 +53,4 @@ def createEvent(request):
             print(form.errors)
     else:
         form = CreateEvent()
-    return render(request, 'RegLogCreate/createEvent.html', {'forms': form})
+    return render(request, 'createEvent.html', {'forms': form})
