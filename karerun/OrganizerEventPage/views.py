@@ -8,7 +8,7 @@ from .forms import EventForm
 import json
 
 @login_required
-def event_detail(request, event_id):
+def organizer_event_detail(request, event_id):
     event = get_object_or_404(Event, id=event_id)
     participants = event.participants.all()
     return render(request, 'event_detail.html', {

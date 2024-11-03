@@ -31,7 +31,7 @@ def login(request):
             if user is not None:
                 request.session['userID'] = user.userid
                 print("success")
-                return redirect('index')
+                return redirect('homepage')
             else:
                 print("error/wrong password")
                 return redirect('sucess')

@@ -30,4 +30,5 @@ urlpatterns = [
     path('',include('EventRegistration.urls')),
     path('userprofile/', include('userprofile.urls')),
     path('organizereventpage/', include('OrganizerEventPage.urls')),
+    path('homepage/', include('Homepage.urls')),
 ]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
