@@ -54,7 +54,6 @@ opacity: 0px;
     max-width: 1200px;  
 }
 
-/* Card Styles */
 .card {
     background: white;
     border-radius: 10px;
@@ -102,7 +101,6 @@ opacity: 0px;
     font-size: 18px;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     header {
         flex-direction: column;
