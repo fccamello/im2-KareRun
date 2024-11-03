@@ -167,7 +167,7 @@
             const formData = new FormData();
             formData.append('photo', file);
             formData.append('type', type);
-            fetch('{% url "update_photo" username=user.username %}', {
+            fetch('{% url "userprofile:update_photo" username=user.username %}', {
                 method: 'POST',
                 body: formData,
                 headers: {
@@ -220,7 +220,7 @@
 
         // Function to save fields via AJAX
         function saveField(fieldId, newValue) {
-            fetch('{% url "update_profile" username=user.username %}', {
+            fetch('{% url "userprofile:update_profile" username=user.username %}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -16,7 +16,7 @@ class Participant(models.Model):
     event = models.ForeignKey(Event, related_name='participants', on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     email = models.EmailField()
-    payment_status = models.CharField(max_length=50, choices=[('paid', 'Paid'), ('unpaid', 'Unpaid')])
+    payment_status = models.CharField(max_length=50, choices=[('Paid', 'Paid'), ('Unpaid', 'Unpaid'), ('Cancelled', 'Cancelled')])
     registration_date = models.DateField(auto_now_add=True)
 
     def __str__(self):
