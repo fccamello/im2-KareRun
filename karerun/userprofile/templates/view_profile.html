@@ -166,6 +166,7 @@
         function uploadPhoto(type, file) {
             const formData = new FormData();
             formData.append('photo', file);
+            formData.append('type', type);
             fetch('{% url "update_photo" username=user.username %}', {
                 method: 'POST',
                 body: formData,

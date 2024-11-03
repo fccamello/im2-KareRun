@@ -19,20 +19,6 @@ def view_profile(request, username):
     profile = get_object_or_404(UserProfile, user=user)
     return render(request, 'view_profile.html', {'user': user, 'profile': profile})
 
-def edit_profile(request, username):
-    user = get_object_or_404(User, username=username)  # Fetch the user based on username
-    profile = get_object_or_404(UserProfile, user=user)  # Fetch the corresponding UserProfile
-    
-    if request.method == 'POST':
-        form = UserProfileForm(request.POST, request.FILES, instance=profile)  # Use the profile instance
-        if form.is_valid():
-            form.save()
-            return redirect('view_profile', username=username)  # Redirect to the updated profile page
-    else:
-        form = UserProfileForm(instance=profile)
-    
-    return render(request, 'edit_profile.html', {'form': form, 'user': user})
-
 @login_required
 @csrf_exempt
 def update_profile(request, username):
@@ -67,15 +53,16 @@ def update_profile(request, username):
 @csrf_exempt
 def update_photo(request, username):
     if request.method == 'POST':
-        photo = request.FILES.get('photo')  
+        photo = request.FILES.get('photo')
+        photo_type = request.POST.get('type')  
         if photo:
             # Logic to save the new photo
             user = User.objects.get(username=username)
             profile = UserProfile.objects.get(user=user)
-            if 'cover' in request.POST:
+            if photo_type == 'cover':
                 profile.cover_photo = photo
             else:
                 profile.profile_image = photo
             profile.save()
-            return JsonResponse({'success': True, 'new_url': profile.cover_photo.url if 'cover' in request.POST else profile.profile_image.url})
+            return JsonResponse({'success': True, 'new_url': profile.cover_photo.url if photo_type == 'cover' else profile.profile_image.url})
     return JsonResponse({'success': False})

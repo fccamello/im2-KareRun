@@ -14,7 +14,7 @@ class Event(models.Model):
         return self.event_name
 
 class UserProfile(models.Model):
-    cover_photo = models.ImageField(upload_to='cover_images/', default='profile_images/default.jpg')
+    cover_photo = models.ImageField(upload_to='cover_images/', default='cover_images/default.jpg')
     profile_image = models.ImageField(upload_to='profile_images/', default='profile_images/default.jpg')
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, blank=True)
