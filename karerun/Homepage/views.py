@@ -1,7 +1,8 @@
-# new_app/views.py
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from RegLogCreate.models import Event
 
 @login_required
 def homepage(request):
-    return render(request, 'homepage.html', {'user': request.user})
+    events = Event.objects.all()
+    return render(request, 'homepage.html', {'user': request.user, 'events':events})
