@@ -15,10 +15,11 @@ def register(request):
             return redirect('sucess')
     else:
         form = RegisterUserForm()
-    return render(request,'RegLogCreate/register.html',{'forms':form})
+    return render(request,'register.html',{'forms':form})
 
-def success(request):
-    return render(request,'RegLogCreate/sucess.html')
+def logout(request):
+    del request.session['userID']
+    return redirect('index')
 
 def login(request):
     if request.method == 'POST':
@@ -39,18 +40,30 @@ def login(request):
             print(form.errors)
     else:
         form = LoginForm()
-    return render(request,'RegLogCreate/login.html',{'forms':form})
+    return render(request,'login.html',{'forms':form})
 
 def createEvent(request):
+    userId = request.session.get('userID',None)
+    userName = None
+    if userId is not None:
+        userName = User.objects.get(userid = userId).username
+        print(userId)
+    else:
+        print("no session")
+    
+    context ={
+        'userName':userName
+    }
     if request.method == 'POST':
         print("received event POST")
         form = CreateEvent(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             print("saved event")
-            return redirect('sucess')
+            return redirect('index')
         else:
             print(form.errors)
     else:
         form = CreateEvent()
-    return render(request, 'RegLogCreate/createEvent.html', {'forms': form})
+    context['forms'] = form
+    return render(request, 'createEvent.html', context)
