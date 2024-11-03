@@ -21,6 +21,13 @@
     {% else %}
     <!--  -->
     <a>Hello {{userName}}</a>
+    <button
+      class="nav-buttons"
+      onclick="window.location.href='{% url 'logout' %}';"
+      style="background-color: #ff5726"
+    >
+      Log Out
+    </button>
     {% endif %}
   </nav>
 </div>
