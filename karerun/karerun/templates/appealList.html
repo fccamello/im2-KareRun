@@ -20,19 +20,31 @@
       <h1>Organizer Appeals</h1>
       {% for appeal in appeals %}
       <div class="appeal-box" id="{{appeal.appealID}}">
-        <div>{{appeal.user.firstname}} {{appeal.user.lastname}}</div>
-        <form method="post" action="{% url 'appealList' %}">
-          {% csrf_token %}
-          <input type="hidden" name="appeal_id" value="{{ appeal.appealID }}" />
-          <input type="hidden" name="action" value="accept" />
-          <button type="submit">Accept</button>
-        </form>
-        <form method="post" action="{% url 'appealList' %}">
-          {% csrf_token %}
-          <input type="hidden" name="appeal_id" value="{{ appeal.appealID }}" />
-          <input type="hidden" name="action" value="decline" />
-          <button type="submit">Decline</button>
-        </form>
+        <h3 class="user-Name">
+          {{appeal.user.firstname}} {{appeal.user.lastname}}
+        </h3>
+        <div class="appeal-buttons">
+          <form method="post" action="{% url 'appealList' %}">
+            {% csrf_token %}
+            <input
+              type="hidden"
+              name="appeal_id"
+              value="{{ appeal.appealID }}"
+            />
+            <input type="hidden" name="action" value="accept" />
+            <button type="submit" class="accept">Accept</button>
+          </form>
+          <form method="post" action="{% url 'appealList' %}">
+            {% csrf_token %}
+            <input
+              type="hidden"
+              name="appeal_id"
+              value="{{ appeal.appealID }}"
+            />
+            <input type="hidden" name="action" value="decline" />
+            <button type="submit" class="decline">Decline</button>
+          </form>
+        </div>
       </div>
       {% endfor %}
     </div>
