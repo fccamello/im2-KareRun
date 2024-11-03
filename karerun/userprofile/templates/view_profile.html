@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,9 +7,10 @@
     <title>{{ user.username }}'s Profile</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <style>
-        body {
-            color: white;
+        p {
+            font-size: medium;
         }
         .profile-page {
             margin: 5%;
@@ -61,7 +63,18 @@
         }
     </style>
 </head>
-<body>
+<body style="background-color: aliceblue;">
+
+    <header style="background-color: #002B5A;">
+        <img src="{% static 'photos/logo.png' %}" style="max-width: 250px; width: 100%; padding-left: 100px;">
+        <div class="header-navs">
+            <nav style="text-decoration: none;">
+                <a href="{% url 'homepage' %}">Home</a>
+                <a href="{% url 'race_list' %}">Events</a>
+                <button class="nav-buttons" onclick="window.location.href='{% url 'index' %}';" style="background-color: #FF5726;">Sign Out</button>
+            </nav>
+        </div>
+    </header>
 
 <div class="profile-page">
     <!-- Profile Header -->
@@ -109,9 +122,9 @@
                     <h4>History</h4>
                     <ul>
                         {% for event in profile.user.joined_events.all %}
-                            <li>Joined {{ event.event_name }} on {{ event.date }} at {{ event.location }}</li>
+                            <li style="font-size: medium;">Joined {{ event.event_name }} on {{ event.date }} at {{ event.location }}</li>
                         {% empty %}
-                            <li>No events joined yet.</li>
+                            <li style="font-size: medium;">No events joined yet.</li>
                         {% endfor %}
                     </ul>
                 </div>
