@@ -21,8 +21,6 @@ from django.conf.urls.static import static
 from EventDetails import views
 from Events.views import race_list_view
 
-
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('LandingPage.urls')),
@@ -31,5 +29,5 @@ urlpatterns = [
     path('events/', race_list_view, name='race_list'),
     path('',include('EventRegistration.urls')),
     path('userprofile/', include('userprofile.urls')),
-
+    path('organizereventpage/', include('OrganizerEventPage.urls')),
 ]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

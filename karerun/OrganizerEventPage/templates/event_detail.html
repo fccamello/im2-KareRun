@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ event.name }} - Event Details</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            color: white;
+        }
+        .event-page {
+            margin: 5%;
+            background-color: #002B5A;
+            padding-bottom: 10%;
+        }
+        .event-header {
+            background-color: #002B5A;
+            padding: 20px;
+            position: relative;
+            text-align: center;
+        }
+        .cover-photo {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .event-info {
+            margin-top: 50px;
+            text-align: center;
+        }
+        .tab-content {
+            margin-top: 20px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+
+<div class="event-page">
+    <!-- Event Header -->
+    <div class="event-header">
+        <img src="{{ event.cover_photo.url }}" alt="Event Cover" class="cover-photo">
+        <button id="changeCoverPhoto" class="btn btn-light btn-sm" style="position: absolute; top: 10px; right: 10px;">Change Cover Photo</button>
+    </div>
+
+    <!-- Event Information -->
+    <div class="container event-info">
+        <h2>{{ event.name }}</h2>
+        <p id="description" class="editable">{{ event.description }}</p>
+        <p><strong>Date:</strong> {{ event.date }}</p>
+        <p><strong>Location:</strong> {{ event.location }}</p>
+        <button id="toggleEdit" class="btn btn-danger">Edit Event</button>
+    </div>
+
+    <!-- Tabs for Event Details and Participants -->
+    <div class="container mt-5">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#details">Event Details</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#participants">Participants</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <!-- Event Details Tab -->
+            <div id="details" class="tab-pane fade show active">
+                <h4>Event Details</h4>
+                <p><strong>Description:</strong> <span id="description" class="editable">{{ event.description }}</span></p>
+                <p><strong>Date:</strong> {{ event.date }}</p>
+                <p><strong>Location:</strong> {{ event.location }}</p>
+            </div>
+
+            <!-- Participants Tab -->
+            <div id="participants" class="tab-pane fade">
+                <h4>Participants</h4>
+                <ul>
+                    {% for participant in participants %}
+                        <li>{{ participant.name }} - {{ participant.payment_status }} - Registered on {{ participant.registration_date }}</li>
+                    {% empty %}
+                        <li>No participants yet.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Hidden file input for cover photo upload -->
+<input type="file" id="coverPhotoInput" accept="image/*" style="display:none;">
+
+<!-- JavaScript and Bootstrap scripts -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const editButton = document.getElementById('toggleEdit');
+        let isEditing = false;
+
+        // Change Cover Photo
+        document.getElementById('changeCoverPhoto').addEventListener('click', function() {
+            document.getElementById('coverPhotoInput').click();
+        });
+
+        document.getElementById('coverPhotoInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                uploadPhoto('cover', file);
+            }
+        });
+
+        function uploadPhoto(type, file) {
+            const formData = new FormData();
+            formData.append('photo', file);
+            formData.append('type', type);
+            fetch('{% url "update_event_cover_photo" event_id=event.id %}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.querySelector('.cover-photo').src = data.new_url;
+                } else {
+                    alert('Error uploading photo.');
+                }
+            });
+        }
+
+        editButton.addEventListener('click', function() {
+            if (isEditing) {
+                document.querySelectorAll('.editable').forEach(function(field) {
+                    const input = field.querySelector('input');
+                    if (input) {
+                        const newValue = input.value;
+                        field.innerHTML = newValue;
+                        saveField(field.id, newValue);
+                    }
+                });
+                editButton.textContent = 'Edit Event';
+                isEditing = false;
+            } else {
+                document.querySelectorAll('.editable').forEach(function(field) {
+                    const text = field.textContent;
+                    field.innerHTML = `<input type="text" value="${text}">`;
+                });
+                editButton.textContent = 'Save Changes';
+                isEditing = true;
+            }
+        });
+
+        function saveField(fieldId, newValue) {
+            fetch('{% url "update_event_detail" event_id=event.id %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ field: fieldId, value: newValue })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) alert('Error saving changes.');
+            });
+        }
+    });
+</script>
+
+</body>
+</html>
