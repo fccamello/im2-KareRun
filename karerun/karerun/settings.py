@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'RegLogCreate',
     'EventDetails',
     'Events',
-    'EventRegistration'
+    'EventRegistration',
+    'userprofile',
 ]
 
 MIDDLEWARE = [
