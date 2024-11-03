@@ -8,11 +8,14 @@ from django.contrib.auth import authenticate
 def register(request):
     user = User.objects.all()
     if request.method == 'POST':
+        print("received POST for register")
         form = RegisterUserForm(request.POST)
         if form.is_valid():
             form.save()
             print("saved user")
-            return redirect('sucess')
+            return redirect('index')
+        else:
+            print(form.errors)
     else:
         form = RegisterUserForm()
     return render(request,'register.html',{'forms':form})

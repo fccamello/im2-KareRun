@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'Events',
     'EventRegistration',
     'userprofile',
+    'OrganizerAppeal',
 ]
 
 MIDDLEWARE = [

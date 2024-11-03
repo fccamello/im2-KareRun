@@ -14,7 +14,7 @@ class User(models.Model):
     password = models.CharField(max_length=255)
     email = models.EmailField()
     birthdate = models.DateField(null = True, blank = True)
-    isEventOrganizer = models.BooleanField(default=False)
+    userType = models.IntegerField(default=0,validators=[MinValueValidator(0),MaxValueValidator(3)])
 
     def __str__(self) -> str:
         return self.username
