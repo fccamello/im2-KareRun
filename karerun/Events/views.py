@@ -21,9 +21,6 @@ def race_list_view(request):
         print(userId)
     else:
         print("no session")
-    
-
-
     context = {
         'events': events,
         'search_query': query,
