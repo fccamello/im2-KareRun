@@ -30,5 +30,6 @@ urlpatterns = [
     path('', include('EventDetails.urls')),
     path('events/', race_list_view, name='race_list'),
     path('',include('EventRegistration.urls')),
+    path('userprofile/', include('userprofile.urls')),
 
 ]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
