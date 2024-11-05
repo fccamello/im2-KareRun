@@ -53,6 +53,8 @@ def event_reg(request, event_id):
             age_category = form.cleaned_data['age_category']
             category_ni = form.cleaned_data['category_ni']
             category_price = form.cleaned_data['category_price']
+            singlet_size = form.cleaned_data['singlet_size']
+            finisher_size = form.cleaned_data['finisher_shirt_size']
 
             inclusions = {
                 'inclusions': [],  
@@ -67,11 +69,17 @@ def event_reg(request, event_id):
                     if item['inclusion'] not in ['Finisher Shirt', 'Singlet']
                 ]
 
-            for item in category_inclusions[category_ni]:
-                if item['inclusion'] == 'Finisher Shirt':
-                    inclusions['finisher_shirt_size'] = item['size']  
-                elif item['inclusion'] == 'Singlet':
-                    inclusions['singlet_size'] = item['size'] 
+                singlet_size_set =  False
+                for item in category_inclusions[category_ni]:
+                    if item['inclusion'] == 'Finisher Shirt':
+                        inclusions['finisher_shirt_size'] = finisher_size 
+                    elif item['inclusion'] == 'Singlet':
+                        inclusions['singlet_size'] = singlet_size
+                        singlet_size_set = True
+                        print(item['size'])
+                        
+
+            
 
 
             registration = Registration(
