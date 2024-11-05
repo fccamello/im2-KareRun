@@ -21,6 +21,7 @@ opacity: 0px;
 }
 
 
+/* Search and Sort Form */
 #search-sort-form {
     display: flex;
     gap: 15px;
@@ -53,7 +54,6 @@ opacity: 0px;
     max-width: 1200px;  
 }
 
-/* Card Styles */
 .card {
     background: white;
     border-radius: 10px;
@@ -101,7 +101,6 @@ opacity: 0px;
     font-size: 18px;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     header {
         flex-direction: column;
@@ -123,7 +122,7 @@ opacity: 0px;
     }
 
     .race_list {
-        grid-template-columns: repeat(2, 1fr); 
+         grid-template-columns: repeat(2, 1fr); 
         padding: 15px;
     }
 }
