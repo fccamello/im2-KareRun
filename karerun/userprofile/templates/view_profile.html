@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,9 +7,10 @@
     <title>{{ user.username }}'s Profile</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <style>
-        body {
-            color: white;
+        p {
+            font-size: medium;
         }
         .profile-page {
             margin: 5%;
@@ -61,7 +63,18 @@
         }
     </style>
 </head>
-<body>
+<body style="background-color: aliceblue;">
+
+    <header style="background-color: #002B5A;">
+        <img src="{% static 'photos/logo.png' %}" style="max-width: 250px; width: 100%; padding-left: 100px;">
+        <div class="header-navs">
+            <nav style="text-decoration: none;">
+                <a href="{% url 'homepage' %}">Home</a>
+                <a href="{% url 'race_list' %}">Events</a>
+                <button class="nav-buttons" onclick="window.location.href='{% url 'index' %}';" style="background-color: #FF5726;">Sign Out</button>
+            </nav>
+        </div>
+    </header>
 
 <div class="profile-page">
     <!-- Profile Header -->
@@ -107,13 +120,27 @@
             <div class="col-md-8">
                 <div class="event-history">
                     <h4>History</h4>
-                    <ul>
-                        {% for event in profile.user.joined_events.all %}
-                            <li>Joined {{ event.event_name }} on {{ event.date }} at {{ event.location }}</li>
-                        {% empty %}
-                            <li>No events joined yet.</li>
-                        {% endfor %}
-                    </ul>
+                    <div class="scrollable-container" style="max-height: 400px; overflow-y: auto; margin-top: 20px;">
+                        <div class="row">
+                            {% for event in profile.user.joined_events.all %}
+                            <div class="col-md-12 mb-3">
+                                <div class="card shadow-sm d-flex flex-row" style="border: #002B5A solid 2px;">
+                                    <!-- Card details on the right -->
+                                    <div class="card-body">
+                                        <h5 class="card-title" style="color: #002B5A;">Joined {{ event.event_name }}</h5>
+                                        <p class="card-text">Location: {{ event.location }}</p>
+                                        <p class="card-text">Date: {{ event.date }}</p>
+                                        <a href="{% url 'event_detail' event_id=event.id %}" class="btn btn-outline-primary">View Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% empty %}
+                            <div class="col-12 text-center">
+                                <p style="font-size: medium;">No events joined yet.</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -167,7 +194,7 @@
             const formData = new FormData();
             formData.append('photo', file);
             formData.append('type', type);
-            fetch('{% url "update_photo" username=user.username %}', {
+            fetch('{% url "userprofile:update_photo" username=user.username %}', {
                 method: 'POST',
                 body: formData,
                 headers: {
@@ -220,7 +247,7 @@
 
         // Function to save fields via AJAX
         function saveField(fieldId, newValue) {
-            fetch('{% url "update_profile" username=user.username %}', {
+            fetch('{% url "userprofile:update_profile" username=user.username %}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
