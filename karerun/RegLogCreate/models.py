@@ -36,6 +36,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     isEventOrganizer = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    userType = models.IntegerField(default=0,validators=[MinValueValidator(0),MaxValueValidator(3)])
 
    
     
