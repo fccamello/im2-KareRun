@@ -1,0 +1,40 @@
+.appeal-container {
+    margin: 0 auto;
+    width: 60%;
+    height: 70rem;
+}
+.appeal-container div, .appeal-container h1{
+    color: #002B5A;
+}
+.appeal-box{
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding:1rem;
+}
+.appeal-buttons{
+    display: flex;
+    justify-content: space-between;
+    width: 20rem;
+    align-items: center;
+}
+.appeal-buttons button{
+    width: 8rem;
+    height: 2rem;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    color: white;
+}
+.accept{
+    background-color: #007CFC;
+}
+.decline{
+    background-color: #FF5726;
+}
+.user-Name{
+    display: flex;
+    align-items: center;
+    color:#002B5A;
+}

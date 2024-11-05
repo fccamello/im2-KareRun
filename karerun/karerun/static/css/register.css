@@ -1,0 +1,38 @@
+#formContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 30rem;
+    height:50rem;
+    background-color: #012b5b;
+    margin: 3rem auto;
+}
+#formContainer form{
+    margin: 4rem 0;
+    display: flex;
+    flex-direction: column;
+    gap:0.2rem;
+}
+
+body{
+    justify-content: center;
+}
+input{
+   border-radius: 10px;
+    width: 20rem;
+    height: 2rem;
+    border: none;
+    background-color: #012b5b;
+    border: white 1px solid;
+    color: white;
+}
+button{
+    background-color: #61CBCC;
+    color:black;
+    border-radius: 5px;
+    width: 20rem;
+    height: 2rem;
+    border: none;
+
+}

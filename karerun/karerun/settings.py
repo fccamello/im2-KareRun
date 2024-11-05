@@ -44,8 +44,6 @@ INSTALLED_APPS = [
     'Events',
     'EventRegistration',
     'userprofile',
-    'OrganizerEventPage',
-    'Homepage',
 ]
 
 MIDDLEWARE = [
@@ -56,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'karerun.urls'
@@ -109,6 +108,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+AUTH_USER_MODEL = 'RegLogCreate.User'
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
@@ -141,3 +143,5 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = '/Homepage/homepage/'  # Adjust this to your actual URL structure
 
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True

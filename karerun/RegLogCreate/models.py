@@ -1,22 +1,51 @@
 from django.db import models
 from django.core.validators import MinValueValidator,MaxValueValidator
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
+from django.contrib.auth.models import PermissionsMixin
+
 from django.contrib.auth.hashers import make_password
 from django.core.files.storage import FileSystemStorage
 import datetime
 # Create your models here.
 #add db_comment && 
-class User(models.Model):
+class UserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError("The Email field must be set")
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+    
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_staff', True)
+        return self.create_user(email, password, **extra_fields)
+
+
+   
+class User(AbstractBaseUser, PermissionsMixin):
     userid = models.BigAutoField(primary_key=True)
-    username = models.CharField(max_length=30) #Display Name?
+    username = models.CharField(max_length=30, unique=True)
     firstname = models.CharField(max_length=30)
     lastname = models.CharField(max_length=30)
-    #Should be hashed
     password = models.CharField(max_length=255)
-    email = models.EmailField()
-    birthdate = models.DateField(null = True, blank = True)
+    email = models.EmailField(unique=True)
+    birthdate = models.DateField(null=True, blank=True)
     isEventOrganizer = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
+    userType = models.IntegerField(default=0,validators=[MinValueValidator(0),MaxValueValidator(3)])
 
-    def __str__(self) -> str:
+   
+    
+    objects = UserManager()
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username', 'firstname', 'lastname']  # Fields required for superuser creation
+
+    def __str__(self):
         return self.username
 
 #should be hashed by django

@@ -1,139 +1,123 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
-<body>
-    
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+  </head>
+  <body>
     <header>
-        <img src="{% static 'photos/logo.png' %}" style="max-width: 150px; width: 100%; padding-left: 100px;">
-        <div class="header-navs">
-        <nav>
-            <a href="">Home</a>
-            <a href="{% url 'race_list' %}" >Events</a>
-            <!-- <a href=""></a> -->
-           
-                <button class="nav-buttons" onclick="window.location.href='{% url 'login' %}';" style="background-color: white; color: black;">Log In</button>
-                <button class="nav-buttons" onclick="window.location.href='{% url 'register' %}';" style="background-color: #FF5726;">Sign Up</button>
-          
-        </nav>
-        </div>
+      <img
+        src="{% static 'photos/logo.png' %}"
+        style="max-width: 150px; width: 100%; padding-left: 100px"
+      />
+      {% include "header.html" %}
     </header>
 
     <!-- carousel -->
     <div class="carousel">
-        <!-- list item -->
-        <div class="list">
-            <div class="item">
-                <img src="{% static 'photos/landing_img8.jpg' %}">
-                    <div class="content">
-                    <div class="author">January 24, 2024</div>
-                    <div class="title">CEBU 2024</div>
-                    <div class="topic">MARATHON</div>
-                    <div style ="font-size:medium" class ="des">45km | 24km | 12km | 6km</div>
-                    <div class="buttons">
-                        <button>REGISTER</button>
-                    </div>
-                </div>
+      <!-- list item -->
+      <div class="list">
+        <div class="item">
+          <img src="{% static 'photos/landing_img8.jpg' %}" />
+          <div class="content">
+            <div class="author">January 24, 2024</div>
+            <div class="title">CEBU 2024</div>
+            <div class="topic">MARATHON</div>
+            <div style="font-size: medium" class="des">
+              45km | 24km | 12km | 6km
             </div>
-            <div class="item">
-                <img src="{% static 'photos/landing_img6.jpg' %}">
-                <div class="content">
-                    <div class="author">January 24, 2024</div>
-                    <div class="title">RACE4WATER</div>
-                    <div class="topic">RUN</div>
-                    <div style ="font-size:medium" class ="des">45km | 24km | 12km | 6km</div>
-                    <div class="buttons">
-                        <button>REGISTER</button>
-                    </div>
-                </div>
+            <div class="buttons">
+              <button>REGISTER</button>
             </div>
-            <div class="item">
-                <img src="{% static 'photos/landing_img7.jpg' %}">
-                <div class="content">
-                    <div class="author">January 24, 2024</div>
-                    <div class="title">EARTH HOUR</div>
-                    <div class="topic">VIRTUAL RUN</div>
-                    <div style ="font-size:medium" class ="des">45km | 24km | 12km | 6km</div>
-                    <div class="buttons">
-                        <button>REGISTER</button>
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <img src="{% static 'photos/landing_img5.jpg' %}">
-                <div class="content">
-                    <div class="author">January 24, 2024</div>
-                    <div class="title">CEBU 2025</div>
-                    <div class="topic">MARATHON</div>
-                    <div style ="font-size:medium" class ="des">45km | 24km | 12km | 6km</div>
-                    <div class="buttons">
-                        <button>REGISTER</button>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
-        <!-- list thumbnail -->
-        <div class="thumbnail">
-            <div class="item">
-                <img src="{% static 'photos/landing_img8.jpg' %}">
-                <div class="content">
-                    <div class="title">
-                        Cebu 2024
-                    </div>
-                    <div class="description">
-                        Marathon
-                    </div>
-                </div>
+        <div class="item">
+          <img src="{% static 'photos/landing_img6.jpg' %}" />
+          <div class="content">
+            <div class="author">January 24, 2024</div>
+            <div class="title">RACE4WATER</div>
+            <div class="topic">RUN</div>
+            <div style="font-size: medium" class="des">
+              45km | 24km | 12km | 6km
             </div>
-            <div class="item">
-                <img src="{% static 'photos/landing_img6.jpg' %}">
-                <div class="content">
-                    <div class="title">
-                       RACE4WATER
-                    </div>
-                    <div class="description">
-                        Run
-                    </div>
-                </div>
+            <div class="buttons">
+              <button>REGISTER</button>
             </div>
-            <div class="item">
-                <img src="{% static 'photos/landing_img7.jpg' %}">
-                <div class="content">
-                    <div class="title">
-                        Earth Hour
-                    </div>
-                    <div class="description">
-                        Virtual Run
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <img src="{% static 'photos/landing_img5.jpg' %}">
-                <div class="content">
-                    <div class="title">
-                        Cebu 2025
-                    </div>
-                    <div class="description">
-                        Marathon
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
-        <!-- next prev -->
+        <div class="item">
+          <img src="{% static 'photos/landing_img7.jpg' %}" />
+          <div class="content">
+            <div class="author">January 24, 2024</div>
+            <div class="title">EARTH HOUR</div>
+            <div class="topic">VIRTUAL RUN</div>
+            <div style="font-size: medium" class="des">
+              45km | 24km | 12km | 6km
+            </div>
+            <div class="buttons">
+              <button>REGISTER</button>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <img src="{% static 'photos/landing_img5.jpg' %}" />
+          <div class="content">
+            <div class="author">January 24, 2024</div>
+            <div class="title">CEBU 2025</div>
+            <div class="topic">MARATHON</div>
+            <div style="font-size: medium" class="des">
+              45km | 24km | 12km | 6km
+            </div>
+            <div class="buttons">
+              <button>REGISTER</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- list thumbnail -->
+      <div class="thumbnail">
+        <div class="item">
+          <img src="{% static 'photos/landing_img8.jpg' %}" />
+          <div class="content">
+            <div class="title">Cebu 2024</div>
+            <div class="description">Marathon</div>
+          </div>
+        </div>
+        <div class="item">
+          <img src="{% static 'photos/landing_img6.jpg' %}" />
+          <div class="content">
+            <div class="title">RACE4WATER</div>
+            <div class="description">Run</div>
+          </div>
+        </div>
+        <div class="item">
+          <img src="{% static 'photos/landing_img7.jpg' %}" />
+          <div class="content">
+            <div class="title">Earth Hour</div>
+            <div class="description">Virtual Run</div>
+          </div>
+        </div>
+        <div class="item">
+          <img src="{% static 'photos/landing_img5.jpg' %}" />
+          <div class="content">
+            <div class="title">Cebu 2025</div>
+            <div class="description">Marathon</div>
+          </div>
+        </div>
+      </div>
+      <!-- next prev -->
 
-        <div class="arrows">
-            <button id="prev"><</button>
-            <button id="next">></button>
-        </div>
-        <!-- time running -->
-        <div class="time"></div>
+      <div class="arrows">
+        <button id="prev"><</button>
+        <button id="next">></button>
+      </div>
+      <!-- time running -->
+      <div class="time"></div>
     </div>
 
     <script src="{% static 'js/app.js' %}"></script>
-</body>
+  </body>
 </html>

@@ -1,36 +1,148 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>Create Event</title>
-  </head>
-  <body>
+</head>
+<body>
     <h1>Create Event</h1>
-    {% if forms.errors %} {{forms.errors}} {%endif%}
+    {% if forms.errors %} {{ forms.errors }} {% endif %}
     <form method="POST" enctype="multipart/form-data">
-      {% csrf_token %}
-      <p>event name</p>
-      {{forms.eventname}}
-      <p>event details</p>
-      {{forms.eventdetails}}
-      <p>event categories</p>
-      {{forms.eventcategory}}
-      <p>event location</p>
-      {{forms.eventlocation}}
-      <p>event date</p>
-      {{forms.eventdate}}
-      <p>event time</p>
-      {{forms.eventtime}}
-      <p>inclusions</p>
-      {{forms.inclusions}}
-      <p>inclusion images</p>
-      {{forms.inclusionimage}}
-      <p>banner image</p>
-      {{forms.bannerimage}}
-      <p>size chart</p>
-      {{forms.sizechartimage}}
-      <p>race route</p>
-      {{forms.racerouteimage}}
-      <button type="submit">submit</button>
+        {% csrf_token %}
+        <input type="hidden" name="eventcategory" id="eventcategory" value="">
+        <input type="hidden" name="inclusions" id="inclusions" value="[]">
+
+        <p>Event Name</p>
+        {{ forms.eventname }}
+        <p>Event Details</p>
+        {{ forms.eventdetails }}
+
+        <p>Event Categories</p>
+        <div id="category-container">
+            <button type="button" onclick="displayInclusions('3k')">3k</button>
+            <button type="button" onclick="displayInclusions('5k')">5k</button>
+            <button type="button" onclick="displayInclusions('10k')">10k</button>
+            <button type="button" onclick="displayInclusions('16k')">16k</button>
+        </div>
+
+        <div>
+            <button type="button" onclick="showInputField()">+</button>
+        </div>
+
+        <div id="custom-category-input" style="display: none;">
+            <input type="text" id="new-category" placeholder="Enter custom category">
+            <button type="button" onclick="addCustomCategory()">Add</button>
+        </div>
+
+        <div id="inclusion-container"></div>
+
+        <p>Event Location</p>
+        {{ forms.eventlocation }}
+        <p>Event Date</p>
+        {{ forms.eventdate }}
+        <p>Event Time</p>
+        {{ forms.eventtime }}
+        <p>Inclusion Images</p>
+        {{ forms.inclusionimage }}
+        <p>Banner Image</p>
+        {{ forms.bannerimage }}
+        <p>Size Chart</p>
+        {{ forms.sizechartimage }}
+        <p>Race Route</p>
+        {{ forms.racerouteimage }}
+        <button type="submit">Submit</button>
     </form>
-  </body>
+
+    <script>
+        const categoryContainer = document.getElementById("category-container");
+        const inclusionContainer = document.getElementById("inclusion-container");
+        const selectedCategories = new Set();
+
+        function showInputField() {
+            document.getElementById("custom-category-input").style.display = "block";
+        }
+
+        function updateCategoryField() {
+            document.getElementById("eventcategory").value = Array.from(selectedCategories).join(',');
+        }
+
+        function displayInclusions(category) {
+            // Add category to selected categories
+            selectedCategories.add(category);
+            updateCategoryField();
+
+            // Clear any existing inclusions
+            inclusionContainer.innerHTML = `<h3>Inclusions for ${category}</h3>`;
+            
+            // Price input
+            const priceInput = document.createElement('input');
+            priceInput.type = 'number';
+            priceInput.placeholder = 'Enter Price';
+            priceInput.id = `price-${category}`;
+            inclusionContainer.appendChild(priceInput);
+
+            // Predefined inclusion buttons
+            ["Singlet", "Race Bib", "Finisher Medal", "Finisher Shirt"].forEach(inclusion => {
+                const inclusionButton = document.createElement("button");
+                inclusionButton.type = "button";
+                inclusionButton.textContent = inclusion;
+                inclusionButton.onclick = () => addInclusionOptions(category, inclusion);
+                inclusionContainer.appendChild(inclusionButton);
+            });
+        }
+
+        function addCustomCategory() {
+            const customCategory = document.getElementById("new-category").value.trim();
+            if (customCategory) {
+                const categoryButton = document.createElement("button");
+                categoryButton.type = "button";
+                categoryButton.textContent = customCategory;
+                categoryButton.id = `button-${customCategory}`;
+                categoryButton.onclick = () => displayInclusions(customCategory);
+                categoryContainer.appendChild(categoryButton);
+
+                document.getElementById("new-category").value = "";
+                document.getElementById("custom-category-input").style.display = "none";
+            } else {
+                alert("Please enter a category name");
+            }
+        }
+
+        function addInclusionOptions(category, inclusion) {
+            const inclusionSection = document.createElement("div");
+            inclusionSection.id = `${category}-${inclusion}-sizes`;
+
+            if (inclusion === "Singlet" || inclusion === "Finisher Shirt") {
+                inclusionSection.innerHTML = `<h4>Sizes for ${inclusion}</h4>`;
+                ["XS", "S", "M", "L", "XL"].forEach(size => {
+                    const sizeButton = document.createElement("button");
+                    sizeButton.type = "button";
+                    sizeButton.textContent = size;
+                    sizeButton.onclick = () => {
+                        addInclusionToForm(category, inclusion, size);
+                    };
+                    inclusionSection.appendChild(sizeButton);
+                });
+            } else {
+                addInclusionToForm(category, inclusion);
+            }
+
+            const oldSizes = document.getElementById(`${category}-${inclusion}-sizes`);
+            if (oldSizes) {
+                inclusionContainer.removeChild(oldSizes);
+            }
+            inclusionContainer.appendChild(inclusionSection);
+        }
+
+        function addInclusionToForm(category, inclusion, size = null) {
+            const inclusionsInput = document.getElementById('inclusions');
+            let inclusions = JSON.parse(inclusionsInput.value || '[]');
+
+            const priceInput = document.getElementById(`price-${category}`);
+            const price = priceInput ? priceInput.value : null;
+
+            inclusions.push({ category, inclusion, size, price });
+            inclusionsInput.value = JSON.stringify(inclusions);
+        }
+    </script>
+</body>
 </html>
