@@ -18,14 +18,7 @@
     <header style="background-color: #002B5A;">
         
         <img src="{% static 'photos/logo.png' %}" style="max-width: 150px; width: 100%; padding-left: 100px;">
-        <div class="header-navs">
-            <nav>
-                <a href="">Home</a>
-                <a href="">Events</a>
-                <button class="nav-buttons" onclick="window.location.href='{% url 'login' %}';" style="background-color: white; color: black;">Log In</button>
-                <button class="nav-buttons" onclick="window.location.href='{% url 'register' %}';" style="background-color: #FF5726;">Sign Up</button>
-            </nav>
-        </div>
+        {%include 'header.html' %}
     </header>
 
 
