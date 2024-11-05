@@ -2,7 +2,7 @@ from django.db import models
 from django.core.validators import MinValueValidator,MaxValueValidator
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
-
+from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import make_password
 from django.core.files.storage import FileSystemStorage
 import datetime
@@ -39,7 +39,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     userType = models.IntegerField(default=0,validators=[MinValueValidator(0),MaxValueValidator(3)])
 
    
-    
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
