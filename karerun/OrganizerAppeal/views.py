@@ -39,5 +39,8 @@ def appealList(request):
             appeal.acceptedBy = userID
             appeal.save()
             print("appeal accepted")
+            user = User.objects.get(userid = appeal.user.userid)
+            user.userType = 1
+            user.save()
 
     return render(request,'appealList.html',context)   
