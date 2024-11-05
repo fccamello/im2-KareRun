@@ -41,15 +41,15 @@ class RegistrationForm(forms.Form):
         if categories:
             self.fields['category_ni'].initial = categories[0]
    
-    def clean(self):
-        cleaned_data = super().clean()
+    # def clean(self):
+    #     cleaned_data = super().clean()
         
-        inclusions = {
-            'singlet_size': cleaned_data.get('singlet_size'),
-            'finisher_shirt_size': cleaned_data.get('finisher_shirt_size')
-        }
+    #     inclusions = {
+    #         'singlet_size': cleaned_data.get('singlet_size'),
+    #         'finisher_shirt_size': cleaned_data.get('finisher_shirt_size')
+    #     }
         
-        cleaned_data['inclusions'] = inclusions
-        return cleaned_data
+    #     cleaned_data['inclusions'] = inclusions
+    #     return cleaned_data
 
         

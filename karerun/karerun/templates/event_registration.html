@@ -300,9 +300,8 @@
         });
 
         this.classList.add('active');
-        const selectedSize = this.getAttribute('data-size');
         if (inclusionType === 'Singlet') {
-            document.getElementById(`singlet_size_${category}`).value = selectedSize;
+            document.getElementById(`singlet_size_${category}`).value =  this.getAttribute('data-size');
         }
     });
 });
