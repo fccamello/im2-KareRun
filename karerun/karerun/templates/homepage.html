@@ -1,0 +1,168 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Homepage</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+  </head>
+  <body style="background-color: aliceblue">
+    <header style="background-color: #002b5a">
+      <img
+        src="{% static 'photos/logo.png' %}"
+        style="max-width: 250px; width: 100%; padding-left: 100px"
+      />
+      <div class="header-navs">
+        <nav style="text-decoration: none">
+          <a href="">Home</a>
+          <a href="{% url 'race_list' %}">Events</a>
+          <button
+            class="nav-buttons"
+            onclick="window.location.href='{% url 'index' %}';"
+            style="background-color: #ff5726"
+          >
+            Sign Out
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <div class="container mt-5 text-center" style="color: #002b5a">
+      <h2>
+        Hello, {{ user.first_name }} {{ user.last_name }}! What would you like
+        to do?
+      </h2>
+    </div>
+
+    <!-- Action Boxes Section -->
+    <div class="container my-5">
+      <div class="row justify-content-center">
+        <!-- Register for a Race Box -->
+        <div class="col-md-3 text-center" style="margin: 20px">
+          <a href="{% url 'race_list' %}" class="text-decoration-none">
+            <div
+              class="card shadow-sm p-4 mb-4 bg-white rounded d-flex align-items-center"
+              style="width: 300px; height: 250px; border: #002b5a solid 3px"
+            >
+              <div class="circle-logo mx-auto mb-3">
+                <img
+                  src="{% static 'icons/register_icon.png' %}"
+                  class="rounded-circle"
+                  style="width: 50px; height: 50px"
+                />
+              </div>
+              <h5 class="text-dark">Register for a Race</h5>
+              <p class="text-dark">
+                <br />Just here to register for events?<br />Let's get
+                searching!
+              </p>
+            </div>
+          </a>
+        </div>
+
+        <!-- Create an Event Box -->
+        <div class="col-md-3 text-center" style="margin: 20px">
+          <a href="{% url 'createEvent' %}" class="text-decoration-none">
+            <div
+              class="card shadow-sm p-4 mb-4 bg-white rounded d-flex align-items-center"
+              style="width: 300px; height: 250px; border: #002b5a solid 3px"
+            >
+              <div class="circle-logo mx-auto mb-3">
+                <img
+                  src="{% static 'icons/create_event_icon.png' %}"
+                  class="rounded-circle"
+                  style="width: 50px; height: 50px"
+                />
+              </div>
+              <h5 class="text-dark">Create an Event</h5>
+              <p class="text-dark">
+                <br />Already an Organizer?<br />Create and manage your own
+                event!
+              </p>
+            </div>
+          </a>
+        </div>
+
+        <!-- Request as Organizer Box -->
+        <div class="col-md-3 text-center" style="margin: 20px">
+          <a href="" class="text-decoration-none">
+            <div
+              class="card shadow-sm p-4 mb-4 bg-white rounded d-flex align-items-center"
+              style="width: 300px; height: 250px; border: #002b5a solid 3px"
+            >
+              <div class="circle-logo mx-auto mb-3">
+                <img
+                  src="{% static 'icons/request_organizer_icon.png' %}"
+                  class="rounded-circle"
+                  style="width: 50px; height: 50px"
+                />
+              </div>
+              <h5 class="text-dark">Request as Organizer</h5>
+              <p class="text-dark">
+                <br />Become an Organizer now to organize your own event!
+              </p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Registered Races Section -->
+    <div class="container mt-5" style="color: #002b5a">
+      <h3>Registered Races</h3>
+      <div
+        class="scrollable-container"
+        style="max-height: 400px; overflow-y: auto; margin-top: 20px"
+      >
+        <div class="row">
+          {% for event in events %}
+          <div class="col-md-12 mb-3">
+            <div
+              class="card shadow-sm d-flex flex-row"
+              style="border: #002b5a solid 2px"
+            >
+              <!-- Image on the left -->
+              <img
+                src="{{ event.bannerimage.url }}"
+                class="card-img-left"
+                style="width: 500px; height: auto; object-fit: cover"
+                alt="{{ event.eventname }}"
+              />
+
+              <!-- Card details on the right -->
+              <div class="card-body">
+                <h5 class="card-title" style="color: #002b5a">
+                  {{ event.eventname }}
+                </h5>
+                <p class="card-text">Location: {{ event.eventlocation }}</p>
+                <p class="card-text">Date: {{ event.eventdate }}</p>
+                <p class="card-text">Time: {{ event.eventtime }}</p>
+                <p class="card-text">Details: {{ event.eventdetails }}</p>
+                <a
+                  href="{% url 'event_detail' event_id=event.eventid %}"
+                  class="btn btn-outline-primary"
+                  >View Details</a
+                >
+              </div>
+            </div>
+          </div>
+          {% empty %}
+          <div class="col-12 text-center">
+            <p style="font-size: medium">No registered races yet.</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>

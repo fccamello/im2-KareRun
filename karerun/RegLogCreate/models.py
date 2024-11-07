@@ -51,7 +51,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     def login(email,password):
         # hashedPassword = make_password(password)
         hashedPassword = password
-        return User.objects.filter(email = email).filter(password = hashedPassword).get()
+        user = authenticate(email=email, password=hashedPassword)
+        if user:
+            return user
+        else:
+            return None
+        
 
 
 # bannerloc = FileSystemStorage(location="./photos/eventbanner/")
