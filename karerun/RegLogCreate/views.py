@@ -5,6 +5,7 @@ from .models import User
 from .forms import RegisterUserForm,LoginForm,CreateEvent
 from datetime import date
 from django.contrib.auth import authenticate
+from django.contrib.auth.hashers import make_password
 # Create your views here.
 def register(request):
     user = User.objects.all()
@@ -12,7 +13,9 @@ def register(request):
         print("received POST for register")
         form = RegisterUserForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save(commit=False)
+            user.password = make_password(form.cleaned_data['password'])
+            user.save()
             print("saved user")
             return redirect('index')
         else:
@@ -39,7 +42,7 @@ def login(request):
                 return redirect('index')
             else:
                 print("error/wrong password")
-                return redirect('sucess')
+                return redirect('login')
         else:
             print(form.errors)
     else:
