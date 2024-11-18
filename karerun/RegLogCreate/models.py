@@ -68,6 +68,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Event(models.Model):
     eventid = models.BigAutoField(primary_key=True)
+    organizerId = models.IntegerField(default=0)
     eventname = models.CharField(max_length=100)
     eventdetails = models.TextField()
     #should be list of categories

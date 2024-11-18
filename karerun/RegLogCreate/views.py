@@ -53,11 +53,14 @@ def createEvent(request):
     userId = request.session.get('userID',None)
     userName = None
     if userId is not None:
-        userName = User.objects.get(userid = userId).username
+        user = User.objects.get(userid = userId)
+        userName = user.username
+        if user.isEventOrganizer == False:
+            return redirect('index')
         print(userId)
     else:
         print("no session")
-    
+
     context ={
         'userName':userName
     }
@@ -65,7 +68,9 @@ def createEvent(request):
         print("received event POST")
         form = CreateEvent(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            user = form.save(commit=False)
+            user.organizerId = userId
+            user.save()
             print("saved event")
             return redirect('index')
         else:
