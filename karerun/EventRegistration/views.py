@@ -7,6 +7,9 @@ from RegLogCreate.models import Event, User
 import json
 
 def event_reg(request, event_id):
+
+    userId = request.session.get('userID', None)
+
     event = get_object_or_404(Event, eventid=event_id)    
     eventname_split = event.eventname.split(' ', 1)
     first_word = eventname_split[0]
@@ -77,13 +80,9 @@ def event_reg(request, event_id):
                         inclusions['singlet_size'] = singlet_size
                         singlet_size_set = True
                         print(item['size'])
-                        
-
             
-
-
             registration = Registration(
-            user = User.objects.get(userid=request.user.userid), 
+            user = User.objects.get(userid=userId), 
             event = event,
             gender = gender,
             contactnum = contactnum,
@@ -94,7 +93,7 @@ def event_reg(request, event_id):
             category_price=category_price
             )
             registration.save()
-            return redirect('sucess')
+            return redirect('index')
         else:
             print(form.errors)      
             print("Form Data:", request.POST)
