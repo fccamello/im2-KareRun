@@ -3,7 +3,6 @@
     <a href="{%url 'index'%}">Home</a>
     <a href="{% url 'race_list' %}">Events</a>
     <!-- <a href=""></a> -->
-    {% if userName is None %}
     <button
       class="nav-buttons"
       onclick="window.location.href='{% url 'login' %}';"
@@ -18,16 +17,5 @@
     >
       Sign Up
     </button>
-    {% else %}
-    <!--  -->
-    <a>Hello {{userName}}</a>
-    <button
-      class="nav-buttons"
-      onclick="window.location.href='{% url 'logout' %}';"
-      style="background-color: #ff5726"
-    >
-      Log Out
-    </button>
-    {% endif %}
   </nav>
 </div>
