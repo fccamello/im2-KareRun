@@ -1,6 +1,10 @@
 <div class="header-navs">
   <nav>
-    <a href="{%url 'index'%}">Home</a>
+    {% if userName %}
+    <a href="{% url 'homepage' %}">Home</a>
+    {% else %}
+    <a href="{% url 'index' %}">Home</a>
+    {% endif %}
     <a href="{% url 'race_list' %}">Events</a>
     <!-- <a href=""></a> -->
     {%if userName is None%}

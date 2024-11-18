@@ -80,11 +80,20 @@
           </a>
         </div>
         {% endif %}
-
         <!-- Request as Organizer Box -->
         {% if not user.isEventOrganizer and not user.is_superuser%}
         <div class="col-md-3 text-center" style="margin: 20px">
-          <a href="{% url 'appeal' %}" class="text-decoration-none">
+          <a
+            href="{% if not requested %}{% url 'appeal' %}{% endif %}"
+            class="text-decoration-none"
+            {%
+            if
+            requested
+            %}style="pointer-events: none; cursor: default;"
+            {%
+            endif
+            %}
+          >
             <div
               class="card shadow-sm p-4 mb-4 bg-white rounded d-flex align-items-center"
               style="width: 300px; height: 250px; border: #002b5a solid 3px"
@@ -98,7 +107,9 @@
               </div>
               <h5 class="text-dark">Request as Organizer</h5>
               <p class="text-dark">
-                <br />Become an Organizer now to organize your own event!
+                {% if requested %}
+                <br />You have already requested. {% else %} <br />Become an
+                Organizer now to organize your own event! {% endif %}
               </p>
             </div>
           </a>

@@ -1,20 +1,29 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from RegLogCreate.models import Event,User
-
+from OrganizerAppeal.models import OrganizerAppeal
 @login_required
 def homepage(request):
     events = Event.objects.all()
     #warning the session might not have 'userID', in normal means they have
     userId = request.session.get('userID',None)
+    appeal = OrganizerAppeal.objects.filter(user = User.objects.get(userid = userId))
+    requested = False
+    if appeal.exists():
+        requested = True
+        print("You have already requested")
     user = None
     if userId is not None:
         user = User.objects.get(userid = userId)
-        print(userId)
-        print(user.isEventOrganizer)
     else:
         print("no session")
-    return render(request, 'homepage.html', {'user': user, 'events':events,'userName':user.username})
+    context = {
+        'events': events,
+        'userName':user.username,
+        'requested':requested,
+        'user':user
+    }
+    return render(request, 'homepage.html', context)   
 
 def logout(request):
     del request.session['userID']
