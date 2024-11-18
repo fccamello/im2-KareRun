@@ -34,7 +34,7 @@
 
     <div class="container mt-5 text-center" style="color: #002b5a">
       <h2>
-        Hello, {{ user.first_name }} {{ user.last_name }}! What would you like
+        Hello, {{ user.firstname }} {{ user.lastname }}! What would you like
         to do?
       </h2>
     </div>
@@ -43,7 +43,7 @@
     <div class="container my-5">
       <div class="row justify-content-center">
         <!-- Register for a Race Box -->
-        <div class="col-md-3 text-center" style="margin: 20px">
+        <div class="col-md-3 text-center" style="margin: 20px; margin-right: 100px;">
           <a href="{% url 'race_list' %}" class="text-decoration-none">
             <div
               class="card shadow-sm p-4 mb-4 bg-white rounded d-flex align-items-center"
@@ -66,6 +66,7 @@
         </div>
 
         <!-- Create an Event Box -->
+        {% if user.isEventOrganizer %}
         <div class="col-md-3 text-center" style="margin: 20px">
           <a href="{% url 'createEvent' %}" class="text-decoration-none">
             <div
@@ -87,8 +88,10 @@
             </div>
           </a>
         </div>
+        {% endif %}
 
         <!-- Request as Organizer Box -->
+        {% if not user.is_superuser and not user.isEventOrganizer %}
         <div class="col-md-3 text-center" style="margin: 20px">
           <a href="{% url 'appeal' %}" class="text-decoration-none">
             <div
@@ -109,6 +112,7 @@
             </div>
           </a>
         </div>
+        {% endif %}
       </div>
     </div>
 
