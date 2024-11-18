@@ -9,6 +9,7 @@ import json
 def event_reg(request, event_id):
 
     userId = request.session.get('userID', None)
+    user = User.objects.get(userid = userId)
 
     event = get_object_or_404(Event, eventid=event_id)    
     eventname_split = event.eventname.split(' ', 1)
@@ -109,7 +110,7 @@ def event_reg(request, event_id):
         'category_prices': category_prices,
         'categories_unique': list(unique_inclusions.keys()),
         'unique_inclusions': unique_inclusions, 
-
+        'user' : user
     }
     
     return render(request, 'event_registration.html', context)
