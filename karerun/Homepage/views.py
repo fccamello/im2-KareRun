@@ -11,6 +11,7 @@ def homepage(request):
     if userId is not None:
         user = User.objects.get(userid = userId)
         print(userId)
+        print(user.isEventOrganizer)
     else:
         print("no session")
     return render(request, 'homepage.html', {'user': user, 'events':events})
