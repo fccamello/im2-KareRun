@@ -5,7 +5,7 @@ class RegisterUserForm(forms.ModelForm):
     birthdate = forms.DateField(widget = forms.DateInput(attrs={'type':'date','min':'1900-01-01'}))
     class Meta:
         model = User
-        fields = ['firstname','lastname','username','email','password','birthdate']
+        fields = ['firstname','lastname','username','email','password','birthdate','sex']
         widgets = {
             'password':forms.PasswordInput,
             'email':forms.EmailInput
