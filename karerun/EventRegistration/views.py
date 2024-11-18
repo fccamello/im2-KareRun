@@ -4,12 +4,33 @@ from django.shortcuts import get_object_or_404, redirect, render
 from .models import Registration
 from .forms import RegistrationForm
 from RegLogCreate.models import Event, User
+from datetime import date
+
 import json
+
+def calculate_age(birthdate):
+    today = date.today()
+    return today.year - birthdate.year - ((today.month, today.day) < (birthdate.month, birthdate.day))
+
+def determine_age_category(age):
+    if age <= 20:
+        return "20 and below"
+    elif 21 <= age <= 30:
+        return "21 to 30"
+    elif 31 <= age <= 40:
+        return "31 to 40"
+    elif 41 <= age <= 50:
+        return "41 to 50"
+    else:
+        return "51 and above"
 
 def event_reg(request, event_id):
 
     userId = request.session.get('userID', None)
     user = User.objects.get(userid = userId)
+
+    user_age = calculate_age(user.birthdate)
+    age_category = determine_age_category(user_age)
 
     event = get_object_or_404(Event, eventid=event_id)    
     eventname_split = event.eventname.split(' ', 1)
@@ -104,6 +125,7 @@ def event_reg(request, event_id):
     context = {
         'event': event,
         'first_word': first_word,
+        'age_category': age_category,
         'rest_of_text': rest_of_text,
         'categories': category_list,
         'category_inclusions': category_inclusions,

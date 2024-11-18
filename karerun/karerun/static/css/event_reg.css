@@ -426,3 +426,9 @@
     margin-top: 0% !important;
     padding: 0% !important;
 }
+
+.age-button.highlight {
+  background: #4ac6d6;
+    border-color: #4ac6d6;
+    color: white;
+}

@@ -109,27 +109,28 @@
                 <div class="age-gender-container">
                     <div class="form-section">
                         <label class="form-label">Age</label>
-                        <div class="age-group">
-                            <label class="age-button">
-                                <input type="radio" name="age_category" value="20 and below">
-                                20 and below
-                            </label>
-                            <label class="age-button">
-                                <input type="radio" name="age_category" value="21 to 30">
-                                21 to 30
-                            </label>
-                            <label class="age-button">
-                                <input type="radio" name="age_category" value="31 to 40">
-                                31 to 40
-                            </label>
-                            <label class="age-button">
-                                <input type="radio" name="age_category" value="41 to 50">
-                                41 to 50
-                            </label>
-                            <label class="age-button">
-                                <input type="radio" name="age_category" value="51 and above">
-                                51 and above
-                            </label>
+        <div class="age-group" id="age-group" data-age-category="{{ age_category }}">
+            <label class="age-button">
+                <input type="radio" name="age_category" value="20 and below" 
+                {% if age_category == "20 and below" %} checked {% else %} disabled {% endif %}>
+                20 and below
+            </label>
+            <label class="age-button">
+                <input type="radio" name="age_category" value="21 to 30" {% if age_category == "21 to 30" %} checked {% else %} disabled {% endif %}>
+                21 to 30
+            </label>
+            <label class="age-button">
+                <input type="radio" name="age_category" value="31 to 40" {% if age_category == "31 to 40" %} checked {% else %} disabled {% endif %}>
+                31 to 40
+            </label>
+            <label class="age-button">
+                <input type="radio" name="age_category" value="41 to 50" {% if age_category == "41 to 50" %} checked {% else %} disabled {% endif %}>
+                41 to 50
+            </label>
+            <label class="age-button">
+                <input type="radio" name="age_category" value="51 and above" {% if age_category == "51 and above" %} checked {% else %} disabled {% endif %}>
+                51 and above
+            </label>
                         </div>
                     </div>
                
@@ -139,11 +140,13 @@
                     <label class="form-label">Gender</label>
                     <div class="gender-group">
                         <label class="gender-option">
-                            <input type="radio" name="gender" value="M">
+                            <input type="radio" name="gender" value="M" data-gender="M"
+                            {% if user.sex == "M" %} checked {% else %} disabled {% endif %}>
                             Male
                         </label>
                         <label class="gender-option">
-                            <input type="radio" name="gender" value="F">
+                            <input type="radio" name="gender" value="F"  data-gender="F"
+                            {% if user.sex == "F" %} checked {% else %} disabled {% endif %}>
                             Female
                         </label>
                     </div>
@@ -219,19 +222,40 @@
     </form>
 
         <script>
-            document.querySelectorAll('.age-button').forEach(button => {
-                button.addEventListener('click', function() {
-                    document.querySelectorAll('.age-button').forEach(btn => btn.classList.remove('active'));
-                    this.classList.add('active');
-                });
+           
+        document.addEventListener('DOMContentLoaded', function() {
+        const ageCategory = document.getElementById('age-group').getAttribute('data-age-category');
+        
+        function resetClasses() {
+            const labels = document.querySelectorAll('.age-button');
+            labels.forEach(label => {
+                label.classList.remove('highlight');
             });
+        }
 
-            document.querySelectorAll('.gender-option').forEach(option => {
-                option.addEventListener('click', function() {
-                    document.querySelectorAll('.gender-option').forEach(opt => opt.classList.remove('active'));
-                    this.classList.add('active');
-                });
-            });
+        function highlightButton() {
+            resetClasses();
+            const selectedLabel = document.querySelector(`input[value="${ageCategory}"]`).closest('label');
+            selectedLabel.classList.add('highlight');
+        }
+
+        highlightButton();
+    });
+        
+
+        document.addEventListener('DOMContentLoaded', function() {
+        const userGender = "{{ user.sex }}";
+
+        const genderInput = document.querySelector(`input[name="gender"][data-gender="${userGender}"]`);
+        if (genderInput) {
+            genderInput.checked = true;
+
+            const genderOption = genderInput.closest('.gender-option');
+            if (genderOption) {
+                genderOption.classList.add('active');
+            }
+        }
+        });
 
             document.querySelectorAll('.category-box').forEach(option => {
                 option.addEventListener('click', function() {
