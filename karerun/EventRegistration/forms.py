@@ -18,8 +18,7 @@ class RegistrationForm(forms.Form):
 
     GENDER_CHOICES = [
         ('M', 'Male'),
-        ('F', 'Female'),
-        ('N', 'Prefer not to say'),
+        ('F', 'Female')
     ]
     
     gender = forms.ChoiceField(choices=GENDER_CHOICES,widget=forms.RadioSelect)
