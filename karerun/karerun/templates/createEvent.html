@@ -1,56 +1,158 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Race List</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+<html>
+<head>
+    <title>Create Event</title>
     <link rel="stylesheet" href="{% static 'css/create_event.css' %}" />
-  </head>
-  <body style="background-color: aliceblue">
-    <header style="background-color: #002b5a">
-      <img
-        src="{% static 'photos/logo.png' %}"
-        style="max-width: 150px; width: 100%; padding-left: 100px"
-      />
-      {%include 'header.html' %}
-    </header>
-    <div id="formContainer">
-      <img
-        src="{% static 'photos/logo.png' %}"
-        style="max-width: 150px; width: 100%"
-      />
-      {% if forms.errors %} {{forms.errors}} {%endif%}
-      <form method="POST" enctype="multipart/form-data">
-        <h3>Race Information</h3>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+
+</head>
+<body style="background-color: aliceblue">
+  <header style="background-color: #002b5a">
+    <img
+      src="{% static 'photos/logo.png' %}"
+      style="max-width: 150px; width: 100%; padding-left: 100px"
+    />
+    {%include 'header.html' %}
+  </header>
+  <div id="formContainer">
+    <h1 class = "create_event"> CREATE EVENT </h1>
+    {% if forms.errors %} {{ forms.errors }} {% endif %}
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
+        <input type="hidden" name="eventcategory" id="eventcategory" value="">
+        <input type="hidden" name="inclusions" id="inclusions" value="[]">
+
         <p>Event Name</p>
-        {{forms.eventname}}
+        {{ forms.eventname }}
         <p>Event Details</p>
-        {{forms.eventdetails}}
+        {{ forms.eventdetails }}
+
         <p>Event Categories</p>
-        {{forms.eventcategory}}
+        <div id="category-container">
+            <button type="button" class = "btn_cat" onclick="displayInclusions('3k')">3k</button>
+            <button type="button" class = "btn_cat" onclick="displayInclusions('5k')">5k</button>
+            <button type="button" class = "btn_cat" onclick="displayInclusions('10k')">10k</button>
+            <button type="button" class = "btn_cat" onclick="displayInclusions('16k')">16k</button>
+        </div>
+
+        <div>
+            <button type="button" onclick="showInputField()">+</button>
+        </div>
+
+        <div id="custom-category-input" style="display: none;">
+            <input type="text" id="new-category" placeholder="Enter custom category">
+            <button type="button" onclick="addCustomCategory()">Add</button>
+        </div>
+
+        <div id="inclusion-container"></div>
+
         <p>Event Location</p>
-        {{forms.eventlocation}}
+        {{ forms.eventlocation }}
         <p>Event Date</p>
-        {{forms.eventdate}}
+        {{ forms.eventdate }}
         <p>Event Time</p>
-        {{forms.eventtime}}
-        <p>Inclusions</p>
-        {{forms.inclusions}}
+        {{ forms.eventtime }}
         <p>Inclusion Images</p>
-        {{forms.inclusionimage}}
+        {{ forms.inclusionimage }}
         <p>Banner Image</p>
-        {{forms.bannerimage}}
+        {{ forms.bannerimage }}
         <p>Size Chart</p>
-        {{forms.sizechartimage}}
+        {{ forms.sizechartimage }}
         <p>Race Route</p>
-        {{forms.racerouteimage}}
-        <button type="submit">Create Event</button>
-      </form>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-     
-  </body>
+        {{ forms.racerouteimage }}
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        const categoryContainer = document.getElementById("category-container");
+        const inclusionContainer = document.getElementById("inclusion-container");
+        const selectedCategories = new Set();
+
+        function showInputField() {
+            document.getElementById("custom-category-input").style.display = "block";
+        }
+
+        function updateCategoryField() {
+            document.getElementById("eventcategory").value = Array.from(selectedCategories).join(',');
+        }
+
+        function displayInclusions(category) {
+            selectedCategories.add(category);
+            updateCategoryField();
+
+            inclusionContainer.innerHTML = `<h3>Inclusions for ${category}</h3>`;
+            
+            const priceInput = document.createElement('input');
+            priceInput.type = 'number';
+            priceInput.placeholder = 'Enter Price';
+            priceInput.id = `price-${category}`;
+            inclusionContainer.appendChild(priceInput);
+
+            ["Singlet", "Race Bib", "Finisher Medal", "Finisher Shirt"].forEach(inclusion => {
+                const inclusionButton = document.createElement("button");
+                inclusionButton.type = "button";
+                inclusionButton.textContent = inclusion;
+                inclusionButton.onclick = () => addInclusionOptions(category, inclusion);
+                inclusionContainer.appendChild(inclusionButton);
+            });
+        }
+
+        function addCustomCategory() {
+            const customCategory = document.getElementById("new-category").value.trim();
+            if (customCategory) {
+                const categoryButton = document.createElement("button");
+                categoryButton.type = "button";
+                categoryButton.textContent = customCategory;
+                categoryButton.id = `button-${customCategory}`;
+                categoryButton.onclick = () => displayInclusions(customCategory);
+                categoryContainer.appendChild(categoryButton);
+
+                document.getElementById("new-category").value = "";
+                document.getElementById("custom-category-input").style.display = "none";
+            } else {
+                alert("Please enter a category name");
+            }
+        }
+
+        function addInclusionOptions(category, inclusion) {
+            const inclusionSection = document.createElement("div");
+            inclusionSection.id = `${category}-${inclusion}-sizes`;
+
+            if (inclusion === "Singlet" || inclusion === "Finisher Shirt") {
+                inclusionSection.innerHTML = `<h4>Sizes for ${inclusion}</h4>`;
+                ["XS", "S", "M", "L", "XL"].forEach(size => {
+                    const sizeButton = document.createElement("button");
+                    sizeButton.type = "button";
+                    sizeButton.textContent = size;
+                    sizeButton.onclick = () => {
+                        addInclusionToForm(category, inclusion, size);
+                    };
+                    inclusionSection.appendChild(sizeButton);
+                });
+            } else {
+                addInclusionToForm(category, inclusion);
+            }
+
+            const oldSizes = document.getElementById(`${category}-${inclusion}-sizes`);
+            if (oldSizes) {
+                inclusionContainer.removeChild(oldSizes);
+            }
+            inclusionContainer.appendChild(inclusionSection);
+        }
+
+        function addInclusionToForm(category, inclusion, size = null) {
+            const inclusionsInput = document.getElementById('inclusions');
+            let inclusions = JSON.parse(inclusionsInput.value || '[]');
+
+            const priceInput = document.getElementById(`price-${category}`);
+            const price = priceInput ? priceInput.value : null;
+
+            inclusions.push({ category, inclusion, size, price });
+            inclusionsInput.value = JSON.stringify(inclusions);
+        }
+    </script>
+</body>
+
+
 </html>
