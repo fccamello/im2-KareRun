@@ -51,8 +51,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     def login(email,password):
         # hashedPassword = make_password(password)
         hashedPassword = password
+        print(email)
+        print(password)
         user = authenticate(email=email, password=hashedPassword)
-        if user:
+        if user is not None:
             return user
         else:
             return None
