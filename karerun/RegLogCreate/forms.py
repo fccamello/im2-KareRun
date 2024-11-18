@@ -2,7 +2,14 @@ from django import forms
 from .models import User,Event
 
 class RegisterUserForm(forms.ModelForm):
-    birthdate = forms.DateField(widget = forms.DateInput(attrs={'type':'date','min':'1900-01-01'}))
+    birthdate = forms.DateField(
+        widget=forms.DateInput(attrs={'type': 'date', 'min': '1900-01-01'})
+    )
+    sex = forms.ChoiceField(
+        choices=[('M', 'Male'), ('F', 'Female')], 
+        widget=forms.RadioSelect 
+    )    
+    
     class Meta:
         model = User
         fields = ['firstname','lastname','username','email','password','birthdate','sex']
