@@ -14,7 +14,7 @@ def homepage(request):
         print(user.isEventOrganizer)
     else:
         print("no session")
-    return render(request, 'homepage.html', {'user': user, 'events':events})
+    return render(request, 'homepage.html', {'user': user, 'events':events,'userName':user.username})
 
 def logout(request):
     del request.session['userID']
