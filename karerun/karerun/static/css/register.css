@@ -4,12 +4,11 @@
     justify-content: center;
     align-items: center;
     width: 30rem;
-    height:60rem;
+    height: 50rem;
     background-color: #012b5b;
     margin: 3rem auto;
 }
 #formContainer form{
-    margin: 4rem 0;
     display: flex;
     flex-direction: column;
     gap:0.2rem;
@@ -36,3 +35,38 @@ button{
     border: none;
 
 }
+
+.sex-input {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .sex-button {
+    background-color: #012b5b;
+    color: white;
+    border: 1px solid #61CBCC;
+    border-radius: 4px;
+    padding: 0.5rem 1.5rem;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+  }
+  
+  .sex-button:hover {
+    background-color: #61CBCC;
+    color: #012b5b;
+  }
+  
+  .sex-button input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  .sex-button.active {
+    background-color: #61CBCC;
+    color: #012b5b;
+  }
