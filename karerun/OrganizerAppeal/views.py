@@ -4,7 +4,7 @@ from .models import OrganizerAppeal
 # Create your views here.
 def appeal(request):
     userID = request.session.get('userID',None)
-    if userID is not None and User.objects.get(userid = userID).userType == 0:
+    if userID is not None and User.objects.get(userid = userID).isEventOrganizer == False:
         print(f"userID: {userID} Has Reqeusted to be an Organizer")
         user = User.objects.get(userid = userID)
         appeal = OrganizerAppeal(user = user)
@@ -23,7 +23,7 @@ def appealList(request):
     }
     if userID is not None:
         context['userName'] = User.objects.get(userid = userID).username
-    if userID is not None and User.objects.get(userid = userID).userType == 3:
+    if userID is not None and User.objects.get(userid = userID).is_staff == True:
         appeals = OrganizerAppeal.objects.filter(acceptedBy = -1)
         context['appeals'] = appeals
     else:#if not admin
@@ -37,6 +37,7 @@ def appealList(request):
             appeal = OrganizerAppeal.objects.get(appealID = appealID)
             appeal.isAccepted = True
             appeal.acceptedBy = userID
+            appeal.user.isEventOrganizer = True
             appeal.save()
             print("appeal accepted")
 
