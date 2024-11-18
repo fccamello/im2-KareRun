@@ -6,3 +6,5 @@ karerun/*/*/*.pyc
 karerun/*/*/*/*.pyc
 *.pyc
 *.pyc
+
+karerun/photos/eventbanner/*/*

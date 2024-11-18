@@ -72,7 +72,7 @@ def createEvent(request):
             user.organizerId = userId
             user.save()
             print("saved event")
-            return redirect('index')
+            return redirect('homepage')
         else:
             print(form.errors)
     else:
