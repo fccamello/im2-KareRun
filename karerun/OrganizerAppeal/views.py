@@ -44,6 +44,7 @@ def appealList(request):
             appeal.isAccepted = True
             appeal.acceptedBy = userID
             appeal.user.isEventOrganizer = True
+            appeal.user.save()
             appeal.save()
             print("appeal accepted")
 
