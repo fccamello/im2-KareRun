@@ -1,0 +1,88 @@
+{% load static %}
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Race List</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/event_details.css' %}">
+    <link rel="stylesheet" href="{% static 'css/event_reg.css' %}">
+    <link rel="stylesheet" href="{% static 'css/reg_summary.css' %}">
+
+</head>
+<body style="color: #002B5A; background-color: aliceblue;">
+     
+        <header style="background-color: #002B5A;">
+            
+            <img src="{% static 'photos/logo.png' %}" style="max-width: 150px; width: 100%; padding-left: 100px;">
+            {%include 'header.html' %}
+        </header>
+
+        <div class="page_banner_bg_reg" style="background-image: url('{{ event.bannerimage.url }}');">
+            <div class="event_box"> 
+                <div class="event_details">
+                    <h5>{{ event.eventdate|date:"F" }}</h5>
+                    <h4>{{ event.eventdate|date:"d" }}</h4>
+                    <h5>{{ event.eventdate|date:"Y" }}</h5>
+                    <h1 class="first_word_reg">{{ first_word }}</h1>
+                    <h1 class="rest_of_text">{{ rest_of_text }}</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="event_banner_reg" style="background-image: url('{{ event.bannerimage.url }}');">
+        </div>
+
+        <div class="reg_title">   </div>
+        <div class="reg_category" style="margin-top: 5%;">Registration Order Summary</div>
+
+        <div class="registration-summary">
+            
+            <h3> Check your items before confirming your order</h3>
+            <p><strong>Full name:</strong> {{ user.firstname }} {{ user.lastname }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+
+            <p><strong>Category Selected:</strong> {{ category_ni }}</p>
+            {% if singlet_size %}
+            <p><strong>Singlet Shirt Size:</strong> {{ singlet_size }}</p>
+            {% endif %}
+
+            {% if finisher_size %}
+                <p><strong>Finisher Shirt Size:</strong> {{ finisher_size }}</p>
+            {% endif %}
+            <p><strong>Total Price:</strong> Php {{ category_price }}</p>
+
+            <h3>Inclusions</h3>
+            <ul class="inclusions-list">
+                    {% with category_items=unique_inclusions|get_item:category_ni   %}
+                        {% if category_items %}
+                            <ul class="inclusions-list">
+                                {% for item in category_items %}
+                                    <li style="padding-top: 5px;">
+                                        {{ item }} 
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p>No inclusions available for this category.</p>
+                        {% endif %}
+                    {% endwith %}
+            </ul>
+
+
+            <div class="button-container">
+                <form method="POST" action="{% url 'confirm_registration' userId=user.userid event_id=event.eventid %}">
+                    {% csrf_token %}
+                    <button type="submit" class="submit-button"  >Confirm Registration</button>
+                </form>
+            </div>
+    
+            <div class="button-container">
+                <button class="submit-button" action="{% url 'event_reg' event_id=event.eventid %}" onclick="location.href='{% url 'event_reg' event_id=event.eventid %}'" >Go Back</button>
+            </div>
+        </div>
+
+</body>
+</html>
