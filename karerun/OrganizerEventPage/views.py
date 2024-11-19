@@ -3,17 +3,21 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
-from .models import Event, Participant
+from EventRegistration.models import Registration
+from RegLogCreate.models import Event, User
 from .forms import EventForm
 import json
 
 @login_required
 def organizer_event_detail(request, event_id):
-    event = get_object_or_404(Event, id=event_id)
-    participants = event.participants.all()
+    user_ids = Registration.objects.filter(event=event_id).values_list('user', flat=True)
+    participants = User.objects.filter(userid__in=user_ids)
+    event = Event.objects.get(eventid = event_id)
+    organizer = User.objects.get(userid = event.organizerId)
     return render(request, 'event_detail.html', {
         'event': event,
         'participants': participants,
+        'organizer' : organizer
     })
 
 @require_POST
@@ -25,7 +29,7 @@ def update_event_detail(request, event_id):
         value = data.get('value')
 
         try:
-            event = Event.objects.get(id=event_id)
+            event = Event.objects.get(eventid=event_id)
 
             if field == 'name':
                 event.name = value
@@ -52,7 +56,7 @@ def update_event_cover_photo(request, event_id):
         photo_type = request.POST.get('type')  
         if photo:
             # Logic to save the new photo
-            event = Event.objects.get(id=event_id)
+            event = Event.objects.get(eventid=event_id)
             event.cover_photo = photo
             event.save()
             return JsonResponse({'success': True, 'new_url': event.cover_photo.url})
