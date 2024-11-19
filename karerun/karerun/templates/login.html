@@ -30,6 +30,9 @@
         <br />
         <button type="submit">submit</button>
       </form>
+      {% if errors %}
+      <p style="color: red">{{errors}}</p>
+      {% endif %}
       <u
         ><a href="{% url 'register' %}" style="color: white">
           Don't have an account? Register here.
