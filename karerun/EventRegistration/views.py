@@ -72,6 +72,7 @@ def event_reg(request, event_id):
         form = RegistrationForm(request.POST)
         
         if form.is_valid():
+            email = form.cleaned_data['email']
             gender = form.cleaned_data['gender']
             contactnum = form.cleaned_data['contact_number']
             emergencynum = form.cleaned_data['emergency_number']
@@ -102,20 +103,43 @@ def event_reg(request, event_id):
                         inclusions['singlet_size'] = singlet_size
                         singlet_size_set = True
                         print(item['size'])
-            
-            registration = Registration(
-            user = User.objects.get(userid=userId), 
-            event = event,
-            gender = gender,
-            contactnum = contactnum,
-            emergencynum = emergencynum,
-            age_category = age_category,
-            category_ni = category_ni,
-            inclusions = inclusions,
-            category_price=category_price
-            )
-            registration.save()
-            return redirect('index')
+
+            request.session['registration_data'] = {
+        'gender': gender,
+        'email': email,
+        'contactnum': contactnum,
+        'emergencynum': emergencynum,
+        'age_category': age_category,
+        'category_ni': category_ni,
+        'category_price': category_price,
+        'inclusions': inclusions,
+        'singlet_size': singlet_size,
+        'finisher_size': finisher_size,
+    }
+
+
+            context = {
+                'gender': gender,
+                'contactnum': contactnum,
+                'emergencynum': emergencynum,
+                'age_category': age_category,
+                'category_ni': category_ni,
+                'category_price': category_price,
+                'inclusions': inclusions,
+                'categories': category_list,
+                 'categories_unique': list(unique_inclusions.keys()),
+                 'unique_inclusions': unique_inclusions, 
+                'event': event,
+                'first_word': first_word,
+                'rest_of_text': rest_of_text,
+                'user' : user,
+                'singlet_size': singlet_size, 
+                'finisher_size': finisher_size
+
+            }
+
+            return render(request, 'regsummary.html', context)  
+         
         else:
             print(form.errors)      
             print("Form Data:", request.POST)
@@ -137,7 +161,45 @@ def event_reg(request, event_id):
     
     return render(request, 'event_registration.html', context)
 
+def confirm_registration(request, userId, event_id):
+    userId = request.session.get('userID', None)
+
+    event = get_object_or_404(Event, eventid=event_id)
+    
+    
+
+    registration_data = request.session.get('registration_data', {})
+
+    if registration_data:
+        user = User.objects.get(userid=userId)
+        gender = registration_data.get('gender')
+        contactnum = registration_data.get('contactnum')
+        emergencynum = registration_data.get('emergencynum')
+        age_category = registration_data.get('age_category')
+        category_ni = registration_data.get('category_ni')
+        inclusions = registration_data.get('inclusions')  # Ensure this is in a format suitable for your database
+        category_price = registration_data.get('category_price')
 
 
+    print("POST Data:", request.POST)
+    print("Gender:", gender)
+    print("Contact Number:", contactnum)
+    print("Emergency Number:", emergencynum)
+    print("Age Category:", age_category)
+    print("Category:", category_ni)
+    print("Inclusions:", inclusions)
+    print("Category Price:", category_price)
 
-
+    registration = Registration(
+        user=user,
+        event=event,
+        gender=gender,
+        contactnum=contactnum,
+        emergencynum=emergencynum,
+        age_category=age_category,
+        category_ni=category_ni,
+        inclusions=inclusions,
+        category_price=category_price
+    )
+    registration.save()
+    return redirect('index')  

@@ -18,6 +18,7 @@ class Registration(models.Model):
     gender = models.CharField(max_length=100, default='M') 
     contactnum = models.CharField(max_length=15, default='000')
     emergencynum = models.CharField(max_length=15, default='000')
+    email = models.CharField(max_length=20, default='@gmail.com')
 
     age_category = models.CharField(max_length=30, choices=AGE_CHOICES, default='20 and below')  
     category_ni = models.CharField(max_length=100, default="3k") 
