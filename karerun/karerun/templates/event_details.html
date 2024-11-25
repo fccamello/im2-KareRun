@@ -34,25 +34,21 @@
                 </div>
                 <button class="btnreg" onclick="location.href='{% url 'event_reg' event_id=event.eventid %}'">REGISTER</button>
             </div>
-            {% if userID == event.OrganizerId %}
-            <div class="btn-bottom-right">
+            <div class="btn-bottom-right" id="viewParticipantsBtn">
                 <img src="/path/to/icon.png" alt="Icon" class="icon" />
                 <span>Participants</span>
             </div>
 
-            <div class="btn-bottom-right second-div">
+            <div class="btn-bottom-right second-div" id="editEventBtn">
                 <img src="/path/to/icon.png" alt="Icon" class="icon" />
                 <span>Edit Event</span>
             </div>
-            {% endif %}
         </div>
 
         
 
     <div class="event_banner" style="background-image: url('{{ event.bannerimage.url }}');">
-        {% if userID == event.OrganizerId %}
-        <button id="changeCoverPhoto" class="btn btn-light btn-sm" style="position: absolute; top: 10px; right: 10px; cursor: pointer;">Change Cover Photo</button>    
-        {% endif %}
+        <button id="changeBannerImage" class="btn btn-light btn-sm" style="position: absolute; top: 10px; right: 10px; cursor: pointer;">Change Banner</button>    
     </div>
     
     <!-- <div class="event_name"> {{ event.eventname }}</div>
@@ -120,9 +116,7 @@
         {% if event.inclusionimage %}
             <div class="event_inclusions">
                 <img src="{{ event.inclusionimage.url }}">
-                {% if userID == event.OrganizerId %}
-                <button id="changeCoverPhoto" class="btn btn-light btn-sm" style="position: absolute; top: 10px; right: 10px; cursor: pointer; z-index: 10;">Change Inclusions</button>    
-                {% endif %}
+                <button id="changeInclusionImage" class="btn btn-light btn-sm" style="position: absolute; top: 10px; right: 10px; cursor: pointer; z-index: 10;">Change Inclusions</button>    
             </div>
         {% else %}
             <p>No image available</p>
@@ -130,27 +124,314 @@
 
         <div class = "reg_now" style="margin-top: 5%;"> Race Route </div>
 
-
         {% if event.racerouteimage %}
         <div class="event_inclusions">
             <img src="{{ event.racerouteimage.url }}">
+            <button id="changeRaceRouteImage" class="btn btn-light btn-sm" style="position: absolute; top: 10px; right: 10px; cursor: pointer; z-index: 10;">Change Race Route</button>    
         </div>
     {% else %}
         <p>No image available</p>
     {% endif %}
     </div>
 
+<!-- Hidden file input for photo upload -->
+<input type="file" id="bannerImageInput" accept="image/*" style="display:none;">
+<input type="file" id="inclusionImageInput" accept="image/*" style="display:none;">
+<input type="file" id="raceRouteImageInput" accept="image/*" style="display:none;">
+
+<!-- Add this just before the closing body tag -->
+<div id="editEventModal" class="modal hidden">
+    <div class="modal-content">
+        <span class="close" id="closeEditEventModal">&times;</span>
+        <h2>Edit Event</h2>
+        {% if forms.errors %} {{ forms.errors }} {% endif %}
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="eventcategory" id="eventcategory" value="">
+            <input type="hidden" name="inclusions" id="inclusions" value="[]">
+
+            <p>Event Name</p>
+            {{ forms.eventname }}
+            <p>Event Details</p>
+            {{ forms.eventdetails }}
+
+            <p>Event Categories</p>
+            <div id="category-container">
+                <button type="button" class = "btn_cat" onclick="displayInclusions('3k')">3k</button>
+                <button type="button" class = "btn_cat" onclick="displayInclusions('5k')">5k</button>
+                <button type="button" class = "btn_cat" onclick="displayInclusions('10k')">10k</button>
+                <button type="button" class = "btn_cat" onclick="displayInclusions('16k')">16k</button>
+            </div>
+
+            <div>
+                <button type="button" onclick="showInputField()">+</button>
+            </div>
+
+            <div id="custom-category-input" style="display: none;">
+                <input type="text" id="new-category" placeholder="Enter custom category">
+                <button type="button" onclick="addCustomCategory()">Add</button>
+            </div>
+
+            <div id="inclusion-container"></div>
+
+            <p>Event Location</p>
+            {{ forms.eventlocation }}
+            <p>Event Date</p>
+            {{ forms.eventdate }}
+            <p>Event Time</p>
+            {{ forms.eventtime }}
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+
+<div id="viewParticipantsModal" class="modal hidden">
+    <div class="modal-content">
+        <span class="close" id="closeViewParticipantsModal">&times;</span>
+        <h2>Participants</h2>
+
+        <!-- Search Bar -->
+        <input type="text" id="searchInput" onkeyup="searchParticipants()" placeholder="Search for participants..." style="width: 97.5%; padding: 8px; margin-bottom: 10px;">
+        
+        <!-- Table for Participant List -->
+        <table id="participantsTable" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th style="border: 1px solid #ddd; padding: 8px;">Name</th>
+                    <th style="border: 1px solid #ddd; padding: 8px;">Email</th>
+                    <th style="border: 1px solid #ddd; padding: 8px;">Sex</th> <!-- Add more columns as necessary -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for participant in participants %}
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 8px;">{{ participant.username }}</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">{{ participant.email }}</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">{{ participant.sex }}</td> <!-- Add more participant details here -->
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="3" style="border: 1px solid #ddd; padding: 8px; text-align: center;">No participants registered yet.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
     
 <script>
+    function searchParticipants() {
+        var input, filter, table, rows, cells, i, j, match;
+        input = document.getElementById('searchInput');
+        filter = input.value.toLowerCase();
+        table = document.getElementById('participantsTable');
+        rows = table.getElementsByTagName('tr');
+        
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 1; i < rows.length; i++) { // Skip the header row (index 0)
+            rows[i].style.display = 'none'; // Hide the row initially
+            cells = rows[i].getElementsByTagName('td');
+            match = false;
+
+            // Check each cell in the row (name, email, sex)
+            for (j = 0; j < cells.length; j++) {
+                if (cells[j]) {
+                    if (cells[j].textContent.toLowerCase().indexOf(filter) > -1) {
+                        match = true; // If any cell matches, show the row
+                        break;
+                    }
+                }
+            }
+
+            // If a match is found, display the row
+            if (match) {
+                rows[i].style.display = '';
+            }
+        }
+    }
+
     AOS.init({
         duration: 10, 
     });
-</script>
-    
 
-    
-  
-    
+    document.addEventListener('DOMContentLoaded', function () {
+        // Assign each button its corresponding file input and photo type
+        const uploadConfigs = [
+            { buttonId: 'changeBannerImage', inputId: 'bannerImageInput', type: 'banner' },
+            { buttonId: 'changeInclusionImage', inputId: 'inclusionImageInput', type: 'inclusion' },
+            { buttonId: 'changeRaceRouteImage', inputId: 'raceRouteImageInput', type: 'raceroute' }
+        ];
+
+        uploadConfigs.forEach(config => {
+            const button = document.getElementById(config.buttonId);
+            const input = document.getElementById(config.inputId);
+
+            // Show file input when the button is clicked
+            button.addEventListener('click', function () {
+                input.click();
+            });
+
+            // Handle file input change and upload
+            input.addEventListener('change', function (event) {
+                const file = event.target.files[0];
+                if (file) {
+                    uploadPhoto(config.type, file);
+                }
+            });
+        });
+
+        // Function to handle the upload process
+        function uploadPhoto(type, file) {
+            const formData = new FormData();
+            formData.append('photo', file);
+            formData.append('type', type);
+
+            fetch('{% url "update_event_photo" event_id=event.eventid %}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update the appropriate image source dynamically
+                        switch (type) {
+                            case 'banner':
+                                document.querySelector('.event_banner').style.backgroundImage = `url('${data.new_url}')`;
+                                break;
+                            case 'inclusion':
+                                document.querySelector('.event_inclusions img').src = data.new_url;
+                                break;
+                            case 'raceroute':
+                                document.querySelector('.event_inclusions img[alt="Race Route"]').src = data.new_url;
+                                break;
+                        }
+                    } else {
+                        alert('Error uploading photo.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while uploading the photo.');
+                });
+        }
+
+        // Edit Event Modal
+        const editEventBtn = document.getElementById('editEventBtn');
+        const editEventModal = document.getElementById('editEventModal');
+        const closeEditEventModal = document.getElementById('closeEditEventModal');
+        
+        editEventBtn.addEventListener('click', () => editEventModal.style.display = 'block', console.log("gefl"));
+        closeEditEventModal.addEventListener('click', () => editEventModal.style.display = 'none');
+        window.addEventListener('click', (event) => {
+            if (event.target === editEventModal) {
+                editEventModal.style.display = 'none';
+            }
+        });
+
+        // View Participants Modal
+        const viewParticipantsBtn = document.getElementById('viewParticipantsBtn');
+        const viewParticipantsModal = document.getElementById('viewParticipantsModal');
+        const closeViewParticipantsModal = document.getElementById('closeViewParticipantsModal');
+
+        viewParticipantsBtn.addEventListener('click', () => viewParticipantsModal.style.display = 'block', console.log("geeeee"));
+        closeViewParticipantsModal.addEventListener('click', () => viewParticipantsModal.style.display = 'none');
+        window.addEventListener('click', (event) => {
+            if (event.target === viewParticipantsModal) {
+                viewParticipantsModal.style.display = 'none';
+            }
+        });
+    });
+    const categoryContainer = document.getElementById("category-container");
+        const inclusionContainer = document.getElementById("inclusion-container");
+        const selectedCategories = new Set();
+
+        function showInputField() {
+            document.getElementById("custom-category-input").style.display = "block";
+        }
+
+        function updateCategoryField() {
+            document.getElementById("eventcategory").value = Array.from(selectedCategories).join(',');
+        }
+
+        function displayInclusions(category) {
+            selectedCategories.add(category);
+            updateCategoryField();
+
+            inclusionContainer.innerHTML = `<h3>Inclusions for ${category}</h3>`;
+            
+            const priceInput = document.createElement('input');
+            priceInput.type = 'number';
+            priceInput.placeholder = 'Enter Price';
+            priceInput.id = `price-${category}`;
+            inclusionContainer.appendChild(priceInput);
+
+            ["Singlet", "Race Bib", "Finisher Medal", "Finisher Shirt"].forEach(inclusion => {
+                const inclusionButton = document.createElement("button");
+                inclusionButton.type = "button";
+                inclusionButton.textContent = inclusion;
+                inclusionButton.onclick = () => addInclusionOptions(category, inclusion);
+                inclusionContainer.appendChild(inclusionButton);
+            });
+        }
+
+        function addCustomCategory() {
+            const customCategory = document.getElementById("new-category").value.trim();
+            if (customCategory) {
+                const categoryButton = document.createElement("button");
+                categoryButton.type = "button";
+                categoryButton.textContent = customCategory;
+                categoryButton.id = `button-${customCategory}`;
+                categoryButton.onclick = () => displayInclusions(customCategory);
+                categoryContainer.appendChild(categoryButton);
+
+                document.getElementById("new-category").value = "";
+                document.getElementById("custom-category-input").style.display = "none";
+            } else {
+                alert("Please enter a category name");
+            }
+        }
+
+        function addInclusionOptions(category, inclusion) {
+            const inclusionSection = document.createElement("div");
+            inclusionSection.id = `${category}-${inclusion}-sizes`;
+
+            if (inclusion === "Singlet" || inclusion === "Finisher Shirt") {
+                inclusionSection.innerHTML = `<h4>Sizes for ${inclusion}</h4>`;
+                ["XS", "S", "M", "L", "XL"].forEach(size => {
+                    const sizeButton = document.createElement("button");
+                    sizeButton.type = "button";
+                    sizeButton.textContent = size;
+                    sizeButton.onclick = () => {
+                        addInclusionToForm(category, inclusion, size);
+                    };
+                    inclusionSection.appendChild(sizeButton);
+                });
+            } else {
+                addInclusionToForm(category, inclusion);
+            }
+
+            const oldSizes = document.getElementById(`${category}-${inclusion}-sizes`);
+            if (oldSizes) {
+                inclusionContainer.removeChild(oldSizes);
+            }
+            inclusionContainer.appendChild(inclusionSection);
+        }
+
+        function addInclusionToForm(category, inclusion, size = null) {
+            const inclusionsInput = document.getElementById('inclusions');
+            let inclusions = JSON.parse(inclusionsInput.value || '[]');
+
+            const priceInput = document.getElementById(`price-${category}`);
+            const price = priceInput ? priceInput.value : null;
+
+            inclusions.push({ category, inclusion, size, price });
+            inclusionsInput.value = JSON.stringify(inclusions);
+        }
+</script>
 
 </body>
 </html>
