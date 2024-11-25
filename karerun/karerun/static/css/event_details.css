@@ -169,7 +169,7 @@ color: #002B5A;
     font-weight: 600;
     cursor: pointer;
     line-height: 35px;
-    margin-top: 50%;
+    /* margin-top: 50%; */
     text-align: center;
     transition: all 0.4s ease;
 }
@@ -211,4 +211,8 @@ color: #002B5A;
 .category-box:hover {
     transform: rotateY(10deg); 
 }
+}
+.participantCount{
+    margin-top: 30%;
+    width: 250%;
 }

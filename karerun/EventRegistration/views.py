@@ -75,6 +75,9 @@ def event_reg(request, event_id):
         if Registration.objects.filter(user=user, event=event).exists():
             print("User is already registered")
             errors.append("You are already registered to this event.")
+        elif Registration.objects.filter(event=event).count()>= event.maxparticipants:
+            print("Event is already full")
+            errors.append("Event is already full.")
         elif form.is_valid():
             email = form.cleaned_data['email']
             gender = form.cleaned_data['gender']

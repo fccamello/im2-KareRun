@@ -1,129 +1,149 @@
-{% load static %}
-{% load custom_filters %}
+{% load static %} {% load custom_filters %}
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{ event.eventname }}</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <link rel="stylesheet" href="{% static 'css/event_reg.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.1/aos.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/event_reg.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.1/aos.css"
+    />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.1/aos.js"></script>
-    <link rel="stylesheet" href="{% static 'css/event_details.css' %}">
-</head>
-<body style="background-color: aliceblue;">
-     
-    <header style="background-color: #002B5A;">
-        
-        <img src="{% static 'photos/logo.png' %}" style="max-width: 150px; width: 100%; padding-left: 100px;">
-        {%include 'header.html' %}
+    <link rel="stylesheet" href="{% static 'css/event_details.css' %}" />
+  </head>
+  <body style="background-color: aliceblue">
+    <header style="background-color: #002b5a">
+      <img
+        src="{% static 'photos/logo.png' %}"
+        style="max-width: 150px; width: 100%; padding-left: 100px"
+      />
+      {%include 'header.html' %}
     </header>
 
-
-        <div class="page_banner_bg" style="background-image: url('{{ event.bannerimage.url }}');">
-
-            <div class="event_box"> 
-                <div class="event_details">
-                  <h5>  {{  event.eventdate|date:"F" }}  </h5>
-                  <h4>  {{  event.eventdate|date:"d" }}  </h4>
-                  <h5>  {{  event.eventdate|date:"Y" }}  </h5>
-                    <h1 class="first_word">{{ first_word }}</h1>
-                    <div style="width: auto;"><h1 class="rest_of_text"> {{ rest_of_text }}</h1> </div>
-                    <h5 class="categories">{{ categories|join:" | " }}  </h5>
-                </div>
-                <button class="btnreg" onclick="location.href='{% url 'event_reg' event_id=event.eventid %}'">REGISTER</button>
-            </div>
-         
+    <div
+      class="page_banner_bg"
+      style="background-image: url('{{ event.bannerimage.url }}');"
+    >
+      <div class="event_box">
+        <div class="event_details">
+          <h5>{{ event.eventdate|date:"F" }}</h5>
+          <h4>{{ event.eventdate|date:"d" }}</h4>
+          <h5>{{ event.eventdate|date:"Y" }}</h5>
+          <h1 class="first_word">{{ first_word }}</h1>
+          <div style="width: auto">
+            <h1 class="rest_of_text">{{ rest_of_text }}</h1>
+          </div>
+          <h5 class="categories">{{ categories|join:" | " }}</h5>
         </div>
-
-
-
-    <div class="event_banner" style="background-image: url('{{ event.bannerimage.url }}');">
+        <div class="participantCount">
+          <h3>Participants: {{num_registrants}}</h3>
+        </div>
+        <button
+          class="btnreg"
+          onclick="location.href='{% url 'event_reg' event_id=event.eventid %}'"
+        >
+          REGISTER
+        </button>
+      </div>
     </div>
-    
+
+    <div
+      class="event_banner"
+      style="background-image: url('{{ event.bannerimage.url }}');"
+    ></div>
+
     <!-- <div class="event_name"> {{ event.eventname }}</div>
     <div class="event_description"> {{ event.eventdetails }}</div>
     <div class="event_description">Location: {{ event.eventlocation }}</p> </div>
     <div class="event_description">Date: {{ event.eventdate }}</div>
     <div class="event_description">Time: {{ event.eventtime }}</div>
     <div style="overflow-x: hidden; margin: 0;"> -->
-        <!-- <div class="event_description"> </h2> </div> -->
-        <!-- <h3>Banner Image</h3>
+    <!-- <div class="event_description"> </h2> </div> -->
+    <!-- <h3>Banner Image</h3>
         <p>Banner Image URL: {{ event.inclusionimage.url }}</p> -->
 
-        <div class="categories-container">
-            <div class="categories-row">
-                {% for category in categories %}
-                    <label class="category-box"
-                    data-aos="flip-left" 
-                    data-aos-easing="ease" 
-                    data-aos-duration="1000"
-                        style="background-color: 
+    <div class="categories-container">
+      <div class="categories-row">
+        {% for category in categories %}
+        <label
+          class="category-box"
+          data-aos="flip-left"
+          data-aos-easing="ease"
+          data-aos-duration="1000"
+          style="background-color: 
                             {% if forloop.counter0 == 0 %} #F4A730
                             {% elif forloop.counter0 == 1 %} #F4782F
                             {% elif forloop.counter0 == 2 %} #ED5D74 
                             {% elif forloop.counter0 == 3 %} #1AA5DD 
-                            {% endif %}" 
-                    >
-                        
-                        <input type="radio" name="category_ni" style="display: none;" value="{{ category }}">
-                        <div style="display: block; padding: 0%; margin: 0%; width: 100%; height: 100%; position: relative;"> 
-                            <div class="category-distance">
-                                <div class="category-km">{{ category }}</div>
-                            </div>                        
-                            <hr style="color: black;">
-                            <div class="inclusions-header">INCLUSIONS:</div>
-                            <ul class="inclusions-list">
-                                {% with category_items=unique_inclusions|get_item:category %}
-                                    {% for item in category_items %}
-                                        <li style="padding-top: 5px;">
-                                            {{ item }}
-                                        </li>
-                                    {% endfor %}
-                                {% endwith %}
-                            </ul>
-                            <div class="category-price">
-                                {% with price=category_prices|get_item:category %}
-                                        Php {{ price|floatformat:"0" }}
-                                        <input type="hidden" name="category_price" style="display: none;" value="{{ price }}">
-                                {% endwith %}
-                            </div>
-                        </div>
-                        <div class="checkmark-icon hidden"></div>
-                    </label>
-                {% endfor %}
+                            {% endif %}"
+        >
+          <input
+            type="radio"
+            name="category_ni"
+            style="display: none"
+            value="{{ category }}"
+          />
+          <div
+            style="
+              display: block;
+              padding: 0%;
+              margin: 0%;
+              width: 100%;
+              height: 100%;
+              position: relative;
+            "
+          >
+            <div class="category-distance">
+              <div class="category-km">{{ category }}</div>
             </div>
-        
-        {% if event.inclusionimage %}
-            <div class="event_inclusions">
-                <img src="{{ event.inclusionimage.url }}">
+            <hr style="color: black" />
+            <div class="inclusions-header">INCLUSIONS:</div>
+            <ul class="inclusions-list">
+              {% with category_items=unique_inclusions|get_item:category %}
+              {%for item in category_items %}
+              <li style="padding-top: 5px">{{ item }}</li>
+              {% endfor %} {% endwith %}
+            </ul>
+            <div class="category-price">
+              {% with price=category_prices|get_item:category %} Php
+              {{price|floatformat:"0" }}
+              <input
+                type="hidden"
+                name="category_price"
+                style="display: none"
+                value="{{ price }}"
+              />
+              {% endwith %}
             </div>
-        {% else %}
-            <p>No image available</p>
-        {% endif %}
+          </div>
+          <div class="checkmark-icon hidden"></div>
+        </label>
+        {% endfor %}
+      </div>
 
-        {% if event.inclusionimage %}
-        <div class="event_inclusions">
-            <img src="{{ event.bannerimage.url }}">
-        </div>
-    {% else %}
-        <p>No image available</p>
-    {% endif %}
+      {% if event.inclusionimage %}
+      <div class="event_inclusions">
+        <img src="{{ event.inclusionimage.url }}" />
+      </div>
+      {% else %}
+      <p>No image available</p>
+      {% endif %} {% if event.inclusionimage %}
+      <div class="event_inclusions">
+        <img src="{{ event.bannerimage.url }}" />
+      </div>
+      {% else %}
+      <p>No image available</p>
+      {% endif %}
     </div>
 
-    
-<script>
-    AOS.init({
-        duration: 10, 
-    });
-</script>
-    
-
-    
-  
-    
-
-</body>
+    <script>
+      AOS.init({
+        duration: 10,
+      });
+    </script>
+  </body>
 </html>

@@ -81,6 +81,7 @@ class Event(models.Model):
     #should be a list of inclusions
     inclusions = models.JSONField()
     maxSlots = models.IntegerField(default=0)
+    isClosed = models.BooleanField(default=False)
     # bannerimage = models.ImageField(storage=bannerloc)
     # inclusionimage = models.ImageField(storage=inclusionloc)
     # sizechartimage = models.ImageField(storage=sizechartloc)
