@@ -49,7 +49,8 @@ class CreateEvent(forms.ModelForm):
     inclusionimage = forms.ImageField(widget=forms.ClearableFileInput(attrs={'accept': 'image/*'}))
     sizechartimage = forms.ImageField(widget=forms.ClearableFileInput(attrs={'accept': 'image/*'}))
     racerouteimage = forms.ImageField(widget=forms.ClearableFileInput(attrs={'accept': 'image/*'}))
+    maxSlots = forms.IntegerField(widget=forms.NumberInput(attrs={'min': 1}))
     class Meta:
         model = Event
-        fields = ['eventname','eventdetails','eventcategory','eventlocation','eventdate','eventtime','inclusions','bannerimage','inclusionimage','sizechartimage','racerouteimage']
+        fields = ['eventname','eventdetails','eventcategory','eventlocation','eventdate','eventtime','inclusions','bannerimage','inclusionimage','sizechartimage','racerouteimage','maxSlots']
     
