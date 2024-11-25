@@ -432,3 +432,12 @@
     border-color: #4ac6d6;
     color: white;
 }
+
+.errorMessages{
+  color: red;
+  align-self: center;
+}
+.error-messages{
+  display: flex;
+  justify-content: center;
+}

@@ -25,7 +25,7 @@ def determine_age_category(age):
         return "51 and above"
 
 def event_reg(request, event_id):
-
+    errors = []
     userId = request.session.get('userID', None)
     user = User.objects.get(userid = userId)
 
@@ -71,7 +71,11 @@ def event_reg(request, event_id):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         
-        if form.is_valid():
+        #Check If User is already registered
+        if Registration.objects.filter(user=user, event=event).exists():
+            print("User is already registered")
+            errors.append("You are already registered to this event.")
+        elif form.is_valid():
             email = form.cleaned_data['email']
             gender = form.cleaned_data['gender']
             contactnum = form.cleaned_data['contact_number']
@@ -144,9 +148,9 @@ def event_reg(request, event_id):
             print(form.errors)      
             print("Form Data:", request.POST)
 
-
-
+    print(errors)
     context = {
+        'errors':errors,
         'event': event,
         'first_word': first_word,
         'age_category': age_category,
