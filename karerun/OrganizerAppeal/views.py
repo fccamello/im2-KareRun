@@ -1,6 +1,8 @@
 from django.shortcuts import render,redirect
-from RegLogCreate.models import User
+from RegLogCreate.models import User, Event
 from .models import OrganizerAppeal
+from django.db.models import Count
+
 # Create your views here.
 def appeal(request):
     userID = request.session.get('userID',None)
@@ -12,7 +14,7 @@ def appeal(request):
         print("You have already requested")
         redirect('homepage')
     elif User.objects.get(userid = userID).isEventOrganizer == False:
-        print(f"userID: {userID} Has Reqeusted to be an Organizer")
+        print(f"userID: {userID} Has Requested to be an Organizer")
         appeal = OrganizerAppeal(user = user)
         appeal.save()
     else:
@@ -22,8 +24,29 @@ def appeal(request):
     
 def appealList(request):
    
+    events = Event.objects.all()
+    users = User.objects.all()
+
+    regular_users_count = User.objects.filter(isEventOrganizer=False, is_superuser=False, is_staff=False).count()
+    event_count = Event.objects.count()
+    organizer_count = User.objects.filter(isEventOrganizer=True).count()
+
+    gender_distribution = User.objects.values('sex').annotate(count=Count('userid'))
+    gender_labels = [entry['sex'] for entry in gender_distribution]
+    gender_counts = [entry['count'] for entry in gender_distribution]
+
+
+
+
     userID = request.session.get('userID',None)
     context = {
+        'events': events,
+        'users': users,
+        'gender_labels': gender_labels,
+        'gender_counts': gender_counts,
+        'regular_users_count' : regular_users_count,
+        'organizer_count' : organizer_count,
+        'event_count': event_count,
         'appeals':None,
         'userName':None
     }
@@ -47,5 +70,10 @@ def appealList(request):
             appeal.user.save()
             appeal.save()
             print("appeal accepted")
+        elif action == "decline":
+            appeal = OrganizerAppeal.objects.get(appealID = appealID)
+            appeal.delete() 
+
+
 
     return render(request,'appealList.html',context)   

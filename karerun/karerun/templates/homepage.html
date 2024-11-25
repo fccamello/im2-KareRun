@@ -28,12 +28,12 @@
     </div>
 
     <!-- Action Boxes Section -->
-    <div class="container my-5">
-      <div class="row justify-content-center">
+  <div class="container my-5">
+      <div class="row justify-content-center" style="gap: 50px;">
         <!-- Register for a Race Box -->
-        <div
+        <div 
           class="col-md-3 text-center"
-          style="margin: 20px; margin-right: 100px"
+          style="margin: 20px; "
         >
           <a href="{% url 'race_list' %}" class="text-decoration-none">
             <div
@@ -73,7 +73,7 @@
               </div>
               <h5 class="text-dark">Create an Event</h5>
               <p class="text-dark">
-                <br />Already an Organizer?<br />Create and manage your own
+                <br />Create and manage your own
                 event!
               </p>
             </div>
@@ -115,8 +115,43 @@
           </a>
         </div>
         {% endif %}
+
+      <!-- View admin page -->
+      {% if user.isEventOrganizer and user.is_superuser%}
+      <div class="col-md-3 text-center" style="margin: 20px">
+        <a
+          href="{% url 'appealList' %}"
+          class="text-decoration-none"
+          {%
+          if
+          requested
+          %}style="pointer-events: none; cursor: default;"
+          {%
+          endif
+          %}
+        >
+          <div
+            class="card shadow-sm p-4 mb-4 bg-white rounded d-flex align-items-center"
+            style="width: 300px; height: 250px; border: #002b5a solid 3px"
+          >
+            <div class="circle-logo mx-auto mb-3">
+              <img
+                src="{% static 'icons/request_organizer_icon.png' %}"
+                class="rounded-circle"
+                style="width: 50px; height: 50px"
+              />
+            </div>
+            <h5 class="text-dark">View Admin Page</h5>
+            <p class="text-dark">
+              <br />Manage Organizer Requests! 
+            </p>
+          </div>
+        </a>
       </div>
+      {% endif %}
     </div>
+  </div>
+
 
     <!-- Registered Races Section -->
     <div class="container mt-5" style="color: #002b5a">

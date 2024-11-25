@@ -8,7 +8,7 @@
 }
 
 .races_title{
-top: -417px;
+margin-top: 3%;
 margin-left: 2%;
 gap: 0px;
 color: #61CBCC;
@@ -57,6 +57,7 @@ opacity: 0px;
 .card {
     background: white;
     border-radius: 10px;
+    padding-bottom: 2%;
     overflow: hidden;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
@@ -129,7 +130,7 @@ opacity: 0px;
 
 .button-container {
     position: absolute;
-    bottom: 20px;
+    bottom: 1px;
     right: 20px;
 }
 

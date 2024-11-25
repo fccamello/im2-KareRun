@@ -18,12 +18,12 @@
         </header>
 
 
-    <div class = "event_list_banner"> </div>
+    <!-- <div class = "event_list_banner"> </div> -->
     <div class ="races_title"> Races </div>
-    <div style="margin-left: 2%;">
+    <div style="margin-left: 2%; ">
 
         <form method="GET" id="search-sort-form">
-            <input type="text" name="search" value="{{ search_query }}" placeholder="Search by event name">
+            <input type="text" name="search" value="{{ search_query }}" placeholder="Search by event name" style="width: 80%;">
             <select name="sort" id="sort-select">
                 <option value="date" {% if sort_by == 'date' %}selected{% endif %}>Sort by Date</option>
                 <option value="name" {% if sort_by == 'name' %}selected{% endif %}>Sort by Name</option>
@@ -41,7 +41,7 @@
                     <p class="card-text">Location: {{ event.eventlocation }}</p>
                     <p class="card-text">Date: {{ event.eventdate }}</p>
                     <p class="card-text">Time: {{ event.eventtime }}</p>
-                    <p class="card-text">Details: {{ event.eventdetails }}</p>
+                    <p class="card-text">Details: {{ event.eventdetails|truncatechars:50 }}</p>
                     <div class="button-container">
                         <button class="register-button" onclick="window.location.href='{% url 'event_detail' event_id=event.eventid %}'">Details</button>
                     </div>
