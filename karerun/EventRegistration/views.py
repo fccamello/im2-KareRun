@@ -141,7 +141,8 @@ def event_reg(request, event_id):
                 'rest_of_text': rest_of_text,
                 'user' : user,
                 'singlet_size': singlet_size, 
-                'finisher_size': finisher_size
+                'finisher_size': finisher_size,
+                'userName': user.firstname
 
             }
 
@@ -163,7 +164,8 @@ def event_reg(request, event_id):
         'category_prices': category_prices,
         'categories_unique': list(unique_inclusions.keys()),
         'unique_inclusions': unique_inclusions, 
-        'user' : user
+        'user' : user,
+        'userName': user.firstname
     }
     
     return render(request, 'event_registration.html', context)
