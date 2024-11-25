@@ -1,5 +1,6 @@
 from django import forms
 from .models import User,Event
+from datetime import date, timedelta
 
 class RegisterUserForm(forms.ModelForm):
 
@@ -37,7 +38,9 @@ class CreateEvent(forms.ModelForm):
     # eventcategory = forms.CharField(widget=forms.Textarea)
     eventcategory = forms.CharField(max_length=100)
     eventlocation = forms.CharField(max_length=100)
-    eventdate = forms.DateField(widget = forms.DateInput(attrs={'type':'date'}))
+    eventdate = forms.DateField(
+        widget=forms.DateInput(attrs={'type': 'date', 'min': (date.today() + timedelta(days=1)).isoformat()})
+    )
     eventtime = forms.TimeField(widget = forms.TimeInput(attrs={'type':'time'}))
     # inclusions = forms.CharField(widget=forms.Textarea)
     # inclusions = forms.CharField(widget=forms.HiddenInput())
@@ -46,7 +49,8 @@ class CreateEvent(forms.ModelForm):
     inclusionimage = forms.ImageField(widget=forms.ClearableFileInput(attrs={'accept': 'image/*'}))
     sizechartimage = forms.ImageField(widget=forms.ClearableFileInput(attrs={'accept': 'image/*'}))
     racerouteimage = forms.ImageField(widget=forms.ClearableFileInput(attrs={'accept': 'image/*'}))
+    maxSlots = forms.IntegerField(widget=forms.NumberInput(attrs={'min': 1}))
     class Meta:
         model = Event
-        fields = ['eventname','eventdetails','eventcategory','eventlocation','eventdate','eventtime','inclusions','bannerimage','inclusionimage','sizechartimage','racerouteimage']
+        fields = ['eventname','eventdetails','eventcategory','eventlocation','eventdate','eventtime','inclusions','bannerimage','inclusionimage','sizechartimage','racerouteimage','maxSlots']
     

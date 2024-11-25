@@ -60,9 +60,12 @@ def event_detail(request, event_id):
             print(form.errors)
     else:
         form = CreateEvent(instance=event)  # Prefill the form with the current event data
+    #Get number of participants
+    num_registrants = Registration.objects.filter(event = event).count()
 
     print("Banner Image URL:", event.bannerimage.url) 
     return render(request, 'event_details.html', {
+        'userName': "this is not needed",
         'event': event,
         'userID': userId,
         'forms': form,
@@ -72,6 +75,7 @@ def event_detail(request, event_id):
         'categories': category_list,
         'unique_inclusions': unique_inclusions_dict,
          'category_prices': category_prices,
+        'num_registrants': num_registrants,
     })
 
 def update_event_photo(request, event_id):
