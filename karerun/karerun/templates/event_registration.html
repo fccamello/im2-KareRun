@@ -32,11 +32,19 @@
         </div>
 
         <div class="reg_title">REGISTRATION</div>
+        {% if errors%}
+            <div class="error-messages">
+                {% for error in errors %}
+                    <h2 class="errorMessages">{{ error }}</h2>
+                {% endfor %}
+            </div>
+        {%endif%}
         <div class="reg_category">Categories</div>
 
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
         <div class="categories-container">
+            
             <div class="categories-row">
                 {% for category in categories %}
                     <label class="category-box"  onclick="selectCategory(this)"

@@ -3,7 +3,7 @@ import logging
 from django.shortcuts import render, get_object_or_404
 from RegLogCreate.models import Event 
 from collections import defaultdict
-
+from EventRegistration.models import Registration
 
 def event_detail(request, event_id):
     event = get_object_or_404(Event, eventid=event_id) 
@@ -43,9 +43,12 @@ def event_detail(request, event_id):
 
     unique_inclusions_dict = {k: list(v) for k, v in unique_inclusions.items()}
 
+    #Get number of participants
+    num_registrants = Registration.objects.filter(event = event).count()
 
     print("Banner Image URL:", event.bannerimage.url) 
     return render(request, 'event_details.html', {
+        'userName': "this is not needed",
         'event': event,
         'userID': userId,
         'first_word': first_word,
@@ -53,4 +56,5 @@ def event_detail(request, event_id):
         'categories': category_list,
         'unique_inclusions': unique_inclusions_dict,
          'category_prices': category_prices,
+        'num_registrants': num_registrants,
     })
