@@ -302,7 +302,10 @@
         // Clear previous selections
         const buttons = document.querySelectorAll('.category-box');
         buttons.forEach(btn => btn.style.border = 'none');
-        button.style.border = '2px solid #000';
+        button.style.border = '0px solid #000';
+        button.style.boxShadow = '0 0 10px rgba(0, 123, 255, 0.5)';
+
+        button.style.backgroundColor = '#007bff';
         
     }
 
