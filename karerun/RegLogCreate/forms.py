@@ -1,5 +1,6 @@
 from django import forms
 from .models import User,Event
+from datetime import date, timedelta
 
 class RegisterUserForm(forms.ModelForm):
 
@@ -37,7 +38,9 @@ class CreateEvent(forms.ModelForm):
     # eventcategory = forms.CharField(widget=forms.Textarea)
     eventcategory = forms.CharField(max_length=100)
     eventlocation = forms.CharField(max_length=100)
-    eventdate = forms.DateField(widget = forms.DateInput(attrs={'type':'date'}))
+    eventdate = forms.DateField(
+        widget=forms.DateInput(attrs={'type': 'date', 'min': (date.today() + timedelta(days=1)).isoformat()})
+    )
     eventtime = forms.TimeField(widget = forms.TimeInput(attrs={'type':'time'}))
     # inclusions = forms.CharField(widget=forms.Textarea)
     # inclusions = forms.CharField(widget=forms.HiddenInput())
