@@ -14,14 +14,7 @@
         
         <header style="background-color: #002B5A;">
             <img src="{% static 'photos/logo.png' %}" style="max-width: 150px; width: 100%; padding-left: 100px;">
-            <div class="header-navs">
-                <nav>
-                    <a href="">Home</a>
-                    <a href="{% url 'race_list' %}">Events</a>
-                    <button class="nav-buttons" onclick="window.location.href='{% url 'login' %}';" style="background-color: white; color: black;">Log In</button>
-                    <button class="nav-buttons" onclick="window.location.href='{% url 'register' %}';" style="background-color: #FF5726;">Sign Up</button>
-                </nav>
-            </div>
+            {%include 'header.html' %}
         </header>
 
         <div class="page_banner_bg_reg" style="background-image: url('{{ event.bannerimage.url }}');">
@@ -35,14 +28,13 @@
                 </div>
             </div>
         </div>
-
         <div class="event_banner_reg" style="background-image: url('{{ event.bannerimage.url }}');">
         </div>
 
         <div class="reg_title">REGISTRATION</div>
         <div class="reg_category">Categories</div>
 
-        <form method="POST" enctype="multipart/form-data" >
+        <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
         <div class="categories-container">
             <div class="categories-row">
@@ -216,7 +208,7 @@
 
 
         <div class="button-container">
-            <button class="submit-button" type="submit">SUBMIT</button>
+            <button class="submit-button" type="submit">CONTINUE</button>
         </div>
 
     </form>

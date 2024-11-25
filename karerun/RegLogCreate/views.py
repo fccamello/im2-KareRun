@@ -29,6 +29,10 @@ def logout(request):
     return redirect('index')
 
 def login(request):
+    context = {
+        'forms':None,
+        'errors':None
+    }
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -41,8 +45,11 @@ def login(request):
                 print("success")
                 return redirect('homepage')
             else:
+                form = LoginForm()
                 print("error/wrong password")
-                return redirect('login')
+                context['forms'] = form
+                context['errors'] = "Invalid email or password"
+                return render(request,'login.html',context) 
         else:
             print(form.errors)
     else:
