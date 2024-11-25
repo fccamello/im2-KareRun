@@ -18,12 +18,11 @@
     <header style="background-color: #002B5A;">
         
         <img src="{% static 'photos/logo.png' %}" style="max-width: 150px; width: 100%; padding-left: 100px;">
-        {%include 'header.html' %}
+        {% include 'header.html' %}
     </header>
 
-
+        
         <div class="page_banner_bg" style="background-image: url('{{ event.bannerimage.url }}');">
-
             <div class="event_box"> 
                 <div class="event_details">
                   <h5>  {{  event.eventdate|date:"F" }}  </h5>
@@ -35,12 +34,25 @@
                 </div>
                 <button class="btnreg" onclick="location.href='{% url 'event_reg' event_id=event.eventid %}'">REGISTER</button>
             </div>
-         
+            {% if userID == event.OrganizerId %}
+            <div class="btn-bottom-right">
+                <img src="/path/to/icon.png" alt="Icon" class="icon" />
+                <span>Participants</span>
+            </div>
+
+            <div class="btn-bottom-right second-div">
+                <img src="/path/to/icon.png" alt="Icon" class="icon" />
+                <span>Edit Event</span>
+            </div>
+            {% endif %}
         </div>
 
-
+        
 
     <div class="event_banner" style="background-image: url('{{ event.bannerimage.url }}');">
+        {% if userID == event.OrganizerId %}
+        <button id="changeCoverPhoto" class="btn btn-light btn-sm" style="position: absolute; top: 10px; right: 10px; cursor: pointer;">Change Cover Photo</button>    
+        {% endif %}
     </div>
     
     <!-- <div class="event_name"> {{ event.eventname }}</div>
@@ -104,6 +116,9 @@
         {% if event.inclusionimage %}
             <div class="event_inclusions">
                 <img src="{{ event.inclusionimage.url }}">
+                {% if userID == event.OrganizerId %}
+                <button id="changeCoverPhoto" class="btn btn-light btn-sm" style="position: absolute; top: 10px; right: 10px; cursor: pointer; z-index: 10;">Change Inclusions</button>    
+                {% endif %}
             </div>
         {% else %}
             <p>No image available</p>
