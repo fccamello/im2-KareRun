@@ -10,8 +10,11 @@ from RegLogCreate.forms import CreateEvent
 from EventRegistration.models import Registration
 
 def event_detail(request, event_id):
+
+    #simple set-up for context    
     event = get_object_or_404(Event, eventid=event_id) 
     userId = request.session.get('userID',None)
+    user = User.objects.get(userid=userId)
     user_ids = Registration.objects.filter(event=event_id).values_list('user', flat=True)
     participants = User.objects.filter(userid__in=user_ids)
     eventname_split = event.eventname.split(' ', 1)
@@ -36,7 +39,7 @@ def event_detail(request, event_id):
     minutes_left = (time_left.seconds % 3600) // 60
     seconds_left = time_left.seconds % 60
 
-
+    #For Context Stuff
     categories = event.eventcategory.split(',')
     category_list = [category.strip() for category in categories]
     
@@ -61,7 +64,8 @@ def event_detail(request, event_id):
         category_prices[category] = price
 
     unique_inclusions_dict = {k: list(v) for k, v in unique_inclusions.items()}
-
+    
+    #checks for Post Reuqests/Updates
     if request.method == 'POST':
         print("received event POST")
         form = CreateEvent(request.POST, request.FILES, instance=event)  # Bind the form to the existing event
@@ -76,6 +80,12 @@ def event_detail(request, event_id):
         form = CreateEvent(instance=event)  # Prefill the form with the current event data
     #Get number of participants
     num_registrants = Registration.objects.filter(event = event).count()
+
+    #Check if user is the organizer/is_superUser
+    is_Edit_Allowed = False
+    if user.is_superuser or user.userid == event.organizerId:
+        is_Edit_Allowed = True
+
 
     print("Banner Image URL:", event.bannerimage.url) 
     return render(request, 'event_details.html', {
@@ -93,6 +103,7 @@ def event_detail(request, event_id):
          'days_left': days_left,
         'hours_left': hours_left,
         'minutes_left': minutes_left,
+        'is_Super':is_Edit_Allowed,
         'seconds_left': seconds_left,
     })
 

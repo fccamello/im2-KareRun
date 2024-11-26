@@ -42,6 +42,7 @@
                   </div>
                 <button class="btnreg" onclick="location.href='{% url 'event_reg' event_id=event.eventid %}'">REGISTER</button>
             </div>
+            {%if is_Super%}
             <div class="btn-bottom-right" id="viewParticipantsBtn">
                 <img src="/path/to/icon.png" alt="Icon" class="icon" />
                 <span>Participants</span>
@@ -51,13 +52,15 @@
                 <img src="/path/to/icon.png" alt="Icon" class="icon" />
                 <span>Edit Event</span>
             </div>
+            {%endif%}
         </div>
 
         
-
+    {% if is_Super %}
     <div class="event_banner" style="background-image: url('{{ event.bannerimage.url }}');">
         <button id="changeBannerImage" class="btn btn-light btn-sm" style="position: absolute; top: 10px; right: 10px; cursor: pointer; z-index: 10;">Change Banner</button>    
     </div>
+    {%endif %}
 
     <!-- <div class="event_name"> {{ event.eventname }}</div>
     <div class="event_description"> {{ event.eventdetails }}</div>
@@ -142,7 +145,9 @@
         {% if event.inclusionimage %}
         <div class="event_inclusions">
             <img src="{{ event.inclusionimage.url }}">
+            {%if is_Super%}
             <button id="changeInclusionImage" class="btn btn-light btn-sm" style="position: absolute; top: 10px; right: 10px; cursor: pointer; z-index: 10;">Change Inclusions</button>    
+            {%endif%}
         </div>
         {% else %}
             <p>No image available</p>
@@ -154,7 +159,9 @@
         {% if event.racerouteimage %}
         <div class="event_inclusions">
             <img src="{{ event.racerouteimage.url }}">
+            {%if is_Super%}
             <button id="changeRaceRouteImage" class="btn btn-light btn-sm" style="position: absolute; top: 10px; right: 10px; cursor: pointer; z-index: 10;">Change Race Route</button>    
+            {%endif%}
         </div>
         {% else %}
             <p>No image available</p>
