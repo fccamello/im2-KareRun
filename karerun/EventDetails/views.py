@@ -84,8 +84,12 @@ def event_detail(request, event_id):
 
     #Check if user is the organizer/is_superUser
     is_Edit_Allowed = False
-    if user.is_superuser or user.userid == event.organizerId:
+    if (user.is_superuser or user.userid == event.organizerId):
         is_Edit_Allowed = True
+    #check if event has passed or closed
+    if event.eventdate < datetime.datetime.now(datetime.timezone.utc):
+        is_Edit_Allowed = False
+
 
 
     print("Banner Image URL:", event.bannerimage.url) 
