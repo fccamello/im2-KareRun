@@ -28,13 +28,10 @@
     </div>
 
     <!-- Action Boxes Section -->
-  <div class="container my-5">
+    <div class="container my-5">
       <div class="row justify-content-center" style="gap: 50px;">
         <!-- Register for a Race Box -->
-        <div 
-          class="col-md-3 text-center"
-          style="margin: 20px; "
-        >
+        <div class="col-md-3 text-center" style="margin: 20px; ">
           <a href="{% url 'race_list' %}" class="text-decoration-none">
             <div
               class="card shadow-sm p-4 mb-4 bg-white rounded d-flex align-items-center"
@@ -80,86 +77,23 @@
           </a>
         </div>
         {% endif %}
-        <!-- Request as Organizer Box -->
-        {% if not user.isEventOrganizer and not user.is_superuser%}
-        <div class="col-md-3 text-center" style="margin: 20px">
-          <a
-            href="{% if not requested %}{% url 'appeal' %}{% endif %}"
-            class="text-decoration-none"
-            {%
-            if
-            requested
-            %}style="pointer-events: none; cursor: default;"
-            {%
-            endif
-            %}
-          >
-            <div
-              class="card shadow-sm p-4 mb-4 bg-white rounded d-flex align-items-center"
-              style="width: 300px; height: 250px; border: #002b5a solid 3px"
-            >
-              <div class="circle-logo mx-auto mb-3">
-                <img
-                  src="{% static 'icons/request_organizer_icon.png' %}"
-                  class="rounded-circle"
-                  style="width: 50px; height: 50px"
-                />
-              </div>
-              <h5 class="text-dark">Request as Organizer</h5>
-              <p class="text-dark">
-                {% if requested %}
-                <br />You have already requested. {% else %} <br />Become an
-                Organizer now to organize your own event! {% endif %}
-              </p>
-            </div>
-          </a>
-        </div>
-        {% endif %}
-
-      <!-- View admin page -->
-      {% if user.isEventOrganizer and user.is_superuser%}
-      <div class="col-md-3 text-center" style="margin: 20px">
-        <a
-          href="{% url 'appealList' %}"
-          class="text-decoration-none"
-          {%
-          if
-          requested
-          %}style="pointer-events: none; cursor: default;"
-          {%
-          endif
-          %}
-        >
-          <div
-            class="card shadow-sm p-4 mb-4 bg-white rounded d-flex align-items-center"
-            style="width: 300px; height: 250px; border: #002b5a solid 3px"
-          >
-            <div class="circle-logo mx-auto mb-3">
-              <img
-                src="{% static 'icons/request_organizer_icon.png' %}"
-                class="rounded-circle"
-                style="width: 50px; height: 50px"
-              />
-            </div>
-            <h5 class="text-dark">View Admin Page</h5>
-            <p class="text-dark">
-              <br />Manage Organizer Requests! 
-            </p>
-          </div>
-        </a>
       </div>
-      {% endif %}
     </div>
-  </div>
-
 
     <!-- Registered Races Section -->
     <div class="container mt-5" style="color: #002b5a">
-      <h3>Registered Races</h3>
-      <div
-        class="scrollable-container"
-        style="max-height: 400px; overflow-y: auto; margin-top: 20px"
-      >
+      <div style="display: flex;">
+        <div>
+          <h3>Registered Races</h3>
+        </div>
+        <div style="margin-left: 60%;">
+          <button class="btn btn-light" style="font-size: 12px; background-color: #4bc6d6; color: aliceblue;" data-toggle="modal" data-target="#generateTrainingPlanModal">
+            Generate Training Plan
+          </button>
+        </div>
+      </div>
+
+      <div class="scrollable-container" style="max-height: 400px; overflow-y: auto; margin-top: 20px">
         <div class="row">
           {% for event in events %}
           <div class="col-md-12 mb-3">
@@ -201,9 +135,117 @@
       </div>
     </div>
 
-    <!-- Bootstrap JS -->
+    <!-- Modal for Training Plan -->
+    <div class="modal fade" id="generateTrainingPlanModal" tabindex="-1" role="dialog" aria-labelledby="generateTrainingPlanModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" style="color: #002b5a;" id="generateTrainingPlanModalLabel">Generate Training Plan</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="generateTrainingForm">
+              <div class="form-group">
+                <label for="eventSelect" style="color: #002b5a;">Select Event</label>
+                <select class="form-control" id="eventSelect">
+                  {% for event in events %}
+                  <option value="{{ event.eventid }}" data-eventdate="{{ event.eventdate|date:'Y-m-d' }}">{{ event.eventname }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <button type="button" class="btn btn-light" style="background-color: #ff5726; color: white; font-size: 14px; margin-left: 70%;" id="generatePlanBtn">Generate Plan</button>
+            </form>
+
+            <div id="trainingPlanResult" style="display: none; margin-top: 20px;">
+              <h4 style="color: #4bc6d6;">Your Running Plan</h4>
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Week</th>
+                    <th>Monday</th>
+                    <th>Tuesday</th>
+                    <th>Wednesday</th>
+                    <th>Thursday</th>
+                    <th>Friday</th>
+                    <th>Saturday</th>
+                    <th>Sunday</th>
+                  </tr>
+                </thead>
+                <tbody id="trainingPlanTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+      document.getElementById("generatePlanBtn").addEventListener("click", function() {
+        var eventSelect = document.getElementById("eventSelect");
+        var selectedOption = eventSelect.options[eventSelect.selectedIndex];
+        var eventDate = new Date(selectedOption.getAttribute("data-eventdate"));
+        var today = new Date();
+        var timeDiff = eventDate - today;
+        var weeksLeft = Math.floor(timeDiff / (1000 * 60 * 60 * 24 * 7));
+
+        if (weeksLeft > 0) {
+          var trainingPlan = generateTrainingPlan(weeksLeft);
+          displayTrainingPlan(trainingPlan);
+        } else {
+          alert("The event date must be in the future.");
+        }
+      });
+
+      function generateTrainingPlan(weeksLeft) {
+        var baseDistance = 5; 
+        var increment = 1; 
+        var plan = [];
+        
+        for (var i = 1; i <= weeksLeft; i++) {
+          var weeklyDistance = baseDistance + (i - 1) * increment;
+          
+          plan.push({
+            week: i,
+            days: [
+              "Rest", 
+              "Run " + weeklyDistance + " km", 
+              "Rest", 
+              "Run " + weeklyDistance + " km", 
+              "Rest", 
+              "Run " + (weeklyDistance + 2) + " km", 
+              "Rest" 
+            ]
+          });
+        }
+        
+        return plan;
+      }
+
+      function displayTrainingPlan(plan) {
+        var tableBody = document.getElementById("trainingPlanTableBody");
+        tableBody.innerHTML = "";
+
+        plan.forEach(function(week) {
+          var row = document.createElement("tr");
+          var weekCell = document.createElement("td");
+          weekCell.textContent = "Week " + week.week;
+          row.appendChild(weekCell);
+
+          week.days.forEach(function(day) {
+            var dayCell = document.createElement("td");
+            dayCell.textContent = day;
+            row.appendChild(dayCell);
+          });
+
+          tableBody.appendChild(row);
+        });
+        document.getElementById("trainingPlanResult").style.display = "block";
+      }
+    </script>
   </body>
 </html>
