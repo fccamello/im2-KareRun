@@ -56,11 +56,11 @@
         </div>
 
         
-    {% if is_Super %}
     <div class="event_banner" style="background-image: url('{{ event.bannerimage.url }}');">
-        <button id="changeBannerImage" class="btn btn-light btn-sm" style="position: absolute; top: 10px; right: 10px; cursor: pointer; z-index: 10;">Change Banner</button>    
+        {% if is_Super %}
+            <button id="changeBannerImage" class="btn btn-light btn-sm" style="position: absolute; top: 10px; right: 10px; cursor: pointer; z-index: 10;">Change Banner</button>    
+        {%endif %}
     </div>
-    {%endif %}
 
     <!-- <div class="event_name"> {{ event.eventname }}</div>
     <div class="event_description"> {{ event.eventdetails }}</div>
