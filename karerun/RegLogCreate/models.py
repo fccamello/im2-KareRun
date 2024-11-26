@@ -75,7 +75,7 @@ class Event(models.Model):
     #should be list of categories
     eventcategory  = models.JSONField()
     eventlocation = models.CharField(max_length=100)
-    eventdate = models.DateField()
+    eventdate = models.DateTimeField()
     eventtime = models.TimeField()
     dateposted = models.DateTimeField(auto_now_add=True)
     #should be a list of inclusions

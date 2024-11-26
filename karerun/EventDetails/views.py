@@ -1,3 +1,4 @@
+import datetime
 from django.shortcuts import render, get_object_or_404, redirect
 from RegLogCreate.models import Event, User 
 from collections import defaultdict
@@ -21,6 +22,19 @@ def event_detail(request, event_id):
 
     category_inclusions = {}
     category_prices = {}
+
+    
+    event_datetime = datetime.datetime.combine(event.eventdate, datetime.time.min)
+
+    # for the date timer
+    current_time = datetime.datetime.now()
+    time_left = event_datetime - current_time
+
+
+    days_left = time_left.days
+    hours_left = time_left.seconds // 3600
+    minutes_left = (time_left.seconds % 3600) // 60
+    seconds_left = time_left.seconds % 60
 
 
     categories = event.eventcategory.split(',')
@@ -76,6 +90,10 @@ def event_detail(request, event_id):
         'unique_inclusions': unique_inclusions_dict,
          'category_prices': category_prices,
         'num_registrants': num_registrants,
+         'days_left': days_left,
+        'hours_left': hours_left,
+        'minutes_left': minutes_left,
+        'seconds_left': seconds_left,
     })
 
 def update_event_photo(request, event_id):

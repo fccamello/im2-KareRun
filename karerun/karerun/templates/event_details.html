@@ -12,6 +12,8 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.1/aos.css"
     />
+    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet">
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.1/aos.js"></script>
     <link rel="stylesheet" href="{% static 'css/event_details.css' %}" />
   </head>
@@ -69,6 +71,7 @@
 
     <div class="event_description">{{ event.eventdetails }}</div>
 
+    
     <div class="reg_now">Categories</div>
 
     <div class="categories-container">
@@ -129,6 +132,10 @@
         </label>
         {% endfor %}
       </div>
+
+      <div class="reg_now" style="margin-top: 3%;">Days Left</div>
+    <div class="reg_now_time">  </div>
+
 
       <div class = "reg_now" style="margin-top: 5%;"> Inclusions </div>
 
@@ -453,5 +460,29 @@
         }
 </script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const eventDate = new Date("{{ event.eventdate|date:'Y-m-d H:i:s' }}").getTime();
+  
+      function updateCountdown() {
+        const now = new Date().getTime();
+        const distance = eventDate - now;
+  
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+  
+        document.querySelector(".reg_now_time").innerHTML = `${days}:${hours}:${minutes}:${seconds}`;
+  
+        if (distance < 0) {
+          document.querySelector(".reg_now_time").innerHTML = "Event has passed!";
+        }
+      }
+  
+      setInterval(updateCountdown, 1000);
+    });
+  </script>
+  
 </body>
 </html>

@@ -138,6 +138,24 @@ color: #002B5A;
     font-weight: bold;
     }
 
+
+.reg_now_time{
+        font-size: 100px;
+        font-weight: 500;
+        height: auto;
+        text-align: center;
+        width: 70%;
+        margin-left: auto;
+        margin-right: auto;
+        left: 125px;
+        margin-top: 5%;
+        gap: 0px;
+        margin-bottom: 5%;
+        opacity: 0px;
+        color: #002B5A;
+        font-weight: bold;
+        }
+    
 .event_inclusions {
     width: 100%; 
     margin-top: 5%;
