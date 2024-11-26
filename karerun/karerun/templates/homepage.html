@@ -27,11 +27,9 @@
       </h2>
     </div>
 
-    <!-- Action Boxes Section -->
     <div class="container my-5">
       <div class="row justify-content-center" style="gap: 50px;">
-        <!-- Register for a Race Box -->
-        <div class="col-md-3 text-center" style="margin: 20px; ">
+        <div class="col-md-3 text-center" style="margin: 10px; ">
           <a href="{% url 'race_list' %}" class="text-decoration-none">
             <div
               class="card shadow-sm p-4 mb-4 bg-white rounded d-flex align-items-center"
@@ -55,7 +53,7 @@
 
         <!-- Create an Event Box -->
         {% if user.isEventOrganizer or user.is_superuser %}
-        <div class="col-md-3 text-center" style="margin: 20px">
+        <div class="col-md-3 text-center" style="margin: 10px">
           <a href="{% url 'createEvent' %}" class="text-decoration-none">
             <div
               class="card shadow-sm p-4 mb-4 bg-white rounded d-flex align-items-center"
@@ -77,9 +75,44 @@
           </a>
         </div>
         {% endif %}
-      </div>
-    </div>
+   
 
+      {% if user.isEventOrganizer and user.is_superuser%}
+      <div class="col-md-3 text-center" style="margin: 10px">
+        <a
+          href="{% url 'appealList' %}"
+          class="text-decoration-none"
+          {%
+          if
+          requested
+          %}style="pointer-events: none; cursor: default;"
+          {%
+          endif
+          %}
+        >
+        <div
+          class="card shadow-sm p-4 mb-4 bg-white rounded d-flex align-items-center"
+          style="width: 300px; height: 250px; border: #002b5a solid 3px"
+        >
+          <div class="circle-logo mx-auto mb-3">
+            <img
+              src="{% static 'icons/request_organizer_icon.png' %}"
+              class="rounded-circle"
+              style="width: 50px; height: 50px"
+            />
+          </div>
+          <h5 class="text-dark">View Admin Page</h5>
+          <p class="text-dark">
+            <br />Manage Organizer Requests! 
+          </p>
+        </div>
+      </a>
+    </div>
+    {% endif %}
+    </div>
+  </div>
+
+  
     <!-- Registered Races Section -->
     <div class="container mt-5" style="color: #002b5a">
       <div style="display: flex;">
@@ -87,9 +120,7 @@
           <h3>Registered Races</h3>
         </div>
         <div style="margin-left: 60%;">
-          <button class="btn btn-light" style="font-size: 12px; background-color: #4bc6d6; color: aliceblue;" data-toggle="modal" data-target="#generateTrainingPlanModal">
-            Generate Training Plan
-          </button>
+          
         </div>
       </div>
 
@@ -120,9 +151,10 @@
                 <p class="card-text">Details: {{ event.eventdetails }}</p>
                 <a
                   href="{% url 'event_detail' event_id=event.eventid %}"
-                  class="btn btn-outline-primary"
-                  >View Details</a
-                >
+                  class="btn btn-light" style="font-size: 12px; background-color: #ff5726; color: aliceblue;">View Details </a>
+                  <button class="btn btn-light" style="font-size: 12px; background-color: #4bc6d6; color: aliceblue;" data-toggle="modal" data-target="#generateTrainingPlanModal">
+                    Generate Training Plan
+                  </button>
               </div>
             </div>
           </div>
