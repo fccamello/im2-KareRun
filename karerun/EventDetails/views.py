@@ -75,6 +75,7 @@ def event_detail(request, event_id):
             print("updated event")
             return redirect('event_detail', event_id=event.eventid)  # Redirect to the updated event page
         else:
+            print("Form Errros")
             print(form.errors)
     else:
         form = CreateEvent(instance=event)  # Prefill the form with the current event data
