@@ -11,6 +11,12 @@ def homepage(request):
     events = Event.objects.filter(eventid__in=event_ids)
     appeal = OrganizerAppeal.objects.filter(user = User.objects.get(userid = userId))
     requested = False
+
+    
+    organizer_event = events.filter(organizerId = userId )
+
+   
+
     if appeal.exists():
         requested = True
         print("You have already requested")
@@ -20,7 +26,8 @@ def homepage(request):
     else:
         print("no session")
     context = {
-        'events': events,
+        'events': organizer_event,
+        'organizer_event': organizer_event,
         'userName':user.username,
         'requested':requested,
         'user':user,
