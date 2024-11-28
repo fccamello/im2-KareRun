@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.models import User
+from RegLogCreate.models import User
 from .forms import UserProfileForm
 from .models import UserProfile
 from django.http import JsonResponse
@@ -8,10 +8,7 @@ from django.contrib.auth.decorators import login_required
 import json
 from django.core.files.storage import default_storage
 
-# View to display profile (optional)
 def view_profile(request, username):
-    #profile = request.user.userprofile
-
     # Get the user by username
     user = get_object_or_404(User, username=username)
     

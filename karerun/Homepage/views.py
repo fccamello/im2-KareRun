@@ -2,11 +2,13 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from RegLogCreate.models import Event,User
 from OrganizerAppeal.models import OrganizerAppeal
+from EventRegistration.models import Registration
 @login_required
 def homepage(request):
-    events = Event.objects.all()
     #warning the session might not have 'userID', in normal means they have
     userId = request.session.get('userID',None)
+    event_ids = Registration.objects.filter(user_id=userId).values_list('event', flat=True)
+    events = Event.objects.filter(eventid__in=event_ids)
     appeal = OrganizerAppeal.objects.filter(user = User.objects.get(userid = userId))
     requested = False
     if appeal.exists():
@@ -21,7 +23,8 @@ def homepage(request):
         'events': events,
         'userName':user.username,
         'requested':requested,
-        'user':user
+        'user':user,
+        'userId':user.userid,
     }
     return render(request, 'homepage.html', context)   
 

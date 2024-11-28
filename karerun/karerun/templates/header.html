@@ -6,6 +6,11 @@
     <a href="{% url 'index' %}">Home</a>
     {% endif %}
     <a href="{% url 'race_list' %}">Events</a>
+    {% if userName %}
+    <a href="{% url 'userprofile:view_profile' userName %}">Profile</a>
+    {% else %}
+    <a href="{% url 'login' %}">Profile</a>
+    {% endif %}
     <!-- <a href=""></a> -->
     {%if userName is None%}
     <button
