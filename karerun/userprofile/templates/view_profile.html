@@ -65,16 +65,13 @@
 </head>
 <body style="background-color: aliceblue;">
 
-    <header style="background-color: #002B5A;">
-        <img src="{% static 'photos/logo.png' %}" style="max-width: 250px; width: 100%; padding-left: 100px;">
-        <div class="header-navs">
-            <nav style="text-decoration: none;">
-                <a href="{% url 'homepage' %}">Home</a>
-                <a href="{% url 'race_list' %}">Events</a>
-                <button class="nav-buttons" onclick="window.location.href='{% url 'index' %}';" style="background-color: #FF5726;">Sign Out</button>
-            </nav>
-        </div>
-    </header>
+    <header style="background-color: #002b5a">
+        <img
+          src="{% static 'photos/logo.png' %}"
+          style="max-width: 250px; width: 100%; padding-left: 100px"
+        />
+        {%include 'header.html' %}
+      </header>
 
 <div class="profile-page">
     <!-- Profile Header -->
@@ -89,16 +86,13 @@
 
     <!-- Profile Information Section -->
     <div class="container profile-info">
-        <h2>{{ user.first_name }} {{ user.last_name }} </h2>
+        <h2>{{ user.firstname }} {{ user.lastname }} </h2>
         <h5 style="color: #FF5726;">@{{ user.username }}</h5>
         <p id="bio" class="editable">{{ profile.bio }}</p>
-        <p>Friends: {{ profile.friends }}</p>
 
         <!-- Buttons (Add Friend, Message, etc.) -->
         <div class="mt-4">
-            <button class="btn btn-primary">Add Friend</button>
-            <button class="btn btn-secondary">Message</button>
-            <button id="toggleEdit" class="btn btn-danger">Edit Profile</button>
+            <button id="toggleEdit" class="btn btn-danger">Edit Bio</button>
         </div>
     </div>
 
@@ -109,34 +103,56 @@
             <div class="col-md-4">
                 <div class="about-me">
                     <h4>About Me</h4>
-                    <p><strong>Birthdate:</strong> <span id="birthdate" class="editable">{{ profile.birthdate }}</span></p>
+                    <p><strong>Birthdate:</strong> {{ user.birthdate }}</p>
                     <p><strong>Age:</strong> {{ profile.age }}</p>
-                    <p><strong>Gender:</strong> <span id="gender" class="editable">{{ profile.gender }}</span></p>
-                    <p><strong>Organization:</strong> <span id="organization" class="editable">{{ profile.organization }}</span></p>
+                    <p><strong>Sex:</strong> {{ user.sex }}</p>
                 </div>
             </div>
 
             <!-- Event History Section -->
             <div class="col-md-8">
                 <div class="event-history">
-                    <h4>History</h4>
+                    <!-- Registered Events -->
+                    <h4>Registered Races</h4>
                     <div class="scrollable-container" style="max-height: 400px; overflow-y: auto; margin-top: 20px;">
                         <div class="row">
-                            {% for event in profile.user.joined_events.all %}
+                            {% for event in registered_events %}
                             <div class="col-md-12 mb-3">
                                 <div class="card shadow-sm d-flex flex-row" style="border: #002B5A solid 2px;">
-                                    <!-- Card details on the right -->
                                     <div class="card-body">
                                         <h5 class="card-title" style="color: #002B5A;">Joined {{ event.event_name }}</h5>
                                         <p class="card-text">Location: {{ event.location }}</p>
                                         <p class="card-text">Date: {{ event.date }}</p>
-                                        <a href="{% url 'event_detail' event_id=event.id %}" class="btn btn-outline-primary">View Details</a>
+                                        <a href="{% url 'event_detail' event_id=event.eventid %}" class="btn btn-outline-primary">View Details</a>
                                     </div>
                                 </div>
                             </div>
                             {% empty %}
                             <div class="col-12 text-center">
-                                <p style="font-size: medium;">No events joined yet.</p>
+                                <p style="font-size: medium;">No registered races yet.</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Created Events -->
+                    <h4 class="mt-5">Created Races</h4>
+                    <div class="scrollable-container" style="max-height: 400px; overflow-y: auto; margin-top: 20px;">
+                        <div class="row">
+                            {% for event in created_events %}
+                            <div class="col-md-12 mb-3">
+                                <div class="card shadow-sm d-flex flex-row" style="border: #002B5A solid 2px;">
+                                    <div class="card-body">
+                                        <h5 class="card-title" style="color: #002B5A;">Created {{ event.event_name }}</h5>
+                                        <p class="card-text">Location: {{ event.location }}</p>
+                                        <p class="card-text">Date: {{ event.date }}</p>
+                                        <a href="{% url 'event_detail' event_id=event.eventid %}" class="btn btn-outline-primary">View Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% empty %}
+                            <div class="col-12 text-center">
+                                <p style="font-size: medium;">No races created yet.</p>
                             </div>
                             {% endfor %}
                         </div>
@@ -145,6 +161,7 @@
             </div>
         </div>
     </div>
+
     <!-- Hidden file inputs for image uploads -->
     <input type="file" id="coverPhotoInput" accept="image/*" style="display:none;">
     <input type="file" id="profilePhotoInput" accept="image/*" style="display:none;">

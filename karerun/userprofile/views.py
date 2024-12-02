@@ -7,6 +7,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 import json
 from django.core.files.storage import default_storage
+from EventRegistration.models import Registration
+from RegLogCreate.models import Event
 
 def view_profile(request, username):
     # Get the user by username
@@ -14,7 +16,10 @@ def view_profile(request, username):
     
     # Fetch the user profile (assuming the user profile is related to the User model via OneToOneField)
     profile = get_object_or_404(UserProfile, user=user)
-    return render(request, 'view_profile.html', {'user': user, 'profile': profile})
+    event_ids = Registration.objects.filter(user_id=user.userid).values_list('event', flat=True)
+    registered_events = Event.objects.filter(eventid__in=event_ids)
+    created_events = Event.objects.filter(organizerId=user.userid)
+    return render(request, 'view_profile.html', {'user': user, 'profile': profile, 'userName': user.username, 'registered_events': registered_events, 'created_events': created_events,})
 
 @login_required
 @csrf_exempt

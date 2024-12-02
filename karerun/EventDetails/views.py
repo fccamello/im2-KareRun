@@ -95,7 +95,7 @@ def event_detail(request, event_id):
 
     print("Banner Image URL:", event.bannerimage.url) 
     return render(request, 'event_details.html', {
-        'userName': "this is not needed",
+        'userName': user.username,
         'event': event,
         'organizer': organizer,
         'userID': userId,
