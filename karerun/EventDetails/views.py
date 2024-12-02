@@ -17,6 +17,7 @@ def event_detail(request, event_id):
     user = User.objects.get(userid=userId)
     user_ids = Registration.objects.filter(event=event_id).values_list('user', flat=True)
     participants = User.objects.filter(userid__in=user_ids)
+    organizer = User.objects.get(userid=event.organizerId)
     eventname_split = event.eventname.split(' ', 1)
     first_word = eventname_split[0]
     rest_of_text = " ".join(eventname_split[1:]) if len(eventname_split) > 1 else ''
@@ -96,6 +97,7 @@ def event_detail(request, event_id):
     return render(request, 'event_details.html', {
         'userName': "this is not needed",
         'event': event,
+        'organizer': organizer,
         'userID': userId,
         'forms': form,
         'participants': participants,
