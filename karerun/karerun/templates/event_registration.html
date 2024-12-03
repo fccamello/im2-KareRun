@@ -278,7 +278,7 @@
 
         
 
-        function selectCategory(button) { 
+    function selectCategory(button) { 
     
         const selectedCategory = button.querySelector('.category-km').textContent.trim();
         const radioInput = document.querySelector(`input[name="category_ni"][value="${selectedCategory}"]`);
@@ -300,12 +300,24 @@
         }
 
         // Clear previous selections
-        const buttons = document.querySelectorAll('.category-box');
-        buttons.forEach(btn => btn.style.border = 'none');
-        button.style.border = '0px solid #000';
-        button.style.boxShadow = '0 0 10px rgba(0, 123, 255, 0.5)';
+        // const buttons = document.querySelectorAll('.category-box');
+        // buttons.forEach(btn => btn.style.border = 'none', );
+        // button.style.border = '0px solid #000';
+        // button.style.boxShadow = '0 0 10px rgba(0, 123, 255, 0.5)';
 
-        button.style.backgroundColor = '#007bff';
+        const buttons = document.querySelectorAll('.category-box');
+
+        buttons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove 'active' class from all buttons
+                buttons.forEach(btn => btn.classList.remove('active'));
+                
+                // Add 'active' class to the clicked button
+                this.classList.add('active');
+            });
+        });
+
+                
         
     }
 

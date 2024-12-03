@@ -83,23 +83,19 @@
     selectedCategories.add(category);
     updateCategoryField();
 
-    // Check if a section for this category already exists
     let categorySection = document.getElementById(`inclusion-section-${category}`);
 
     if (!categorySection) {
-        // Create a new section if it doesn't exist
         categorySection = document.createElement("div");
         categorySection.id = `inclusion-section-${category}`;
         categorySection.innerHTML = `<h3>Inclusions for ${category}</h3>`;
 
-        // Price input for this category
         const priceInput = document.createElement('input');
         priceInput.type = 'number';
         priceInput.placeholder = 'Enter Price';
         priceInput.id = `price-${category}`;
         categorySection.appendChild(priceInput);
 
-        // Add inclusion buttons
         ["Singlet", "Race Bib", "Finisher Medal", "Finisher Shirt"].forEach(inclusion => {
             const inclusionButton = document.createElement("button");
             inclusionButton.type = "button";
@@ -108,10 +104,8 @@
             categorySection.appendChild(inclusionButton);
         });
 
-        // Append the new section to the container
         inclusionContainer.appendChild(categorySection);
     } else {
-        // If the section exists, scroll to it
         categorySection.scrollIntoView({ behavior: "smooth" });
     }
 }
@@ -136,28 +130,24 @@
             function addInclusionOptions(category, inclusion) {
                 const categorySection = document.getElementById(`inclusion-section-${category}`);
 
-// Check if a section for this inclusion already exists
 let inclusionSection = document.getElementById(`${category}-${inclusion}`);
 
 if (!inclusionSection) {
-    // Create a new section for the inclusion if it doesn't exist
     inclusionSection = document.createElement("div");
     inclusionSection.id = `${category}-${inclusion}`;
 
     if (inclusion === "Singlet" || inclusion === "Finisher Shirt") {
         inclusionSection.innerHTML = `<h4>${inclusion} for ${category}</h4>`;
 
-        // Add size buttons for inclusions that have sizes
         ["XS", "S", "M", "L", "XL"].forEach(size => {
             const sizeButton = document.createElement("button");
             sizeButton.type = "button";
             sizeButton.textContent = size;
-            sizeButton.dataset.selected = "false"; // Track selection state
+            sizeButton.dataset.selected = "false"; 
             sizeButton.onclick = () => toggleSizeSelection(sizeButton, category, inclusion, size);
             inclusionSection.appendChild(sizeButton);
         });
     } else {
-        // Directly add the inclusion to the form for others
         addInclusionToForm(category, inclusion);
     }
 
