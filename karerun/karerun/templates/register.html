@@ -19,8 +19,7 @@
     <div id="formContainer">
       <img
       src="{% static 'photos/logo.png' %}"
-      style="max-width: 150px; width: 100%; height: auto;"
-    />
+      style="max-width: 150px; width: 100%; height: auto;"/>
       <form method="POST">
         {% csrf_token %}
         <p>First Name</p>
@@ -49,8 +48,8 @@
         <br />
         <button type="submit">Register</button>
       </form>
-      <u
-        ><a href="{% url 'login' %}" style="color: white">
+      <u style="margin-top: 8%;"
+        ><a href="{% url 'login' %}" style="color: white;">
           Already have an account? Log in</a
         >
       </u>

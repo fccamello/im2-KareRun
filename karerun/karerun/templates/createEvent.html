@@ -80,25 +80,41 @@
         }
 
         function displayInclusions(category) {
-            selectedCategories.add(category);
-            updateCategoryField();
+    selectedCategories.add(category);
+    updateCategoryField();
 
-            inclusionContainer.innerHTML = `<h3>Inclusions for ${category}</h3>`;
-            
-            const priceInput = document.createElement('input');
-            priceInput.type = 'number';
-            priceInput.placeholder = 'Enter Price';
-            priceInput.id = `price-${category}`;
-            inclusionContainer.appendChild(priceInput);
+    // Check if a section for this category already exists
+    let categorySection = document.getElementById(`inclusion-section-${category}`);
 
-            ["Singlet", "Race Bib", "Finisher Medal", "Finisher Shirt"].forEach(inclusion => {
-                const inclusionButton = document.createElement("button");
-                inclusionButton.type = "button";
-                inclusionButton.textContent = inclusion;
-                inclusionButton.onclick = () => addInclusionOptions(category, inclusion);
-                inclusionContainer.appendChild(inclusionButton);
-            });
-        }
+    if (!categorySection) {
+        // Create a new section if it doesn't exist
+        categorySection = document.createElement("div");
+        categorySection.id = `inclusion-section-${category}`;
+        categorySection.innerHTML = `<h3>Inclusions for ${category}</h3>`;
+
+        // Price input for this category
+        const priceInput = document.createElement('input');
+        priceInput.type = 'number';
+        priceInput.placeholder = 'Enter Price';
+        priceInput.id = `price-${category}`;
+        categorySection.appendChild(priceInput);
+
+        // Add inclusion buttons
+        ["Singlet", "Race Bib", "Finisher Medal", "Finisher Shirt"].forEach(inclusion => {
+            const inclusionButton = document.createElement("button");
+            inclusionButton.type = "button";
+            inclusionButton.textContent = inclusion;
+            inclusionButton.onclick = () => addInclusionOptions(category, inclusion);
+            categorySection.appendChild(inclusionButton);
+        });
+
+        // Append the new section to the container
+        inclusionContainer.appendChild(categorySection);
+    } else {
+        // If the section exists, scroll to it
+        categorySection.scrollIntoView({ behavior: "smooth" });
+    }
+}
 
         function addCustomCategory() {
             const customCategory = document.getElementById("new-category").value.trim();
@@ -117,24 +133,36 @@
             }
         }
 
-        function addInclusionOptions(category, inclusion) {
-            const inclusionSection = document.createElement("div");
-            inclusionSection.id = `${category}-${inclusion}-sizes`;
+            function addInclusionOptions(category, inclusion) {
+                const categorySection = document.getElementById(`inclusion-section-${category}`);
 
-            if (inclusion === "Singlet" || inclusion === "Finisher Shirt") {
-                inclusionSection.innerHTML = `<h4>Sizes for ${inclusion}</h4>`;
-                ["XS", "S", "M", "L", "XL"].forEach(size => {
-                    const sizeButton = document.createElement("button");
-                    sizeButton.type = "button";
-                    sizeButton.textContent = size;
-                    sizeButton.onclick = () => {
-                        addInclusionToForm(category, inclusion, size);
-                    };
-                    inclusionSection.appendChild(sizeButton);
-                });
-            } else {
-                addInclusionToForm(category, inclusion);
-            }
+// Check if a section for this inclusion already exists
+let inclusionSection = document.getElementById(`${category}-${inclusion}`);
+
+if (!inclusionSection) {
+    // Create a new section for the inclusion if it doesn't exist
+    inclusionSection = document.createElement("div");
+    inclusionSection.id = `${category}-${inclusion}`;
+
+    if (inclusion === "Singlet" || inclusion === "Finisher Shirt") {
+        inclusionSection.innerHTML = `<h4>${inclusion} for ${category}</h4>`;
+
+        // Add size buttons for inclusions that have sizes
+        ["XS", "S", "M", "L", "XL"].forEach(size => {
+            const sizeButton = document.createElement("button");
+            sizeButton.type = "button";
+            sizeButton.textContent = size;
+            sizeButton.dataset.selected = "false"; // Track selection state
+            sizeButton.onclick = () => toggleSizeSelection(sizeButton, category, inclusion, size);
+            inclusionSection.appendChild(sizeButton);
+        });
+    } else {
+        // Directly add the inclusion to the form for others
+        addInclusionToForm(category, inclusion);
+    }
+
+    categorySection.appendChild(inclusionSection);
+
 
             const oldSizes = document.getElementById(`${category}-${inclusion}-sizes`);
             if (oldSizes) {
@@ -142,6 +170,33 @@
             }
             inclusionContainer.appendChild(inclusionSection);
         }
+    }
+        function toggleSizeSelection(button, category, inclusion, size) {
+            const inclusionsInput = document.getElementById('inclusions');
+            let inclusions = JSON.parse(inclusionsInput.value || '[]');
+
+            if (button.dataset.selected === "false") {
+                button.dataset.selected = "true";
+                button.style.backgroundColor = "lightgray";
+                const priceInput = document.getElementById(`price-${category}`);
+                const price = priceInput ? priceInput.value : null;
+
+                inclusions.push({ category, inclusion, size, price });
+            } else {
+                button.dataset.selected = "false";
+                button.style.backgroundColor = ""; 
+
+                inclusions = inclusions.filter(
+                    inclusionItem =>
+                        inclusionItem.category !== category ||
+                        inclusionItem.inclusion !== inclusion ||
+                        inclusionItem.size !== size
+                );
+            }
+
+            inclusionsInput.value = JSON.stringify(inclusions);
+        }
+
 
         function addInclusionToForm(category, inclusion, size = null) {
             const inclusionsInput = document.getElementById('inclusions');

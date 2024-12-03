@@ -32,7 +32,7 @@ header a{
 /* carousel ni */
 
 .header-navs{
-    padding-left: 50%;
+    padding-left: 40%;
 }
 
 .nav-buttons{
@@ -45,6 +45,7 @@ header a{
     height: 30px;
     font-size: 12px;
 }
+
 
 
 .carousel{
