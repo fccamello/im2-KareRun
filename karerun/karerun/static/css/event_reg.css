@@ -102,11 +102,11 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   height: 350px !important; 
   border-radius: 10px; 
-  background-color: #4ac6d6 !important;
+  background-color: #002B5A !important;
 }
 
 .category-box.selected:hover {
-    color: #4ac6d6;
+    color: #002B5A;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 

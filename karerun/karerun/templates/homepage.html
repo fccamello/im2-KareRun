@@ -152,7 +152,7 @@
   </div>
 
   
-  {% if user.isEventOrganizer == False or not user.is_superuser == False %}
+  {% if user.is_superuser == False %}
     <div class="container mt-5" style="color: #002b5a">
       <div style="display: flex;">
         <div>
@@ -222,8 +222,10 @@
       </div>
       <div class="scrollable-container" style="max-height: 400px; overflow-y: auto;  overflow-x: hidden; margin-top: 20px">
         <div class="row">
+
+        
           
-            {% for event in events %}
+            {% for event in created_events %}
           <div class="col-md-12 mb-3">
             <div
               class="card shadow-sm d-flex flex-row"
@@ -250,7 +252,7 @@
                   href="{% url 'event_detail' event_id=event.eventid %}"
                   class="btn btn-light" style="font-size: 12px; background-color: #ff5726; color: aliceblue;">View Details </a>
                   <button class="btn btn-light" style="font-size: 12px; background-color: #4bc6d6; color: aliceblue;" data-toggle="modal" data-target="#generateTrainingPlanModal">
-                    View Participants
+                    View Analysis
                   </button>
               </div>
             </div>

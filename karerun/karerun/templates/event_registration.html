@@ -177,6 +177,7 @@
                 {% for category in categories %}
                     <div class="category-inclusions" data-category="{{ category }}" style="display: none;">
                         <h1>{{ category }}</h1>
+
                         
                         {% with singlet_sizes=category_inclusions|get_item:category|filter_sizes:"Singlet" %}
                         {% if singlet_sizes %}
@@ -209,6 +210,19 @@
                             </div>
                         {% endif %}
                         {% endwith %}
+
+
+                        {% with category_items=unique_inclusions|get_item:category %}
+                         {% if category_items %}
+                    <div class="inclusion-item">
+                            {% for item in category_items %}
+                                {% if item != "Singlet" and item != "Finisher Shirt" %}
+                                    <h2>{{ item }}</h2>
+                                {% endif %}
+                            {% endfor %}
+                    </div>
+                        {% endif %}
+                {% endwith %}
                     </div>
                 {% endfor %}
             </div>
@@ -299,20 +313,13 @@
             selectedInclusions.style.display = 'block';
         }
 
-        // Clear previous selections
-        // const buttons = document.querySelectorAll('.category-box');
-        // buttons.forEach(btn => btn.style.border = 'none', );
-        // button.style.border = '0px solid #000';
-        // button.style.boxShadow = '0 0 10px rgba(0, 123, 255, 0.5)';
+     
 
         const buttons = document.querySelectorAll('.category-box');
 
         buttons.forEach(button => {
             button.addEventListener('click', function() {
-                // Remove 'active' class from all buttons
                 buttons.forEach(btn => btn.classList.remove('active'));
-                
-                // Add 'active' class to the clicked button
                 this.classList.add('active');
             });
         });

@@ -17,7 +17,7 @@
   </header>
   <div id="formContainer">
     <h1 class = "create_event"> CREATE EVENT </h1>
-    {% if forms.errors %} {{ forms.errors }} {% endif %}
+   <div class="errors"> {% if forms.errors %} {{ forms.errors }} {% endif %} </div> 
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <input type="hidden" name="eventcategory" id="eventcategory" value="">

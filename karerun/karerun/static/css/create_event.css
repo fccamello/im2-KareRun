@@ -179,6 +179,7 @@ textarea:focus {
 input[type="file"] {
     padding: 0.5rem;
     background-color: #f8f9fa;
+    color: #232b34;
     border: 1px dashed #ccd0d5;
     border-radius: 4px;
     width: 100%;
@@ -203,17 +204,20 @@ button[type="submit"]:hover {
     background-color: #001f40;
 }
 
-/* Error Messages */
 .error-message {
     color: #dc3545;
     font-size: 0.875rem;
     margin-top: 0.25rem;
 }
 
-/* Form Validation */
+.errors{
+    color: red ;
+}
+
 input:invalid,
 textarea:invalid {
     border-color: #dc3545;
+    color: #001f40;
 }
 
 /* Responsive Design */

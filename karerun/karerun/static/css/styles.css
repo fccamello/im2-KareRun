@@ -10,6 +10,11 @@ body{
 a{
     text-decoration: none;
 }
+
+a:hover {
+    text-decoration: none !important; 
+}
+
 header{
     /* width: 100%; */
     /* max-width: 100%; */
@@ -29,7 +34,6 @@ header a{
     color: #eee;
     margin-right: 40px;
 }
-/* carousel ni */
 
 .header-navs{
     padding-left: 40%;
@@ -45,6 +49,8 @@ header a{
     height: 30px;
     font-size: 12px;
 }
+
+
 
 
 

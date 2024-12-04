@@ -8,6 +8,7 @@ def homepage(request):
     #warning the session might not have 'userID', in normal means they have
     userId = request.session.get('userID',None)
     event_ids = Registration.objects.filter(user_id=userId).values_list('event', flat=True)
+    created_events = Event.objects.filter(organizerId=userId)
     events = Event.objects.filter(eventid__in=event_ids)
     appeal = OrganizerAppeal.objects.filter(user = User.objects.get(userid = userId))
     requested = False
@@ -27,6 +28,7 @@ def homepage(request):
         'requested':requested,
         'user':user,
         'userId':user.userid,
+        'created_events': created_events
     }
     return render(request, 'homepage.html', context)   
 
