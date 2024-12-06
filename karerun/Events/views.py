@@ -18,7 +18,8 @@ def race_list_view(request):
     userName = None
     if userId is not None:
         userName = User.objects.get(userid = userId).username
-        print(userId)
+        print("user id ni", userId)
+        print("user name ni", userName)
     else:
         print("no session")
     context = {

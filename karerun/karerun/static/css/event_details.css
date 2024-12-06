@@ -391,3 +391,9 @@ color: #002B5A;
 .second-div {
     bottom: 120px; /* Adjust this value to move it above the first div 
 } */
+
+.cursor-not-allowed{
+    cursor: not-allowed !important;
+    width: 400% !important;
+    background-color: red !important;
+}

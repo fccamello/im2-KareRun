@@ -23,7 +23,7 @@
         src="{% static 'photos/logo.png' %}"
         style="max-width: 150px; width: 100%; padding-left: 100px"
       />
-      {%include 'header.html' %}
+      {%include 'header.html' with userName=userName %}
     </header>
 
         
@@ -45,8 +45,12 @@
                   <div class="participantCount">
                     <h3 style="margin-top: 0%; padding: 0%;">Participants: {{num_registrants}}</h3>
                   </div>
-                <button class="btnreg" onclick="location.href='{% url 'event_reg' event_id=event.eventid %}'">REGISTER</button>
-            </div>
+                  {% if userID is not None %}
+                  <button id="registerButton" class="btnreg {%if is_registered%}cursor-not-allowed{% endif %}" onclick="location.href='{% url 'event_reg' event_id=event.eventid %}'">REGISTER</button>
+              {% else %}
+                  <button class="btnreg" onclick="location.href='{% url 'login' %}'">LOGIN TO REGISTER</button>
+              {% endif %}
+                          </div>
             {%if is_Super%}
             <div class="btn-bottom-right" id="viewParticipantsBtn">
                 <img src="{% static 'photos/icons8-list-48.png' %}" alt="Icon" class="icon" />
@@ -296,6 +300,14 @@
     });
 
     document.addEventListener('DOMContentLoaded', function () {
+        
+        //disable register if registered
+        const registerButton = document.getElementById('registerButton');
+        if(registerButton.classList.contains("cursor-not-allowed")) {
+            registerButton.disabled = true;
+            registerButton.textContent = 'You are already registered';
+        }
+
         // Assign each button its corresponding file input and photo type
         const uploadConfigs = [
             { buttonId: 'changeBannerImage', inputId: 'bannerImageInput', type: 'banner' },

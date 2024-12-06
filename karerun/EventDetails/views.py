@@ -10,14 +10,20 @@ from RegLogCreate.forms import CreateEvent
 from EventRegistration.models import Registration
 
 def event_detail(request, event_id):
+    event = get_object_or_404(Event, eventid=event_id)
 
-    #simple set-up for context    
-    event = get_object_or_404(Event, eventid=event_id) 
-    userId = request.session.get('userID',None)
-    user = User.objects.get(userid=userId)
+    # Check if the user is logged in
+    user = None
+    userId = None
+    if request.user.is_authenticated:
+        userId = request.session.get('userID', None)
+        user = User.objects.get(userid=userId) if userId else None
+
+    # where no user is logged in
     user_ids = Registration.objects.filter(event=event_id).values_list('user', flat=True)
     participants = User.objects.filter(userid__in=user_ids)
     organizer = User.objects.get(userid=event.organizerId)
+
     eventname_split = event.eventname.split(' ', 1)
     first_word = eventname_split[0]
     rest_of_text = " ".join(eventname_split[1:]) if len(eventname_split) > 1 else ''
@@ -27,20 +33,17 @@ def event_detail(request, event_id):
     category_inclusions = {}
     category_prices = {}
 
-    
     event_datetime = datetime.datetime.combine(event.eventdate, datetime.time.min)
 
     # for the date timer
     current_time = datetime.datetime.now()
     time_left = event_datetime - current_time
 
-
     days_left = time_left.days
     hours_left = time_left.seconds // 3600
     minutes_left = (time_left.seconds % 3600) // 60
     seconds_left = time_left.seconds % 60
 
-    #For Context Stuff
     categories = event.eventcategory.split(',')
     category_list = [category.strip() for category in categories]
     
@@ -65,53 +68,55 @@ def event_detail(request, event_id):
         category_prices[category] = price
 
     unique_inclusions_dict = {k: list(v) for k, v in unique_inclusions.items()}
-    
-    #checks for Post Reuqests/Updates
-    if request.method == 'POST':
+    is_registered = False
+
+    if request.method == 'POST' and user:
         print("received event POST")
-        form = CreateEvent(request.POST, request.FILES, instance=event)  # Bind the form to the existing event
+        form = CreateEvent(request.POST, request.FILES, instance=event) 
         if form.is_valid():
-            # Save the form, which will update the existing event object
             form.save()
             print("updated event")
-            return redirect('event_detail', event_id=event.eventid)  # Redirect to the updated event page
+            return redirect('event_detail', event_id=event.eventid) 
         else:
-            print("Form Errros")
+            print("Form Errors")
             print(form.errors)
     else:
-        form = CreateEvent(instance=event)  # Prefill the form with the current event data
-    #Get number of participants
-    num_registrants = Registration.objects.filter(event = event).count()
+        is_registered = Registration.objects.filter(event=event, user=user).exists()
+        form = CreateEvent(instance=event)  
 
-    #Check if user is the organizer/is_superUser
+    num_registrants = Registration.objects.filter(event=event).count()
+
     is_Edit_Allowed = False
-    if (user.is_superuser or user.userid == event.organizerId):
+    if user and (user.is_superuser or user.userid == event.organizerId):
         is_Edit_Allowed = True
-    #check if event has passed or closed
+
     if event.eventdate < datetime.datetime.now(datetime.timezone.utc):
         is_Edit_Allowed = False
-
-
+    
+    username = None
+    if user:
+        username = user.username
 
     print("Banner Image URL:", event.bannerimage.url) 
     return render(request, 'event_details.html', {
-        'userName': user.username,
+        'userName': username,
         'event': event,
         'organizer': organizer,
-        'userID': userId,
+        'userID': userId if user else None,
         'forms': form,
         'participants': participants,
         'first_word': first_word,
         'rest_of_text': rest_of_text,
         'categories': category_list,
         'unique_inclusions': unique_inclusions_dict,
-         'category_prices': category_prices,
+        'category_prices': category_prices,
         'num_registrants': num_registrants,
-         'days_left': days_left,
+        'days_left': days_left,
         'hours_left': hours_left,
         'minutes_left': minutes_left,
-        'is_Super':is_Edit_Allowed,
+        'is_Super': is_Edit_Allowed,
         'seconds_left': seconds_left,
+        'is_registered': is_registered
     })
 
 def update_event_photo(request, event_id):
