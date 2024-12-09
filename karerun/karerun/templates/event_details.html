@@ -230,36 +230,55 @@
 </div>
 
 <div id="viewParticipantsModal" class="modal hidden">
-    <div class="modal-content">
+    <div class="modal-content" style="width: 75%!important;">
         <span class="close" id="closeViewParticipantsModal">&times;</span>
         <h2>Participants</h2>
 
         <!-- Search Bar -->
-        <input type="text" id="searchInput" onkeyup="searchParticipants()" placeholder="Search for participants..." style="width: 97.5%; padding: 8px; margin-bottom: 10px;">
+        <input type="text" id="searchInput" onkeyup="searchParticipants()" placeholder="Search for participants..." style="width: 98.5%; padding: 8px; margin-bottom: 10px;">
         
         <!-- Table for Participant List -->
-        <table id="participantsTable" style="width: 100%; border-collapse: collapse;">
+        <table id="participantsTable" style="width: 100%; border-collapse: collapse; background-color: white; color: #002b5a;">
             <thead>
                 <tr>
-                    <th style="border: 1px solid #ddd; padding: 8px;">Name</th>
+                    <th style="border: 1px solid #ddd; padding: 8px;">#</th>
+                    <th style="border: 1px solid #ddd; padding: 8px;">Username</th>
+                    <th style="border: 1px solid #ddd; padding: 8px;">Full Name</th>
                     <th style="border: 1px solid #ddd; padding: 8px;">Email</th>
-                    <th style="border: 1px solid #ddd; padding: 8px;">Sex</th> <!-- Add more columns as necessary -->
+                    <th style="border: 1px solid #ddd; padding: 8px;">Sex</th>
+                    <th style="border: 1px solid #ddd; padding: 8px;">Status</th>
                 </tr>
             </thead>
             <tbody>
                 {% for participant in participants %}
-                    <tr>
-                        <td style="border: 1px solid #ddd; padding: 8px;">{{ participant.username }}</td>
-                        <td style="border: 1px solid #ddd; padding: 8px;">{{ participant.email }}</td>
-                        <td style="border: 1px solid #ddd; padding: 8px;">{{ participant.sex }}</td> <!-- Add more participant details here -->
-                    </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 8px;">{{ forloop.counter }}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px;">
+                        <a href="{% url 'userprofile:view_profile' participant.username %}">
+                            {{ participant.username }}
+                        </a>
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 8px;">{{ participant.firstname }} {{ participant.lastname }}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px;">{{ participant.email }}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px;">{{ participant.sex }}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px;">
+                        <select style="width: 100%;">
+                            <option value="Paid" {% if participant.status == "Paid" %}selected{% endif %}>Paid</option>
+                            <option value="Unpaid" {% if participant.status == "Unpaid" %}selected{% endif %}>Unpaid</option>
+                            <option value="Cancelled" {% if participant.status == "Cancelled" %}selected{% endif %}>Cancelled</option>
+                        </select>
+                    </td>
+                </tr>
                 {% empty %}
-                    <tr>
-                        <td colspan="3" style="border: 1px solid #ddd; padding: 8px; text-align: center;">No participants registered yet.</td>
-                    </tr>
+                <tr>
+                    <td colspan="6" style="border: 1px solid #ddd; padding: 8px; text-align: center;">
+                        No participants registered yet.
+                    </td>
+                </tr>
                 {% endfor %}
             </tbody>
         </table>
+
     </div>
 </div>
 

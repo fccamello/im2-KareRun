@@ -132,81 +132,127 @@
               <p><strong>Birthdate:</strong> {{ user.birthdate }}</p>
               <p><strong>Age:</strong> {{ profile.age }}</p>
               <p><strong>Sex:</strong> {{ user.sex }}</p>
+              {% if user.isEventOrganizer %}
+              <p><strong>User Type:</strong> Organizer</p>
+              {% elif user.is_superuser %}
+              <p><strong>User Type:</strong> Admin</p>
+              {% else %}
+              <p><strong>User Type:</strong> User</p>
+              {% endif %}
             </div>
           </div>
 
           <!-- Event History Section -->
           <div class="col-md-8">
             <div class="event-history">
-              <!-- Registered Events -->
-              <h4>Registered Races</h4>
-              <div
-                class="scrollable-container"
-                style="max-height: 400px; overflow-y: auto; margin-top: 20px"
-              >
-                <div class="row">
-                  {% for event in registered_events %}
-                  <div class="col-md-12 mb-3">
-                    <div
-                      class="card shadow-sm d-flex flex-row"
-                      style="border: #002b5a solid 2px"
-                    >
-                      <div class="card-body">
-                        <h5 class="card-title" style="color: #002b5a">
-                          Joined {{ event.event_name }}
-                        </h5>
-                        <p class="card-text">Location: {{ event.location }}</p>
-                        <p class="card-text">Date: {{ event.date }}</p>
-                        <a
-                          href="{% url 'event_detail' event_id=event.eventid %}"
-                          class="btn btn-outline-primary"
-                          >View Details</a
-                        >
-                      </div>
-                    </div>
+              <!-- Registered Races Section -->
+              {% if not user.is_superuser %}
+              <div class="container mt-5" style="color: #002b5a; margin-top: 10px!important;">
+                <div style="display: flex;">
+                  <div>
+                    <h3>Registered Races</h3>
                   </div>
-                  {% empty %}
-                  <div class="col-12 text-center">
-                    <p style="font-size: medium">No registered races yet.</p>
-                  </div>
-                  {% endfor %}
                 </div>
-              </div>
 
-              <!-- Created Events -->
-              <h4 class="mt-5">Created Races</h4>
-              <div
-                class="scrollable-container"
-                style="max-height: 400px; overflow-y: auto; margin-top: 20px"
-              >
-                <div class="row">
-                  {% for event in created_events %}
-                  <div class="col-md-12 mb-3">
-                    <div
-                      class="card shadow-sm d-flex flex-row"
-                      style="border: #002b5a solid 2px"
-                    >
-                      <div class="card-body">
-                        <h5 class="card-title" style="color: #002b5a">
-                          Created {{ event.event_name }}
-                        </h5>
-                        <p class="card-text">Location: {{ event.location }}</p>
-                        <p class="card-text">Date: {{ event.date }}</p>
-                        <a
-                          href="{% url 'event_detail' event_id=event.eventid %}"
-                          class="btn btn-outline-primary"
-                          >View Details</a
-                        >
+                <div class="scrollable-container" style="max-height: 400px; overflow-y: auto; overflow-x: hidden; margin-top: 20px">
+                  <div class="row">
+                    {% for event in registered_events %}
+                    <div class="col-md-12 mb-3">
+                      <div class="card shadow-sm d-flex flex-row" style="border: #002b5a solid 2px">
+                        <!-- Image on the left -->
+                        <img
+                          src="{{ event.bannerimage.url }}"
+                          class="card-img-left"
+                          style="width: 300px; height: auto; object-fit: cover"
+                          alt="{{ event.eventname }}"
+                        />
+                        <!-- Card details on the right -->
+                        <div class="card-body">
+                          <h5 class="card-title" style="color: #002b5a">{{ event.eventname }}</h5>
+                          <p class="card-text">Location: {{ event.eventlocation }}</p>
+                          <p class="card-text">Date: {{ event.eventdate }}</p>
+                          <p class="card-text">Time: {{ event.eventtime }}</p>
+                          <p class="card-text">Details: {{ event.eventdetails }}</p>
+                          <a
+                            href="{% url 'event_detail' event_id=event.eventid %}"
+                            class="btn btn-light"
+                            style="font-size: 12px; background-color: #ff5726; color: aliceblue"
+                          >View Details</a>
+                          <button
+                            class="btn btn-light"
+                            style="font-size: 12px; background-color: #4bc6d6; color: aliceblue"
+                            data-toggle="modal"
+                            data-target="#generateTrainingPlanModal"
+                          >
+                            Generate Training Plan
+                          </button>
+                        </div>
                       </div>
                     </div>
+                    {% empty %}
+                    <div class="col-12 text-center">
+                      <p style="font-size: medium">No registered races yet.</p>
+                    </div>
+                    {% endfor %}
                   </div>
-                  {% empty %}
-                  <div class="col-12 text-center">
-                    <p style="font-size: medium">No races created yet.</p>
-                  </div>
-                  {% endfor %}
                 </div>
               </div>
+              {% endif %}
+
+              <!-- Created Events Section -->
+              {% if user.isEventOrganizer or user.is_superuser %}
+              <div class="container mt-5" style="color: #002b5a; margin-top: 10px!important;">
+                <div style="display: flex;">
+                  <div>
+                    <h3>Created Events</h3>
+                  </div>
+                </div>
+
+                <div class="scrollable-container" style="max-height: 400px; overflow-y: auto; overflow-x: hidden; margin-top: 20px">
+                  <div class="row">
+                    {% for event in created_events %}
+                    <div class="col-md-12 mb-3">
+                      <div class="card shadow-sm d-flex flex-row" style="border: #002b5a solid 2px">
+                        <!-- Image on the left -->
+                        <img
+                          src="{{ event.bannerimage.url }}"
+                          class="card-img-left"
+                          style="width: 300px; height: auto; object-fit: cover"
+                          alt="{{ event.eventname }}"
+                        />
+                        <!-- Card details on the right -->
+                        <div class="card-body">
+                          <h5 class="card-title" style="color: #002b5a">{{ event.eventname }}</h5>
+                          <p class="card-text">Location: {{ event.eventlocation }}</p>
+                          <p class="card-text">Date: {{ event.eventdate }}</p>
+                          <p class="card-text">Time: {{ event.eventtime }}</p>
+                          <p class="card-text">Details: {{ event.eventdetails }}</p>
+                          <a
+                            href="{% url 'event_detail' event_id=event.eventid %}"
+                            class="btn btn-light"
+                            style="font-size: 12px; background-color: #ff5726; color: aliceblue"
+                          >View Details</a>
+                          <button
+                            class="btn btn-light"
+                            style="font-size: 12px; background-color: #4bc6d6; color: aliceblue"
+                            data-toggle="modal"
+                            data-target="#viewAnalysisModal"
+                          >
+                            View Analysis
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-12 text-center">
+                      <p style="font-size: medium">No created races yet.</p>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+
             </div>
           </div>
         </div>
