@@ -25,10 +25,12 @@ def determine_age_category(age):
         return "51 and above"
 
 def event_reg(request, event_id):
+
     errors = []
     userId = request.session.get('userID', None)
+    print(userId)
     user = User.objects.get(userid = userId)
-
+    print(user)
     user_age = calculate_age(user.birthdate)
     age_category = determine_age_category(user_age)
 

@@ -28,12 +28,17 @@ form {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    overflow: hidden;
 }
 
 form p {
     font-weight: 600;
     color: #002b5a;
     margin: 0 0 0.5rem 0;
+}
+
+input,textarea{
+    max-width: 90%;
 }
 
 input[type="text"],

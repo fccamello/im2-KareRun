@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
     <link rel="stylesheet" href="{% static 'css/appeal_list.css' %}" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
   </head>
   <body style="background-color: aliceblue">
     <header style="background-color: #002b5a">
@@ -18,168 +17,178 @@
       />
       {% include 'header.html' %}
     </header>
-    
-    <div class="header_hello" style="color: #002b5a; margin-bottom: 5%;">
-        Hello, {{ user.firstname }} {{ user.lastname }}!
+
+    <div class="header_hello" style="color: #002b5a; margin-bottom: 5%">
+      Hello, {{ user.firstname }} {{ user.lastname }}!
     </div>
 
-    <div class="dashboard-txt"> Dashboard </div>
+    <div class="dashboard-txt">Dashboard</div>
 
     <div class="grid-container">
       <div class="card">
         <h5>Total Users</h5>
-        <div style= "display: flex; align-items: center; justify-content: space-between; height: 50%;">
-        <h2>{{ regular_users_count }} </h2>
-        <div style="width: 150px; height: 150px;"> 
-          <canvas id="genderChart"></canvas>
-        </div>        
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 50%;
+          "
+        >
+          <h2>{{ regular_users_count }}</h2>
+          <div style="width: 150px; height: 150px">
+            <canvas id="genderChart"></canvas>
+          </div>
+        </div>
+        <span style="color: green">+20%</span>
       </div>
-      <span style="color: green;">+20%</span>
-    </div>
-     
-    <div class="card">
+
+      <div class="card">
         <h5>Total Events</h5>
-        <h2>{{ event_count }} </h2>
-        <span style="color: green;">+30%</span>
+        <h2>{{ event_count }}</h2>
+        <span style="color: green">+30%</span>
       </div>
       <div class="card">
         <h5>Total Organizers</h5>
         <h2>{{organizer_count}}</h2>
-        <span style="color: green;">+20%</span>
+        <span style="color: green">+20%</span>
       </div>
-     
     </div>
 
-    
-    <div class="appeal-box-card" >
-    <div class="appeal-container">
-      <h5>Organizer Requests </h5>
-      {% for appeal in appeals %}
-      <div class="appeal-box" id="{{appeal.appealID}}">
-        <h3 class="user-Name">
-          {{appeal.user.firstname}} {{appeal.user.lastname}}
-        </h3>
-        <div class="appeal-buttons">
-          <form method="post" action="{% url 'appealList' %}">
-            {% csrf_token %}
-            <input
-              type="hidden"
-              name="appeal_id"
-              value="{{ appeal.appealID }}"
-            />
-            <input type="hidden" name="action" value="accept" />
-            <button type="submit" class="accept">Accept</button>
-          </form>
-          <form method="post" action="{% url 'appealList' %}">
-            {% csrf_token %}
-            <input
-              type="hidden"
-              name="appeal_id"
-              value="{{ appeal.appealID }}"
-            />
-            <input type="hidden" name="action" value="decline" />
-            <button type="submit" class="decline">Decline</button>
-          </form>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-
-    
-
-    <div class="appeal-container">
-      <h5>Event List</h5>
-      {% if events %}
-        {% for event in events %}
-        <div class="appeal-box" id="event-{{ event.eventID }}">
-          <h3 class="event-title">
-            {{ event.eventname }}
+    <div class="appeal-box-card">
+      <div class="appeal-container">
+        <h5>Organizer Requests</h5>
+        {% for appeal in appeals %}
+        <div class="appeal-box" id="{{appeal.appealID}}">
+          <h3 class="user-Name">
+            {{appeal.user.firstname}} {{appeal.user.lastname}}
           </h3>
-          <div class="appeal-buttons" style="justify-content: flex-end;">
-            <form method="get" action="{% url 'event_detail' event_id=event.eventid %}">
-              <button type="submit" class="details" style="background-color: #002b5a;">Details</button>
+          <div class="appeal-buttons">
+            <form method="post" action="{% url 'appealList' %}">
+              {% csrf_token %}
+              <input
+                type="hidden"
+                name="appeal_id"
+                value="{{ appeal.appealID }}"
+              />
+              <input type="hidden" name="action" value="accept" />
+              <button type="submit" class="accept">Accept</button>
+            </form>
+            <form method="post" action="{% url 'appealList' %}">
+              {% csrf_token %}
+              <input
+                type="hidden"
+                name="appeal_id"
+                value="{{ appeal.appealID }}"
+              />
+              <input type="hidden" name="action" value="decline" />
+              <button type="submit" class="decline">Decline</button>
             </form>
           </div>
         </div>
         {% endfor %}
-      {% else %}
+      </div>
+
+      <div class="appeal-container">
+        <h5>Event List</h5>
+        {% if events %} {% for event in events %}
+        <div class="appeal-box" id="event-{{ event.eventID }}">
+          <h3 class="event-title">{{ event.eventname }}</h3>
+          <div class="appeal-buttons" style="justify-content: flex-end">
+            <form
+              method="get"
+              action="{% url 'event_detail' event_id=event.eventid %}"
+            >
+              <button
+                type="submit"
+                class="details"
+                style="background-color: #002b5a"
+              >
+                Details
+              </button>
+            </form>
+          </div>
+        </div>
+        {% endfor %} {% else %}
         <p>No events available.</p>
-      {% endif %}
-    </div>
+        {% endif %}
+      </div>
 
-
-    <div class="appeal-container">
-      <h5>Users List</h5>
-      {% if users %}
-        {% for user in users %}
+      <div class="appeal-container">
+        <h5>Users List</h5>
+        {% if users %} {% for user in users %}
         <div class="appeal-box" id="event-{{ event.eventID }}">
-          <h3 class="event-title">
-            {{ user.username }}
-          </h3>
-          <div class="appeal-buttons" style="justify-content: flex-end;">
-            <form method="get" >
-              <button type="submit" class="details" style="background-color: #002b5a;">Details</button>
+          <h3 class="event-title">{{ user.username }}</h3>
+          <div class="appeal-buttons" style="justify-content: flex-end">
+            <form
+              method="get"
+              action="{%url 'userprofile:view_profile' user.username %}"
+            >
+              <button
+                type="submit"
+                class="details"
+                style="background-color: #002b5a"
+              >
+                Details
+              </button>
             </form>
           </div>
         </div>
-        {% endfor %}
-      {% else %}
+        {% endfor %} {% else %}
         <p>No users available.</p>
-      {% endif %}
+        {% endif %}
+      </div>
     </div>
-    </div>
 
-
-
-    <script>      
-      const genderCtx = document.getElementById('genderChart').getContext('2d');
-  new Chart(genderCtx, {
-    type: 'pie',
-    data: {
-      labels: {{ gender_labels|safe }}, // Labels dynamically passed from context
-      datasets: [{
-        label: 'Users',
-        data: {{ gender_counts|safe }}, // Gender counts dynamically passed
-        backgroundColor: [
-          '#4CAF50', // Green for Female
-          '#2196F3', // Blue for Male
-          '#FFC107', // Yellow for Other
-        ],
-        borderWidth: 0 // Removes chart borders
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: true, // Keeps chart proportions
-      plugins: {
-        legend: {
-          position: 'top',
-          labels: {
-            boxWidth: 10, // Small legend boxes
-            font: {
-              size: 10 // Smaller font size for legends
-            }
-          }
+    <script>
+          const genderCtx = document.getElementById('genderChart').getContext('2d');
+      new Chart(genderCtx, {
+        type: 'pie',
+        data: {
+          labels: {{ gender_labels|safe }}, // Labels dynamically passed from context
+          datasets: [{
+            label: 'Users',
+            data: {{ gender_counts|safe }}, // Gender counts dynamically passed
+            backgroundColor: [
+              '#4CAF50', // Green for Female
+              '#2196F3', // Blue for Male
+              '#FFC107', // Yellow for Other
+            ],
+            borderWidth: 0 // Removes chart borders
+          }]
         },
-        tooltip: {
-          callbacks: {
-            label: function(tooltipItem) {
-              const label = tooltipItem.label || '';
-              const value = tooltipItem.raw || 0;
-              const total = tooltipItem.dataset.data.reduce((acc, cur) => acc + cur, 0);
-              const percentage = ((value / total) * 100).toFixed(2);
-              return `${label}: ${value} (${percentage}%)`;
+        options: {
+          responsive: true,
+          maintainAspectRatio: true, // Keeps chart proportions
+          plugins: {
+            legend: {
+              position: 'top',
+              labels: {
+                boxWidth: 10, // Small legend boxes
+                font: {
+                  size: 10 // Smaller font size for legends
+                }
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: function(tooltipItem) {
+                  const label = tooltipItem.label || '';
+                  const value = tooltipItem.raw || 0;
+                  const total = tooltipItem.dataset.data.reduce((acc, cur) => acc + cur, 0);
+                  const percentage = ((value / total) * 100).toFixed(2);
+                  return `${label}: ${value} (${percentage}%)`;
+                }
+              }
+            }
+          },
+          elements: {
+            arc: {
+              borderWidth: 0 // Removes the arc borders
             }
           }
         }
-      },
-      elements: {
-        arc: {
-          borderWidth: 0 // Removes the arc borders
-        }
-      }
-    }
-  });
-</script>
+      });
+    </script>
   </body>
 </html>

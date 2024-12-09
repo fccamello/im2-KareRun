@@ -27,7 +27,7 @@ def appealList(request):
     events = Event.objects.all()
     users = User.objects.all()
 
-    regular_users_count = User.objects.filter(isEventOrganizer=False, is_superuser=False, is_staff=False).count()
+    regular_users_count = User.objects.filter(is_superuser=False, is_staff=False).count()
     event_count = Event.objects.count()
     organizer_count = User.objects.filter(isEventOrganizer=True).count()
 

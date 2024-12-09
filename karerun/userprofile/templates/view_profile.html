@@ -1,294 +1,364 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{ user.username }}'s Profile</title>
     <!-- Bootstrap CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
     <style>
-        p {
-            font-size: medium;
-        }
-        .profile-page {
-            margin: 5%;
-            background-color: #002B5A;
-            padding-bottom: 10%;
-        }
-        .profile-header {
-            background-color: #002B5A;
-            padding: 20px;
-            position: relative;
-            text-align: center;
-        }
-        .cover-photo {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-            border-radius: 10px;
-        }
-        .profile-picture {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            position: absolute;
-            bottom: -75px;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 5px solid #002B5A;
-        }
-        .profile-info {
-            margin-top: 100px;
-            text-align: center;
-        }
-        .about-me {
-            background-color: #f0f0f0;
-            padding: 20px;
-            border-radius: 10px;
-            color: black;
-        }
-        .event-history {
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 10px;
-            color: black;
-        }
-        .editable {
-            display: inline-block;
-        }
-        .edit-input {
-            display: none;
-        }
+      p {
+        font-size: medium;
+      }
+      .profile-page {
+        margin: 5%;
+        background-color: #002b5a;
+        padding-bottom: 10%;
+      }
+      .profile-header {
+        background-color: #002b5a;
+        padding: 20px;
+        position: relative;
+        text-align: center;
+      }
+      .cover-photo {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        border-radius: 10px;
+      }
+      .profile-picture {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        position: absolute;
+        bottom: -75px;
+        left: 50%;
+        transform: translateX(-50%);
+        border: 5px solid #002b5a;
+      }
+      .profile-info {
+        margin-top: 100px;
+        text-align: center;
+      }
+      .about-me {
+        background-color: #f0f0f0;
+        padding: 20px;
+        border-radius: 10px;
+        color: black;
+      }
+      .event-history {
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        color: black;
+      }
+      .editable {
+        display: inline-block;
+      }
+      .edit-input {
+        display: none;
+      }
     </style>
-</head>
-<body style="background-color: aliceblue;">
-
+  </head>
+  <body style="background-color: aliceblue">
     <header style="background-color: #002b5a">
+      <img
+        src="{% static 'photos/logo.png' %}"
+        style="max-width: 250px; width: 100%; padding-left: 100px"
+      />
+      {%include 'header.html' %}
+    </header>
+
+    <div class="profile-page">
+      <!-- Profile Header -->
+      <div class="profile-header">
         <img
-          src="{% static 'photos/logo.png' %}"
-          style="max-width: 250px; width: 100%; padding-left: 100px"
+          src="{{ profile.cover_photo.url }}"
+          alt="Cover Photo"
+          class="cover-photo"
         />
-        {%include 'header.html' %}
-      </header>
-
-<div class="profile-page">
-    <!-- Profile Header -->
-    <div class="profile-header">
-        <img src="{{ profile.cover_photo.url }}" alt="Cover Photo" class="cover-photo">
-        <img src="{{ profile.profile_image.url }}" alt="Profile Picture" class="profile-picture">
+        <img
+          src="{{ profile.profile_image.url }}"
+          alt="Profile Picture"
+          class="profile-picture"
+        />
+        {% if user.username == request.user.username %}
         <div class="photo-buttons">
-            <button id="changeCoverPhoto" class="btn btn-light btn-sm" style="position: absolute; top: 10px; right: 10px;">Change Cover Photo</button>
-            <button id="changeProfilePhoto" class="btn btn-light btn-sm" style="position: absolute; bottom: -40px; right: 10px;">Change Profile Photo</button>
+          <button
+            id="changeCoverPhoto"
+            class="btn btn-light btn-sm"
+            style="position: absolute; top: 10px; right: 10px"
+          >
+            Change Cover Photo
+          </button>
+          <button
+            id="changeProfilePhoto"
+            class="btn btn-light btn-sm"
+            style="position: absolute; bottom: -40px; right: 10px"
+          >
+            Change Profile Photo
+          </button>
         </div>
-    </div>
+        {%endif%}
+      </div>
 
-    <!-- Profile Information Section -->
-    <div class="container profile-info">
-        <h2>{{ user.firstname }} {{ user.lastname }} </h2>
-        <h5 style="color: #FF5726;">@{{ user.username }}</h5>
+      <!-- Profile Information Section -->
+      <div class="container profile-info">
+        <h2>{{ user.firstname }} {{ user.lastname }}</h2>
+        <h5 style="color: #ff5726">@{{ user.username }}</h5>
         <p id="bio" class="editable">{{ profile.bio }}</p>
 
         <!-- Buttons (Add Friend, Message, etc.) -->
         <div class="mt-4">
-            <button id="toggleEdit" class="btn btn-danger">Edit Bio</button>
+          {% if user.username == request.user.username %}
+          <button id="toggleEdit" class="btn btn-danger">Edit Bio</button>
+          {%endif%}
         </div>
-    </div>
+      </div>
 
-    <!-- Main Section with About Me and Event History -->
-    <div class="container mt-5">
+      <!-- Main Section with About Me and Event History -->
+      <div class="container mt-5">
         <div class="row">
-            <!-- About Me Section -->
-            <div class="col-md-4">
-                <div class="about-me">
-                    <h4>About Me</h4>
-                    <p><strong>Birthdate:</strong> {{ user.birthdate }}</p>
-                    <p><strong>Age:</strong> {{ profile.age }}</p>
-                    <p><strong>Sex:</strong> {{ user.sex }}</p>
-                </div>
+          <!-- About Me Section -->
+          <div class="col-md-4">
+            <div class="about-me">
+              <h4>About Me</h4>
+              <p><strong>Birthdate:</strong> {{ user.birthdate }}</p>
+              <p><strong>Age:</strong> {{ profile.age }}</p>
+              <p><strong>Sex:</strong> {{ user.sex }}</p>
             </div>
+          </div>
 
-            <!-- Event History Section -->
-            <div class="col-md-8">
-                <div class="event-history">
-                    <!-- Registered Events -->
-                    <h4>Registered Races</h4>
-                    <div class="scrollable-container" style="max-height: 400px; overflow-y: auto; margin-top: 20px;">
-                        <div class="row">
-                            {% for event in registered_events %}
-                            <div class="col-md-12 mb-3">
-                                <div class="card shadow-sm d-flex flex-row" style="border: #002B5A solid 2px;">
-                                    <div class="card-body">
-                                        <h5 class="card-title" style="color: #002B5A;">Joined {{ event.event_name }}</h5>
-                                        <p class="card-text">Location: {{ event.location }}</p>
-                                        <p class="card-text">Date: {{ event.date }}</p>
-                                        <a href="{% url 'event_detail' event_id=event.eventid %}" class="btn btn-outline-primary">View Details</a>
-                                    </div>
-                                </div>
-                            </div>
-                            {% empty %}
-                            <div class="col-12 text-center">
-                                <p style="font-size: medium;">No registered races yet.</p>
-                            </div>
-                            {% endfor %}
-                        </div>
+          <!-- Event History Section -->
+          <div class="col-md-8">
+            <div class="event-history">
+              <!-- Registered Events -->
+              <h4>Registered Races</h4>
+              <div
+                class="scrollable-container"
+                style="max-height: 400px; overflow-y: auto; margin-top: 20px"
+              >
+                <div class="row">
+                  {% for event in registered_events %}
+                  <div class="col-md-12 mb-3">
+                    <div
+                      class="card shadow-sm d-flex flex-row"
+                      style="border: #002b5a solid 2px"
+                    >
+                      <div class="card-body">
+                        <h5 class="card-title" style="color: #002b5a">
+                          Joined {{ event.event_name }}
+                        </h5>
+                        <p class="card-text">Location: {{ event.location }}</p>
+                        <p class="card-text">Date: {{ event.date }}</p>
+                        <a
+                          href="{% url 'event_detail' event_id=event.eventid %}"
+                          class="btn btn-outline-primary"
+                          >View Details</a
+                        >
+                      </div>
                     </div>
-
-                    <!-- Created Events -->
-                    <h4 class="mt-5">Created Races</h4>
-                    <div class="scrollable-container" style="max-height: 400px; overflow-y: auto; margin-top: 20px;">
-                        <div class="row">
-                            {% for event in created_events %}
-                            <div class="col-md-12 mb-3">
-                                <div class="card shadow-sm d-flex flex-row" style="border: #002B5A solid 2px;">
-                                    <div class="card-body">
-                                        <h5 class="card-title" style="color: #002B5A;">Created {{ event.event_name }}</h5>
-                                        <p class="card-text">Location: {{ event.location }}</p>
-                                        <p class="card-text">Date: {{ event.date }}</p>
-                                        <a href="{% url 'event_detail' event_id=event.eventid %}" class="btn btn-outline-primary">View Details</a>
-                                    </div>
-                                </div>
-                            </div>
-                            {% empty %}
-                            <div class="col-12 text-center">
-                                <p style="font-size: medium;">No races created yet.</p>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
+                  </div>
+                  {% empty %}
+                  <div class="col-12 text-center">
+                    <p style="font-size: medium">No registered races yet.</p>
+                  </div>
+                  {% endfor %}
                 </div>
+              </div>
+
+              <!-- Created Events -->
+              <h4 class="mt-5">Created Races</h4>
+              <div
+                class="scrollable-container"
+                style="max-height: 400px; overflow-y: auto; margin-top: 20px"
+              >
+                <div class="row">
+                  {% for event in created_events %}
+                  <div class="col-md-12 mb-3">
+                    <div
+                      class="card shadow-sm d-flex flex-row"
+                      style="border: #002b5a solid 2px"
+                    >
+                      <div class="card-body">
+                        <h5 class="card-title" style="color: #002b5a">
+                          Created {{ event.event_name }}
+                        </h5>
+                        <p class="card-text">Location: {{ event.location }}</p>
+                        <p class="card-text">Date: {{ event.date }}</p>
+                        <a
+                          href="{% url 'event_detail' event_id=event.eventid %}"
+                          class="btn btn-outline-primary"
+                          >View Details</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  {% empty %}
+                  <div class="col-12 text-center">
+                    <p style="font-size: medium">No races created yet.</p>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
+
+      <!-- Hidden file inputs for image uploads -->
+      <input
+        type="file"
+        id="coverPhotoInput"
+        accept="image/*"
+        style="display: none"
+      />
+      <input
+        type="file"
+        id="profilePhotoInput"
+        accept="image/*"
+        style="display: none"
+      />
     </div>
 
-    <!-- Hidden file inputs for image uploads -->
-    <input type="file" id="coverPhotoInput" accept="image/*" style="display:none;">
-    <input type="file" id="profilePhotoInput" accept="image/*" style="display:none;">
-</div>
+    <!-- Bootstrap JS and FontAwesome Icons -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 
-<!-- Bootstrap JS and FontAwesome Icons -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://kit.fontawesome.com/a076d05399.js"></script>
-
-<!-- JavaScript for Edit/Save Functionality -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const editButton = document.getElementById('toggleEdit');
+    <!-- JavaScript for Edit/Save Functionality -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const editButton = document.getElementById("toggleEdit");
         let isEditing = false;
 
         // Change Cover Photo
-        document.getElementById('changeCoverPhoto').addEventListener('click', function() {
-            document.getElementById('coverPhotoInput').click();
-        });
+        document
+          .getElementById("changeCoverPhoto")
+          .addEventListener("click", function () {
+            document.getElementById("coverPhotoInput").click();
+          });
 
         // Change Profile Photo
-        document.getElementById('changeProfilePhoto').addEventListener('click', function() {
-            document.getElementById('profilePhotoInput').click();
-        });
+        document
+          .getElementById("changeProfilePhoto")
+          .addEventListener("click", function () {
+            document.getElementById("profilePhotoInput").click();
+          });
 
         // Handle file input change
-        document.getElementById('coverPhotoInput').addEventListener('change', function(event) {
+        document
+          .getElementById("coverPhotoInput")
+          .addEventListener("change", function (event) {
             const file = event.target.files[0];
             if (file) {
-                // Perform AJAX upload for cover photo
-                uploadPhoto('cover', file);
+              // Perform AJAX upload for cover photo
+              uploadPhoto("cover", file);
             }
-        });
+          });
 
-        document.getElementById('profilePhotoInput').addEventListener('change', function(event) {
+        document
+          .getElementById("profilePhotoInput")
+          .addEventListener("change", function (event) {
             const file = event.target.files[0];
             if (file) {
-                // Perform AJAX upload for profile photo
-                uploadPhoto('profile', file);
+              // Perform AJAX upload for profile photo
+              uploadPhoto("profile", file);
             }
-        });
+          });
 
         // Function to upload photos via AJAX
         function uploadPhoto(type, file) {
-            const formData = new FormData();
-            formData.append('photo', file);
-            formData.append('type', type);
-            fetch('{% url "userprofile:update_photo" username=user.username %}', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRFToken': '{{ csrf_token }}'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Update the image displayed on the page
-                    if (type === 'cover') {
-                        document.querySelector('.cover-photo').src = data.new_url;
-                    } else {
-                        document.querySelector('.profile-picture').src = data.new_url;
-                    }
+          const formData = new FormData();
+          formData.append("photo", file);
+          formData.append("type", type);
+          fetch('{% url "userprofile:update_photo" username=user.username %}', {
+            method: "POST",
+            body: formData,
+            headers: {
+              "X-CSRFToken": "{{ csrf_token }}",
+            },
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                // Update the image displayed on the page
+                if (type === "cover") {
+                  document.querySelector(".cover-photo").src = data.new_url;
                 } else {
-                    alert('Error uploading photo.');
+                  document.querySelector(".profile-picture").src = data.new_url;
                 }
+              } else {
+                alert("Error uploading photo.");
+              }
             })
-            .catch(error => {
-                console.error('Error uploading photo:', error);
+            .catch((error) => {
+              console.error("Error uploading photo:", error);
             });
         }
 
-        editButton.addEventListener('click', function() {
-            if (isEditing) {
-                // Save changes
-                document.querySelectorAll('.editable').forEach(function(field) {
-                    const input = field.querySelector('input');
-                    if (input) {
-                        const newValue = input.value;
-                        field.innerHTML = newValue;
+        editButton.addEventListener("click", function () {
+          if (isEditing) {
+            // Save changes
+            document.querySelectorAll(".editable").forEach(function (field) {
+              const input = field.querySelector("input");
+              if (input) {
+                const newValue = input.value;
+                field.innerHTML = newValue;
 
-                        // Save each field via AJAX
-                        saveField(field.id, newValue);
-                    }
-                });
-                editButton.textContent = 'Edit Profile';
-                isEditing = false;
-            } else {
-                // Enable editing
-                document.querySelectorAll('.editable').forEach(function(field) {
-                    const text = field.textContent;
-                    field.innerHTML = `<input type="text" value="${text}">`;
-                });
-                editButton.textContent = 'Save Changes';
-                isEditing = true;
-            }
+                // Save each field via AJAX
+                saveField(field.id, newValue);
+              }
+            });
+            editButton.textContent = "Edit Profile";
+            isEditing = false;
+          } else {
+            // Enable editing
+            document.querySelectorAll(".editable").forEach(function (field) {
+              const text = field.textContent;
+              field.innerHTML = `<input type="text" value="${text}">`;
+            });
+            editButton.textContent = "Save Changes";
+            isEditing = true;
+          }
         });
 
         // Function to save fields via AJAX
         function saveField(fieldId, newValue) {
-            fetch('{% url "userprofile:update_profile" username=user.username %}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                body: JSON.stringify({
-                    field: fieldId,
-                    value: newValue
-                })
+          fetch(
+            '{% url "userprofile:update_profile" username=user.username %}',
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}",
+              },
+              body: JSON.stringify({
+                field: fieldId,
+                value: newValue,
+              }),
+            }
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                console.log(`Field ${fieldId} updated successfully`);
+              } else {
+                alert("Error saving changes.");
+              }
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    console.log(`Field ${fieldId} updated successfully`);
-                } else {
-                    alert('Error saving changes.');
-                }
-            })
-            .catch(error => {
-                console.error('Error updating field:', error);
+            .catch((error) => {
+              console.error("Error updating field:", error);
             });
         }
-    });
-</script>
-
-</body>
+      });
+    </script>
+  </body>
 </html>

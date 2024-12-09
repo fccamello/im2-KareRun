@@ -33,7 +33,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     lastname = models.CharField(max_length=30)
     password = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
-    birthdate = models.DateField(null=True, blank=True)
+    birthdate = models.DateField(null=False, blank=True,default=datetime.date.today())
     isEventOrganizer = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
