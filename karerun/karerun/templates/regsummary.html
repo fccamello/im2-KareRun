@@ -71,17 +71,16 @@
                     {% endwith %}
             </ul>
 
-
+        <div style="display:flex">
             <div class="button-container">
-                <form method="POST" action="{% url 'confirm_registration' userId=user.userid event_id=event.eventid %}">
+                <button class="submit-button left-button" onclick="location.href='{% url 'event_reg' event_id=event.eventid %}'">Go Back</button>
+                <form method="POST" action="{% url 'confirm_registration' userId=user.userid event_id=event.eventid %}" style="width: 100%">
                     {% csrf_token %}
-                    <button type="submit" class="submit-button"  >Confirm Registration</button>
+                    <button type="submit" class="submit-button right-button">Confirm Registration</button>
                 </form>
             </div>
-    
-            <div class="button-container">
-                <button class="submit-button" action="{% url 'event_reg' event_id=event.eventid %}" onclick="location.href='{% url 'event_reg' event_id=event.eventid %}'" >Go Back</button>
-            </div>
+            
+        </div>
         </div>
 
 </body>
