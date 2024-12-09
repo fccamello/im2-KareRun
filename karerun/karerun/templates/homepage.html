@@ -29,7 +29,7 @@
 
     <div class="container my-5">
       <div class="row justify-content-center" style="gap: 50px;">
-        {% if user.isEventOrganizer == False or not user.is_superuser == False%}
+        {% if user.is_superuser == False %}
         <div class="col-md-3 text-center" style="margin: 10px; ">
           <a href="{% url 'race_list' %}" class="text-decoration-none">
             <div
@@ -151,7 +151,7 @@
     </div>
   </div>
 
-  
+
   {% if user.is_superuser == False %}
     <div class="container mt-5" style="color: #002b5a">
       <div style="display: flex;">
