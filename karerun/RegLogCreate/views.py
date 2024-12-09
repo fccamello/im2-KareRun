@@ -43,6 +43,9 @@ def login(request):
             if user is not None:
                 request.session['userID'] = user.userid
                 print("success")
+                context['user'] = user
+                context['userId'] = user.userid
+                return render(request,'homepage.html')
                 return redirect('homepage')
             else:
                 form = LoginForm()
