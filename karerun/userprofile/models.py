@@ -5,7 +5,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 class UserProfile(models.Model):
-    cover_photo = models.ImageField(upload_to='photos/', default='photos/default.jpg')
+    cover_photo = models.ImageField(upload_to='photos/', default='photos/defaultbg.png')
     profile_image = models.ImageField(upload_to='photos/', default='photos/default.jpg')
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, blank=True)
