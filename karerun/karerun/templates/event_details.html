@@ -507,10 +507,14 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
       const eventDate = new Date("{{ event.eventdate|date:'Y-m-d H:i:s' }}").getTime();
+      const closeDate = new Date("{{ event.closedate|date:'Y-m-d H:i:s' }}").getTime();
+
   
       function updateCountdown() {
         const now = new Date().getTime();
         const distance = eventDate - now;
+        const distanceToClose = closeDate - now;
+
   
         const days = Math.floor(distance / (1000 * 60 * 60 * 24));
         const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -520,8 +524,26 @@
         document.querySelector(".reg_now_time").innerHTML = `${days}:${hours}:${minutes}:${seconds}`;
   
         if (distance < 0) {
-          document.querySelector(".reg_now_time").innerHTML = "Event has passed!";
+            const messageElement = document.querySelector(".reg_now_time");
+            messageElement.innerHTML = "Event ended!";
+            messageElement.style.fontSize = "50px"; 
+        
+
+        const registerButton = document.getElementById('registerButton');
+            if (registerButton) {
+                registerButton.disabled = true;
+                registerButton.textContent = "Event has ended";
+                registerButton.classList.add("cursor-not-allowed"); 
+            }
         }
+        else if (distanceToClose < 0){
+            if (registerButton) {
+                registerButton.disabled = true;
+                registerButton.textContent = "Registration Closed";
+                registerButton.classList.add("cursor-not-allowed");
+            }
+        }
+        
       }
   
       setInterval(updateCountdown, 1000);

@@ -1,4 +1,6 @@
 {% load static %}
+{% load custom_filters %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -179,7 +181,6 @@
                 alt="{{ event.eventname }}"
               />
 
-              <!-- Card details on the right -->
               <div class="card-body">
                 <h5 class="card-title" style="color: #002b5a">
                   {{ event.eventname }}
@@ -194,6 +195,10 @@
                   <button class="btn btn-light" style="font-size: 12px; background-color: #4bc6d6; color: aliceblue;" data-toggle="modal" data-target="#generateTrainingPlanModal">
                     Generate Training Plan
                   </button>
+                  <button class="btn btn-light" style="font-size: 12px; background-color: #4bc6d6; color: aliceblue;" data-toggle="modal" data-target="#registrationDetailsModal{{ event.eventid }}">
+                    View Registration Details
+                  </button>
+                  
               </div>
             </div>
           </div>
@@ -250,10 +255,7 @@
                 <p class="card-text">Details: {{ event.eventdetails }}</p>
                 <a
                   href="{% url 'event_detail' event_id=event.eventid %}"
-                  class="btn btn-light" style="font-size: 12px; background-color: #ff5726; color: aliceblue;">View Details </a>
-                  <button class="btn btn-light" style="font-size: 12px; background-color: #4bc6d6; color: aliceblue;" data-toggle="modal" data-target="#generateTrainingPlanModal">
-                    View Analysis
-                  </button>
+                  class="btn btn-light" style="font-size: 12px; background-color: #ff5726; color: aliceblue;">View Details </a> 
               </div>
             </div>
           </div>
@@ -319,6 +321,37 @@
         </div>
       </div>
     </div>
+
+
+    <!-- Modal for Registration Details -->
+    {% for event in events %}
+    <div class="modal fade" id="registrationDetailsModal{{ event.eventid }}" tabindex="-1" role="dialog" aria-labelledby="registrationDetailsModalLabel{{ event.eventid }}" aria-hidden="true" style="color:#002b5a">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" style="color: #002b5a;" id="registrationDetailsModalLabel{{ event.eventid }}">Registration Details for {{ event.eventname }}</h5>
+            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h3>{{ event.eventname }}</h3>
+            {% with registration=event_registration_details|get_item:event.eventid %}
+              <p>Category: {{ registration.category_ni }}</p>
+              <p>Email: {{ registration.email }}</p>
+              <p>Price: ₱{{ registration.category_price }}</p>
+              <p>Age Category: {{ registration.age_category }}</p>
+              <p>Registered on: {{ registration.registration_date }}</p>
+            {% endwith %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>

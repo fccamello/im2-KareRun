@@ -188,7 +188,7 @@ def confirm_registration(request, userId, event_id):
         emergencynum = registration_data.get('emergencynum')
         age_category = registration_data.get('age_category')
         category_ni = registration_data.get('category_ni')
-        inclusions = registration_data.get('inclusions')  # Ensure this is in a format suitable for your database
+        inclusions = registration_data.get('inclusions') 
         category_price = registration_data.get('category_price')
 
 

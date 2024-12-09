@@ -41,6 +41,11 @@ class CreateEvent(forms.ModelForm):
     eventdate = forms.DateField(
         widget=forms.DateInput(attrs={'type': 'date', 'min': (date.today() + timedelta(days=1)).isoformat()})
     )
+
+    closedate = forms.DateField(
+        widget=forms.DateInput(attrs={'type': 'date', 'min': (date.today() + timedelta(days=1)).isoformat()})
+    )
+
     eventtime = forms.TimeField(widget = forms.TimeInput(attrs={'type':'time'}))
     # inclusions = forms.CharField(widget=forms.Textarea)
     # inclusions = forms.CharField(widget=forms.HiddenInput())

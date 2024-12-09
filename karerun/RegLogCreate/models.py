@@ -76,6 +76,7 @@ class Event(models.Model):
     eventcategory  = models.JSONField()
     eventlocation = models.CharField(max_length=100)
     eventdate = models.DateTimeField()
+    closedate = models.DateTimeField(default=datetime.date(2024, 12, 31))
     eventtime = models.TimeField()
     dateposted = models.DateTimeField(auto_now_add=True)
     #should be a list of inclusions
