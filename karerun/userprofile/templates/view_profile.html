@@ -88,7 +88,7 @@
           alt="Profile Picture"
           class="profile-picture"
         />
-        {% if user.username == request.user.username %}
+        {% if user.userid == current_user.userid %}
         <div class="photo-buttons">
           <button
             id="changeCoverPhoto"
@@ -116,7 +116,7 @@
 
         <!-- Buttons (Add Friend, Message, etc.) -->
         <div class="mt-4">
-          {% if user.username == request.user.username %}
+          {% if user.userid == current_user.userid %}
           <button id="toggleEdit" class="btn btn-danger">Edit Bio</button>
           {%endif%}
         </div>

@@ -13,13 +13,18 @@ from RegLogCreate.models import Event
 def view_profile(request, username):
     # Get the user by username
     user = get_object_or_404(User, username=username)
-    
+    print(user.userid)
+    current_user = get_object_or_404(User, userid=request.session['userID'])
+    print(current_user.userid)
     # Fetch the user profile (assuming the user profile is related to the User model via OneToOneField)
     profile = get_object_or_404(UserProfile, user=user)
     event_ids = Registration.objects.filter(user_id=user.userid).values_list('event', flat=True)
     registered_events = Event.objects.filter(eventid__in=event_ids)
     created_events = Event.objects.filter(organizerId=user.userid)
-    return render(request, 'view_profile.html', {'user': user, 'profile': profile, 'userName': user.username, 'registered_events': registered_events, 'created_events': created_events,})
+    context = {
+        
+    }
+    return render(request, 'view_profile.html', {'user': user, 'profile': profile, 'userName': user.username, 'registered_events': registered_events, 'created_events': created_events,'current_user':current_user})
 
 @login_required
 @csrf_exempt
