@@ -11,7 +11,7 @@ class RegisterUserForm(forms.ModelForm):
     
 
     birthdate = forms.DateField(
-        widget=forms.DateInput(attrs={'type': 'date', 'min': '1900-01-01'})
+        widget=forms.DateInput(attrs={'type': 'date', 'min': '1900-01-01', 'max': date.today().isoformat()})
     )
     
     sex = forms.ChoiceField(choices=GENDER_CHOICES,widget=forms.RadioSelect)

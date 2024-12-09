@@ -17,7 +17,7 @@ def register(request):
             user.password = make_password(form.cleaned_data['password'])
             user.save()
             print("saved user")
-            return redirect('index')
+            return redirect('login')
         else:
             print(form.errors)
     else:
@@ -45,8 +45,7 @@ def login(request):
                 print("success")
                 context['user'] = user
                 context['userId'] = user.userid
-                return render(request,'homepage.html')
-                return redirect('homepage')
+                return render(request,'homepage.html',context)
             else:
                 form = LoginForm()
                 print("error/wrong password")

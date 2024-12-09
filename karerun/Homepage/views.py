@@ -3,7 +3,8 @@ from django.contrib.auth.decorators import login_required
 from RegLogCreate.models import Event,User
 from OrganizerAppeal.models import OrganizerAppeal
 from EventRegistration.models import Registration
-@login_required
+# dont do log-in required
+#@login_required
 def homepage(request):
     #warning the session might not have 'userID', in normal means they have
     userId = request.session.get('userID',None)
@@ -30,6 +31,7 @@ def homepage(request):
         'userId':user.userid,
         'created_events': created_events
     }
+    print("rendering homepage") 
     return render(request, 'homepage.html', context)   
 
 def logout(request):
