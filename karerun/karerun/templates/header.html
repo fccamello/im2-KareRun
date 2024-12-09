@@ -15,7 +15,7 @@
     {% endif %}
     <!-- <a href=""></a> -->
 
-    {% if userName == "" or userName is not None %}
+    {% if userName == "" or userName is None %}
     <button
       class="nav-buttons"
       onclick="window.location.href='{% url 'login' %}';"

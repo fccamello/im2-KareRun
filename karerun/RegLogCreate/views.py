@@ -45,6 +45,7 @@ def login(request):
                 print("success")
                 context['user'] = user
                 context['userId'] = user.userid
+                return redirect('homepage')
                 return render(request,'homepage.html',context)
             else:
                 form = LoginForm()
