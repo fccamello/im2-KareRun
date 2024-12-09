@@ -10,7 +10,7 @@ def appeal(request):
     user = None
     if userID is not None:
         user = User.objects.get(userid = userID)
-    if appeal.exists():
+    if appeal.exists() and appeal[0].acceptedBy == -1:
         print("You have already requested")
         redirect('homepage')
     elif User.objects.get(userid = userID).isEventOrganizer == False:
@@ -27,7 +27,7 @@ def appealList(request):
     events = Event.objects.all()
     users = User.objects.all()
 
-    regular_users_count = User.objects.filter(isEventOrganizer=False, is_superuser=False, is_staff=False).count()
+    regular_users_count = User.objects.filter(is_superuser=False, is_staff=False).count()
     event_count = Event.objects.count()
     organizer_count = User.objects.filter(isEventOrganizer=True).count()
 
