@@ -24,7 +24,7 @@ def view_profile(request, username):
     context = {
         
     }
-    return render(request, 'view_profile.html', {'user': user, 'profile': profile, 'userName': user.username, 'registered_events': registered_events, 'created_events': created_events,'current_user':current_user})
+    return render(request, 'view_profile.html', {'user': user, 'profile': profile, 'userName': current_user.username, 'registered_events': registered_events, 'created_events': created_events,'current_user':current_user})
 
 @login_required
 @csrf_exempt
