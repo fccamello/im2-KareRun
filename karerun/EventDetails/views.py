@@ -15,9 +15,9 @@ def event_detail(request, event_id):
     # Check if the user is logged in
     user = None
     userId = None
-    if request.user.is_authenticated:
-        userId = request.session.get('userID', None)
-        user = User.objects.get(userid=userId) if userId else None
+    
+    userId = request.session.get('userID', None)
+    user = User.objects.get(userid=userId) if userId else None
 
     # where no user is logged in
     user_ids = Registration.objects.filter(event=event_id).values_list('user', flat=True)
