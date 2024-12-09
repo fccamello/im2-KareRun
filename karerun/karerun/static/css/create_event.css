@@ -225,6 +225,20 @@ textarea:invalid {
     color: #001f40;
 }
 
+/* for cancel category buttons */
+.cancel-category-btn{
+    position: absolute;
+    height: auto;
+    width: auto;
+    top: 5;
+    right: 5;
+    background-color: red !important;
+}
+
+.position-relative{
+    position: relative;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     #formContainer {
