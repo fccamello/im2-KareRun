@@ -23,12 +23,22 @@
     <div style="margin-left: 2%; ">
 
         <form method="GET" id="search-sort-form">
-            <input type="text" name="search" value="{{ search_query }}" placeholder="Search by event name" style="width: 80%;">
-            <select name="sort" id="sort-select">
-                <option value="date" {% if sort_by == 'date' %}selected{% endif %}>Sort by Date</option>
-                <option value="name" {% if sort_by == 'name' %}selected{% endif %}>Sort by Name</option>
-            </select>
-        </form>
+    <input type="text" name="search" value="{{ search_query }}" placeholder="Search by event name" style="width: 50%;">
+
+    <div>
+        <label><input type="checkbox" name="category" value="3k" {% if '3k' in category %}checked{% endif %} onchange="this.form.submit()"> 3k</label>
+        <label><input type="checkbox" name="category" value="5k" {% if '5k' in category %}checked{% endif %} onchange="this.form.submit()"> 5k</label>
+        <label><input type="checkbox" name="category" value="10k" {% if '10k' in category %}checked{% endif %} onchange="this.form.submit()"> 10k</label>
+        <label><input type="checkbox" name="category" value="16k" {% if '16k' in category %}checked{% endif %} onchange="this.form.submit()"> 16k</label>
+    </div>
+
+    <select name="sort" id="sort-select" onchange="this.form.submit()">
+        <option value="date" {% if sort_by == 'date' %}selected{% endif %}>Sort by Date</option>
+        <option value="name" {% if sort_by == 'name' %}selected{% endif %}>Sort by Name</option>
+    </select>
+</form>
+
+        
     </div>
 
 
@@ -39,7 +49,7 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ event.eventname }}</h5>
                     <p class="card-text">Location: {{ event.eventlocation }}</p>
-                    <p class="card-text">Date: {{ event.eventdate }}</p>
+                    <p class="card-text">Date: {{ event.eventdate|date:"F j, Y" }}</p>
                     <p class="card-text">Time: {{ event.eventtime }}</p>
                     <p class="card-text">Details: {{ event.eventdetails|truncatechars:50 }}</p>
                     <div class="button-container">
