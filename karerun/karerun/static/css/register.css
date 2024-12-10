@@ -6,6 +6,7 @@
     width: 30rem;
     min-height: 50rem;
     max-height: 70rem;
+    padding-top: 1rem;
     background-color: #012b5b;
     margin: 3rem auto;
 }
