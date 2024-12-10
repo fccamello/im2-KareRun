@@ -9,6 +9,7 @@ from django.contrib.auth.hashers import make_password
 # Create your views here.
 def register(request):
     user = User.objects.all()
+    errors = None
     if request.method == 'POST':
         print("received POST for register")
         form = RegisterUserForm(request.POST)
@@ -19,10 +20,12 @@ def register(request):
             print("saved user")
             return redirect('login')
         else:
-            print(form.errors)
+            print("Erorr Found:")
+            errors = form.errors
     else:
         form = RegisterUserForm()
-    return render(request,'register.html',{'forms':form})
+    print(errors)
+    return render(request,'register.html',{'forms':form,'errors':errors})
 
 def logout(request):
     del request.session['userID']
