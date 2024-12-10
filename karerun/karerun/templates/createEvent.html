@@ -91,7 +91,7 @@
                 categorySection = document.createElement("div");
                 categorySection.id = `inclusion-section-${category}`;
                 categorySection.classList.add("position-relative");
-                categorySection.innerHTML = `<h3 style="color: #61caca;">Inclusions for ${category}</h3>`;
+                categorySection.innerHTML = `<h3>Inclusions for ${category}</h3>`;
         
                 const priceInput = document.createElement('input');
                 priceInput.type = 'number';
@@ -119,7 +119,6 @@
                 const closeButton = document.createElement("button");
                 closeButton.textContent = "x";
                 closeButton.classList.add("cancel-category-btn");
-                closeButton.style.color = "white"; 
                 categorySection.appendChild(closeButton);
                 closeButton.onclick = () => {
                     categorySection.remove();
@@ -140,14 +139,15 @@
             }
         }
         
+
         function toggleInclusionSelection(button, category, inclusion) {
             const inclusionsInput = document.getElementById('inclusions');
             let inclusions = JSON.parse(inclusionsInput.value || '[]');
             const priceInput = document.getElementById(`price-${category}`);
             const price = priceInput ? priceInput.value : null;
-
+        
             if (!price) {
-                alert(`Please enter a price!`);
+                alert(`Please enter a price.`);
                 return;
             }
         
@@ -172,6 +172,7 @@
         
             inclusionsInput.value = JSON.stringify(inclusions);
         }
+
 function updateCategoryField() {
     document.getElementById("eventcategory").value = Array.from(selectedCategories).join(',');
 }
@@ -194,81 +195,44 @@ function updateCategoryField() {
             }
         }
 
-function addInclusionOptions(category, inclusion) {
-        const categorySection = document.getElementById(`inclusion-section-${category}`);
-
-let inclusionSection = document.getElementById(`${category}-${inclusion}`);
-
-const priceInput = document.getElementById(`price-${category}`);
-const price = priceInput ? priceInput.value : null;
-
-if (!price) {
-    alert(`Please enter a price!`);
-    return;
-}
-
-if (!inclusionSection) {
-    inclusionSection = document.createElement("div");
-    inclusionSection.id = `${category}-${inclusion}`;
-
-    if (inclusion === "Singlet" || inclusion === "Finisher Shirt") {
-        document.querySelector("#inclusion-container").innerHTML += `<h4 style="color: #61caca;">${inclusion} for ${category}</h4>`;
-
-        ["XS", "S", "M", "L", "XL"].forEach(size => {
-            const sizeButton = document.createElement("button");
-            sizeButton.type = "button";
-            sizeButton.textContent = size;
-            sizeButton.dataset.selected = "false"; 
-            sizeButton.onclick = () => toggleSizeSelection(sizeButton, category, inclusion, size);
-            inclusionSection.appendChild(sizeButton);
-        });
-    } else {
-        addInclusionToForm(category, inclusion);
-    }
-
-    categorySection.appendChild(inclusionSection);
-            const oldSizes = document.getElementById(`${category}-${inclusion}-sizes`);
-            if (oldSizes) {
-                inclusionContainer.removeChild(oldSizes);
-            }
-            inclusionContainer.appendChild(inclusionSection);
-        }
-    }
-        function toggleSizeSelection(button, category, inclusion, size) {
-            const inclusionsInput = document.getElementById('inclusions');
-            let inclusions = JSON.parse(inclusionsInput.value || '[]');
-
+        function addInclusionOptions(category, inclusion) {
+            const categorySection = document.getElementById(`inclusion-section-${category}`);
+        
+            let inclusionSection = document.getElementById(`${category}-${inclusion}`);
+        
+            // Check price before proceeding
             const priceInput = document.getElementById(`price-${category}`);
             const price = priceInput ? priceInput.value : null;
         
             if (!price) {
-                alert(`Please enter a price for the ${category} category before selecting sizes`);
+                alert(`Please enter a price.`);
                 return;
             }
         
-
-            if (button.dataset.selected === "false") {
-                button.dataset.selected = "true";
-                button.style.backgroundColor = "lightgray";
-               
-
-                inclusions.push({ category, inclusion, size, price });
-            } else {
-                button.dataset.selected = "false";
-                button.style.backgroundColor = ""; 
-
-                inclusions = inclusions.filter(
-                    inclusionItem =>
-                        inclusionItem.category !== category ||
-                        inclusionItem.inclusion !== inclusion ||
-                        inclusionItem.size !== size
-                );
+            if (!inclusionSection) {
+                inclusionSection = document.createElement("div");
+                inclusionSection.id = `${category}-${inclusion}`;
+        
+                if (inclusion === "Singlet" || inclusion === "Finisher Shirt") {
+                    inclusionSection.innerHTML = `<h4>${inclusion} for ${category}</h4>`;
+        
+                    ["XS", "S", "M", "L", "XL"].forEach(size => {
+                        const sizeButton = document.createElement("button");
+                        sizeButton.type = "button";
+                        sizeButton.textContent = size;
+                        sizeButton.dataset.selected = "false"; 
+                        sizeButton.onclick = () => toggleSizeSelection(sizeButton, category, inclusion, size);
+                        inclusionSection.appendChild(sizeButton);
+                    });
+                } else {
+                    addInclusionToForm(category, inclusion);
+                }
+        
+                categorySection.appendChild(inclusionSection);
+                inclusionContainer.appendChild(inclusionSection);
             }
-
-            inclusionsInput.value = JSON.stringify(inclusions);
         }
-
-
+        
         function addInclusionToForm(category, inclusion, size = null) {
             const inclusionsInput = document.getElementById('inclusions');
             let inclusions = JSON.parse(inclusionsInput.value || '[]');
@@ -279,6 +243,40 @@ if (!inclusionSection) {
             inclusions.push({ category, inclusion, size, price });
             inclusionsInput.value = JSON.stringify(inclusions);
         }
+
+        function toggleSizeSelection(button, category, inclusion, size) {
+            const inclusionsInput = document.getElementById('inclusions');
+            let inclusions = JSON.parse(inclusionsInput.value || '[]');
+        
+            // Check price before proceeding
+            const priceInput = document.getElementById(`price-${category}`);
+            const price = priceInput ? priceInput.value : null;
+        
+            if (!price) {
+                alert(`Please enter a price.`);
+                return;
+            }
+        
+            if (button.dataset.selected === "false") {
+                button.dataset.selected = "true";
+                button.style.backgroundColor = "lightgray";
+        
+                inclusions.push({ category, inclusion, size, price });
+            } else {
+                button.dataset.selected = "false";
+                button.style.backgroundColor = ""; 
+        
+                inclusions = inclusions.filter(
+                    inclusionItem =>
+                        inclusionItem.category !== category ||
+                        inclusionItem.inclusion !== inclusion ||
+                        inclusionItem.size !== size
+                );
+            }
+        
+            inclusionsInput.value = JSON.stringify(inclusions);
+        }
+        
     </script>
 </body>
 
