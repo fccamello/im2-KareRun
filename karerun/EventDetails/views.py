@@ -116,7 +116,8 @@ def event_detail(request, event_id):
         'minutes_left': minutes_left,
         'is_Super': is_Edit_Allowed,
         'seconds_left': seconds_left,
-        'is_registered': is_registered
+        'is_registered': is_registered,
+        'is_admin': user.is_superuser if user else False,
     })
 
 def update_event_photo(request, event_id):
