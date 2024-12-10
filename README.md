@@ -109,8 +109,11 @@ Document Link: [Link](https://docs.google.com/spreadsheets/d/19w6qpC_Kcdt7AYS_Wf
 
 ## 💅 UI/UX
 
+![Figma](/Extra%20Files/Figma.png)
+
 Document Link: [Link](https://www.figma.com/design/epB9ewXAHRTf5iTgv2dJ6g/Karerun?node-id=0-1&t=JPYRBPPyPp1dThRC-1)
 
 ## 🕸️ ERD
 
+![Figma](/Extra%20Files/ERD.png)
 Document Link: [Link](https://online.visual-paradigm.com/share.jsp?id=333233303932372d35)
