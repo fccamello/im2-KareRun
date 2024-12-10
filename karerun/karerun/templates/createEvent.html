@@ -81,58 +81,97 @@
             document.getElementById("eventcategory").value = Array.from(selectedCategories).join(',');
         }
 
-    function displayInclusions(category) {
-
-    selectedCategories.add(category);
-    updateCategoryField();
-
-    let categorySection = document.getElementById(`inclusion-section-${category}`);
-
-    if (!categorySection) {
-        categorySection = document.createElement("div");
-        categorySection.id = `inclusion-section-${category}`;
-        categorySection.classList.add("position-relative");
-        categorySection.innerHTML = `<h3>Inclusions for ${category}</h3>`;
-
-        const priceInput = document.createElement('input');
-        priceInput.type = 'number';
-        priceInput.placeholder = 'Enter Price';
-        priceInput.id = `price-${category}`;
-        categorySection.appendChild(priceInput);
-
-        ["Singlet", "Race Bib", "Finisher Medal", "Finisher Shirt"].forEach(inclusion => {
-            const inclusionButton = document.createElement("button");
-            inclusionButton.type = "button";
-            inclusionButton.textContent = inclusion;
-            inclusionButton.onclick = () => addInclusionOptions(category, inclusion);
-            categorySection.appendChild(inclusionButton);
-        });
-
-        const closeButton = document.createElement("button");
-        closeButton.textContent = "x";
-        closeButton.classList.add("cancel-category-btn");
-        categorySection.appendChild(closeButton);
-        closeButton.onclick = () => {
-            categorySection.remove();
-            selectedCategories.delete(category);
+        function displayInclusions(category) {
+            selectedCategories.add(category);
             updateCategoryField();
-
+        
+            let categorySection = document.getElementById(`inclusion-section-${category}`);
+        
+            if (!categorySection) {
+                categorySection = document.createElement("div");
+                categorySection.id = `inclusion-section-${category}`;
+                categorySection.classList.add("position-relative");
+                categorySection.innerHTML = `<h3 style="color: #61caca;">Inclusions for ${category}</h3>`;
+        
+                const priceInput = document.createElement('input');
+                priceInput.type = 'number';
+                priceInput.placeholder = 'Enter Price';
+                priceInput.id = `price-${category}`;
+                categorySection.appendChild(priceInput);
+        
+                const inclusionButtons = ["Singlet", "Race Bib", "Finisher Medal", "Finisher Shirt"];
+                inclusionButtons.forEach(inclusion => {
+                    const inclusionButton = document.createElement("button");
+                    inclusionButton.type = "button";
+                    inclusionButton.textContent = inclusion;
+                    inclusionButton.id = `${category}-${inclusion}-btn`;
+                    inclusionButton.dataset.selected = "false";
+                    inclusionButton.onclick = () => {
+                        if (inclusion === "Singlet" || inclusion === "Finisher Shirt") {
+                            addInclusionOptions(category, inclusion);
+                        } else {
+                            toggleInclusionSelection(inclusionButton, category, inclusion);
+                        }
+                    };
+                    categorySection.appendChild(inclusionButton);
+                });
+        
+                const closeButton = document.createElement("button");
+                closeButton.textContent = "x";
+                closeButton.classList.add("cancel-category-btn");
+                closeButton.style.color = "white"; 
+                categorySection.appendChild(closeButton);
+                closeButton.onclick = () => {
+                    categorySection.remove();
+                    selectedCategories.delete(category);
+                    updateCategoryField();
+        
+                    const inclusionsInput = document.getElementById('inclusions');
+                    let inclusions = JSON.parse(inclusionsInput.value || '[]');
+                    inclusions = inclusions.filter(inclusionItem => inclusionItem.category !== category);
+                    inclusionsInput.value = JSON.stringify(inclusions);
+        
+                    document.querySelectorAll(`[id^="${category}-"]`).forEach(el => el.remove());
+                };
+        
+                inclusionContainer.appendChild(categorySection);
+            } else {
+                categorySection.scrollIntoView({ behavior: "smooth" });
+            }
+        }
+        
+        function toggleInclusionSelection(button, category, inclusion) {
             const inclusionsInput = document.getElementById('inclusions');
             let inclusions = JSON.parse(inclusionsInput.value || '[]');
-            inclusions = inclusions.filter(inclusionItem => inclusionItem.category !== category);
+            const priceInput = document.getElementById(`price-${category}`);
+            const price = priceInput ? priceInput.value : null;
+
+            if (!price) {
+                alert(`Please enter a price!`);
+                return;
+            }
+        
+            if (button.dataset.selected === "false") {
+                button.dataset.selected = "true";
+                button.style.backgroundColor = "lightgray";
+        
+                // Add inclusion with null size
+                inclusions.push({ category, inclusion, size: null, price });
+            } else {
+                button.dataset.selected = "false";
+                button.style.backgroundColor = ""; 
+        
+                // Remove the specific inclusion with null size
+                inclusions = inclusions.filter(
+                    inclusionItem =>
+                        inclusionItem.category !== category ||
+                        inclusionItem.inclusion !== inclusion ||
+                        inclusionItem.size !== null
+                );
+            }
+        
             inclusionsInput.value = JSON.stringify(inclusions);
-
-            document.querySelectorAll(`[id^="${category}-"]`).forEach(el => el.remove());
-        };
-
-        inclusionContainer.appendChild(categorySection);
-
-
-    } else {
-        categorySection.scrollIntoView({ behavior: "smooth" });
-    }
-}
-
+        }
 function updateCategoryField() {
     document.getElementById("eventcategory").value = Array.from(selectedCategories).join(',');
 }
@@ -155,17 +194,25 @@ function updateCategoryField() {
             }
         }
 
-     function addInclusionOptions(category, inclusion) {
+function addInclusionOptions(category, inclusion) {
         const categorySection = document.getElementById(`inclusion-section-${category}`);
 
 let inclusionSection = document.getElementById(`${category}-${inclusion}`);
+
+const priceInput = document.getElementById(`price-${category}`);
+const price = priceInput ? priceInput.value : null;
+
+if (!price) {
+    alert(`Please enter a price!`);
+    return;
+}
 
 if (!inclusionSection) {
     inclusionSection = document.createElement("div");
     inclusionSection.id = `${category}-${inclusion}`;
 
     if (inclusion === "Singlet" || inclusion === "Finisher Shirt") {
-        inclusionSection.innerHTML = `<h4>${inclusion} for ${category}</h4>`;
+        document.querySelector("#inclusion-container").innerHTML += `<h4 style="color: #61caca;">${inclusion} for ${category}</h4>`;
 
         ["XS", "S", "M", "L", "XL"].forEach(size => {
             const sizeButton = document.createElement("button");
@@ -180,8 +227,6 @@ if (!inclusionSection) {
     }
 
     categorySection.appendChild(inclusionSection);
-
-
             const oldSizes = document.getElementById(`${category}-${inclusion}-sizes`);
             if (oldSizes) {
                 inclusionContainer.removeChild(oldSizes);
@@ -193,11 +238,19 @@ if (!inclusionSection) {
             const inclusionsInput = document.getElementById('inclusions');
             let inclusions = JSON.parse(inclusionsInput.value || '[]');
 
+            const priceInput = document.getElementById(`price-${category}`);
+            const price = priceInput ? priceInput.value : null;
+        
+            if (!price) {
+                alert(`Please enter a price for the ${category} category before selecting sizes`);
+                return;
+            }
+        
+
             if (button.dataset.selected === "false") {
                 button.dataset.selected = "true";
                 button.style.backgroundColor = "lightgray";
-                const priceInput = document.getElementById(`price-${category}`);
-                const price = priceInput ? priceInput.value : null;
+               
 
                 inclusions.push({ category, inclusion, size, price });
             } else {
