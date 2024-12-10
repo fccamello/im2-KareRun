@@ -57,5 +57,5 @@ class CreateEvent(forms.ModelForm):
     maxSlots = forms.IntegerField(widget=forms.NumberInput(attrs={'min': 1}))
     class Meta:
         model = Event
-        fields = ['eventname','eventdetails','eventcategory','eventlocation','eventdate','eventtime','inclusions','bannerimage','inclusionimage','sizechartimage','racerouteimage','maxSlots']
+        fields = ['eventname','eventdetails','eventcategory','eventlocation','eventdate','eventtime','inclusions','bannerimage','inclusionimage','sizechartimage','racerouteimage','maxSlots', 'closedate']
     
