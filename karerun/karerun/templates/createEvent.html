@@ -214,7 +214,7 @@ function updateCategoryField() {
                 inclusionSection.id = `${category}-${inclusion}`;
         
                 if (inclusion === "Singlet" || inclusion === "Finisher Shirt") {
-                    inclusionSection.innerHTML = `<h4>${inclusion} for ${category}</h4>`;
+                    inclusionSection.innerHTML = `<h4 style=" color: #61caca;">${inclusion} for ${category}</h4>`;
         
                     ["XS", "S", "M", "L", "XL"].forEach(size => {
                         const sizeButton = document.createElement("button");
