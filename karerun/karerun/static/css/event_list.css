@@ -149,3 +149,43 @@ opacity: 0px;
 .register-button:hover {
     background-color: #e64d21;
 }
+
+#search-sort-form div {
+    margin-top: 15px;
+}
+
+#search-sort-form label {
+    display: inline-block;
+    margin-right: 20px;
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+}
+
+#search-sort-form input[type="checkbox"] {
+    margin-right: 8px;
+    cursor: pointer;
+}
+
+#search-sort-form input[type="checkbox"]:hover {
+    transform: scale(1.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+#search-sort-form div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+    #search-sort-form div {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    #search-sort-form label {
+        font-size: 14px;
+    }
+}

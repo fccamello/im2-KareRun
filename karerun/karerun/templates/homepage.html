@@ -186,7 +186,7 @@
                   {{ event.eventname }}
                 </h5>
                 <p class="card-text">Location: {{ event.eventlocation }}</p>
-                <p class="card-text">Date: {{ event.eventdate }}</p>
+                <p class="card-text">Date: {{ event.eventdate|date:"F j, Y" }}</p>
                 <p class="card-text">Time: {{ event.eventtime }}</p>
                 <p class="card-text">Details: {{ event.eventdetails }}</p>
                 <a
@@ -250,7 +250,7 @@
                   {{ event.eventname }}
                 </h5>
                 <p class="card-text">Location: {{ event.eventlocation }}</p>
-                <p class="card-text">Date: {{ event.eventdate }}</p>
+                <p class="card-text">Date: {{ event.eventdate|date:"F j, Y" }}</p>
                 <p class="card-text">Time: {{ event.eventtime }}</p>
                 <p class="card-text">Details: {{ event.eventdetails }}</p>
                 <a
@@ -341,7 +341,6 @@
               <p>Email: {{ registration.email }}</p>
               <p>Price: ₱{{ registration.category_price }}</p>
               <p>Age Category: {{ registration.age_category }}</p>
-              <p>Registered on: {{ registration.registration_date }}</p>
             {% endwith %}
           </div>
         </div>

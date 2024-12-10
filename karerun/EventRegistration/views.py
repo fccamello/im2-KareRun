@@ -213,4 +213,4 @@ def confirm_registration(request, userId, event_id):
         category_price=category_price
     )
     registration.save()
-    return redirect('index')  
+    return redirect('homepage')  
