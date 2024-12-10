@@ -181,6 +181,13 @@
 <input type="file" id="bannerImageInput" accept="image/*" style="display:none;">
 <input type="file" id="inclusionImageInput" accept="image/*" style="display:none;">
 <input type="file" id="raceRouteImageInput" accept="image/*" style="display:none;">
+<input type="hidden" id="organizerId" value="{{ event.organizerId }}">
+<input type="hidden" id="userId" value="{{ userID }}">
+
+<script>
+    console.log("Organizer ID from hidden input:", "{{ event.organizerId }}");
+    console.log("User ID from hidden input:", "{{ userID }}");
+</script>
 
 <!-- Add this just before the closing body tag -->
 <div id="editEventModal" class="modal hidden">
@@ -319,7 +326,6 @@
     });
 
     document.addEventListener('DOMContentLoaded', function () {
-        
         //disable register if registered
         const registerButton = document.getElementById('registerButton');
         if(registerButton.classList.contains("cursor-not-allowed")) {
@@ -512,7 +518,8 @@
     document.addEventListener('DOMContentLoaded', function () {
       const eventDate = new Date("{{ event.eventdate|date:'Y-m-d H:i:s' }}").getTime();
       const closeDate = new Date("{{ event.closedate|date:'Y-m-d H:i:s' }}").getTime();
-
+      const organizerId = document.getElementById('organizerId').value; // Hidden field or data attribute
+      const userId = document.getElementById('userId').value;
   
       function updateCountdown() {
         const now = new Date().getTime();
@@ -547,7 +554,11 @@
                 registerButton.classList.add("cursor-not-allowed");
             }
         }
-        
+        if(organizerId == userId) {
+            registerButton.disabled = true;
+            registerButton.textContent = 'You cannot join your event';
+            registerButton.classList.add("cursor-not-allowed");
+        }
       }
   
       setInterval(updateCountdown, 1000);
