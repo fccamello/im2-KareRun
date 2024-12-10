@@ -49,10 +49,11 @@
         <br />
         <button type="submit">Register</button>
         {% if errors %}
+        <h3 style="color: red; margin: 0%">Errors:</h3>
         <div>{{errors}}</div>
         {% endif %}
       </form>
-      <u style="margin-top: 8%"
+      <u style="margin: 8% 0%"
         ><a href="{% url 'login' %}" style="color: white">
           Already have an account? Log in</a
         >
