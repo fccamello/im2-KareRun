@@ -31,10 +31,10 @@ def appealList(request):
     event_count = Event.objects.count()
     organizer_count = User.objects.filter(isEventOrganizer=True).count()
 
-    gender_distribution = User.objects.values('sex').annotate(count=Count('userid'))
+    gender_distribution = User.objects.filter(is_superuser=False, is_staff=False).values('sex').annotate(count=Count('userid'))
     gender_labels = [entry['sex'] for entry in gender_distribution]
     gender_counts = [entry['count'] for entry in gender_distribution]
-
+    print(gender_labels)
 
 
 

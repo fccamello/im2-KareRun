@@ -46,7 +46,7 @@
                     <h3 style="margin-top: 0%; padding: 0%;">Participants: {{num_registrants}}</h3>
                   </div>
                   {% if userID is not None %}
-                  <button id="registerButton" class="btnreg {%if is_registered%}cursor-not-allowed{% endif %}" onclick="location.href='{% url 'event_reg' event_id=event.eventid %}'">REGISTER</button>
+                  <button id="registerButton" class="btnreg {%if is_registered or is_admin%}cursor-not-allowed {% endif %} {%if is_admin %} admin {%endif%}" onclick="location.href='{% url 'event_reg' event_id=event.eventid %}'">REGISTER</button>
               {% else %}
                   <button class="btnreg" onclick="location.href='{% url 'login' %}'">LOGIN TO REGISTER</button>
               {% endif %}
@@ -181,6 +181,13 @@
 <input type="file" id="bannerImageInput" accept="image/*" style="display:none;">
 <input type="file" id="inclusionImageInput" accept="image/*" style="display:none;">
 <input type="file" id="raceRouteImageInput" accept="image/*" style="display:none;">
+<input type="hidden" id="organizerId" value="{{ event.organizerId }}">
+<input type="hidden" id="userId" value="{{ userID }}">
+
+<script>
+    console.log("Organizer ID from hidden input:", "{{ event.organizerId }}");
+    console.log("User ID from hidden input:", "{{ userID }}");
+</script>
 
 <!-- Add this just before the closing body tag -->
 <div id="editEventModal" class="modal hidden">
@@ -319,12 +326,15 @@
     });
 
     document.addEventListener('DOMContentLoaded', function () {
-        
         //disable register if registered
         const registerButton = document.getElementById('registerButton');
         if(registerButton.classList.contains("cursor-not-allowed")) {
             registerButton.disabled = true;
+            if(registerButton.classList.contains("admin")) {
+                registerButton.textContent = 'Admin not allowed to register';
+            } else {
             registerButton.textContent = 'You are already registered';
+            }
         }
 
         // Assign each button its corresponding file input and photo type
@@ -508,7 +518,8 @@
     document.addEventListener('DOMContentLoaded', function () {
       const eventDate = new Date("{{ event.eventdate|date:'Y-m-d H:i:s' }}").getTime();
       const closeDate = new Date("{{ event.closedate|date:'Y-m-d H:i:s' }}").getTime();
-
+      const organizerId = document.getElementById('organizerId').value; // Hidden field or data attribute
+      const userId = document.getElementById('userId').value;
   
       function updateCountdown() {
         const now = new Date().getTime();
@@ -543,7 +554,11 @@
                 registerButton.classList.add("cursor-not-allowed");
             }
         }
-        
+        if(organizerId == userId) {
+            registerButton.disabled = true;
+            registerButton.textContent = 'You cannot join your event';
+            registerButton.classList.add("cursor-not-allowed");
+        }
       }
   
       setInterval(updateCountdown, 1000);
